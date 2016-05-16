@@ -10,6 +10,9 @@ using System.Configuration;
 
 namespace cdmdotnet.Logging.Configuration
 {
+	/// <summary>
+	/// The settings for all <see cref="ILogger"/> instances reading information from an app.config or web.config file.
+	/// </summary>
 	/// <remarks>
 	/// http://haacked.com/archive/2007/03/12/custom-configuration-sections-in-3-easy-steps.aspx
 	/// </remarks>
@@ -19,6 +22,7 @@ namespace cdmdotnet.Logging.Configuration
 
 		private static readonly LoggerSettingsConfigurationSection Settings = ConfigurationManager.GetSection(ConfigurationSectionKey) as LoggerSettingsConfigurationSection;
 
+		/// <summary />
 		public static ILoggerSettings Default
 		{
 			get
@@ -29,6 +33,9 @@ namespace cdmdotnet.Logging.Configuration
 
 		#region Implementation of ILoggerSettings
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableInfo"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableInfo", DefaultValue = true, IsRequired = true)]
 		public bool EnableInfo
 		{
@@ -42,6 +49,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableDebug"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableDebug", DefaultValue = false, IsRequired = true)]
 		public bool EnableDebug
 		{
@@ -55,6 +65,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableWarning"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableWarning", DefaultValue = true, IsRequired = true)]
 		public bool EnableWarning
 		{
@@ -68,6 +81,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableError"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableError", DefaultValue = true, IsRequired = true)]
 		public bool EnableError
 		{
@@ -81,6 +97,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableFatalError"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableFatalError", DefaultValue = true, IsRequired = true)]
 		public bool EnableFatalError
 		{
@@ -94,6 +113,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableThreadedLogging"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableThreadedLogging", DefaultValue = true, IsRequired = true)]
 		public bool EnableThreadedLogging
 		{
@@ -107,6 +129,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.ModuleName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("ModuleName", DefaultValue = "All", IsRequired = true)]
 		public string ModuleName
 		{
@@ -120,6 +145,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.Instance"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("Instance", DefaultValue = "All", IsRequired = true)]
 		public string Instance
 		{
@@ -133,6 +161,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnvironmentInstance"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnvironmentInstance", DefaultValue = "All", IsRequired = true)]
 		public string EnvironmentInstance
 		{
@@ -146,6 +177,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.Environment"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("Environment", DefaultValue = "Unknown", IsRequired = true)]
 		public string Environment
 		{
@@ -159,10 +193,9 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
-		#endregion
-
-		#region ILoggerSettings Members
-
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
 		[ConfigurationProperty("EnableThreadedLoggingOutput", DefaultValue = false, IsRequired = true)]
 		public bool EnableThreadedLoggingOutput
 		{

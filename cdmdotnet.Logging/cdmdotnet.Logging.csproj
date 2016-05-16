@@ -23,6 +23,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\cdmdotnet.Logging.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\cdmdotnet.Logging.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="cdmdotnet.Performance, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -58,13 +61,10 @@
     <Compile Include="NullCorrelationIdHelper.cs" />
     <Compile Include="CorrelationIdHelper.cs" />
     <Compile Include="ICorrelationIdHelper.cs" />
-    <Compile Include="CorrolationIdHelper.cs" />
-    <Compile Include="ICorrolationIdHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="DatabaseLogger.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="LogInformation.cs" />
-    <Compile Include="NullCorrolationIdHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

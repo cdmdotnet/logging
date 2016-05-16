@@ -19,8 +19,14 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace cdmdotnet.Logging
 {
+	/// <summary>
+	/// Provides a set of methods that help you log events relating to the execution of your code.
+	/// </summary>
 	public abstract class Logger : ILogger
 	{
+		/// <summary>
+		/// Instantiates a new instance of the <see cref="Logger"/> class preparing the required thread pool polling if <see cref="ILoggerSettings.EnableThreadedLogging"/> is set to true.
+		/// </summary>
 		protected Logger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
 		{
 			LoggerSettings = loggerSettings;
@@ -41,16 +47,25 @@ namespace cdmdotnet.Logging
 			}
 		}
 
+		/// <summary />
 		protected abstract string GetQueueThreadName();
 
+		/// <summary>
+		/// The <see cref="ILoggerSettings"/> for the instance, set during Instantiation
+		/// </summary>
 		protected ILoggerSettings LoggerSettings { get; private set; }
 
+		/// <summary>
+		/// The <see cref="ICorrelationIdHelper"/> for the instance, set during Instantiation
+		/// </summary>
 		protected ICorrelationIdHelper CorrelationIdHelper { get; private set; }
 
 		private IDictionary<Thread, LogInformation> LoggingThreadsQueue { get; set; }
 
+		/// <summary />
 		protected bool IsDisposing { get; set; }
 
+		/// <summary />
 		protected bool IsDisposed { get; set; }
 
 		private int CurrentRunningThreadCount { get; set; }
@@ -58,6 +73,7 @@ namespace cdmdotnet.Logging
 		private ReaderWriterLockSlim CurrentRunningThreadCountLock { get; set; }
 
 		private bool? _enableThreadedLoggingOutput;
+		/// <summary />
 		protected bool EnableThreadedLoggingOutput
 		{
 			get
@@ -70,30 +86,45 @@ namespace cdmdotnet.Logging
 
 		#region Implementation of ILog
 
+		/// <summary>
+		/// Writes an informational message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// </summary>
 		public void LogInfo(string message, string container = null, Exception exception = null)
 		{
 			if (LoggerSettings.EnableInfo)
 				Log("Info", message, container, exception);
 		}
 
+		/// <summary>
+		/// Writes a debugging message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// </summary>
 		public void LogDebug(string message, string container = null, Exception exception = null)
 		{
 			if (LoggerSettings.EnableDebug)
 				Log("Debug", message, container, exception);
 		}
 
+		/// <summary>
+		/// Writes a warning message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// </summary>
 		public void LogWarning(string message, string container = null, Exception exception = null)
 		{
 			if (LoggerSettings.EnableWarning)
 				Log("Warning", message, container, exception);
 		}
 
+		/// <summary>
+		/// Writes an error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// </summary>
 		public void LogError(string message, string container = null, Exception exception = null)
 		{
 			if (LoggerSettings.EnableError)
 				Log("Error", message, container, exception);
 		}
 
+		/// <summary>
+		/// Writes a fatal error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// </summary>
 		public void LogFatalError(string message, string container = null, Exception exception = null)
 		{
 			if (LoggerSettings.EnableFatalError)
@@ -102,6 +133,7 @@ namespace cdmdotnet.Logging
 
 		#endregion
 
+		/// <summary />
 		protected virtual void Log(string level, string message, string container, Exception exception)
 		{
 			try
@@ -205,6 +237,10 @@ namespace cdmdotnet.Logging
 				ShiftCurrentRunningThreadCount(false);
 		}
 
+		/// <summary>
+		/// Persists (or saves) the provided <paramref name="logInformation"></paramref> to the database
+		/// </summary>
+		/// <param name="logInformation">The <see cref="LogInformation"/> holding all the information you want to persist (save) to the database.</param>
 		protected abstract void PersistLog(LogInformation logInformation);
 
 		private void PollLoggingQueue()

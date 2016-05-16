@@ -13,21 +13,35 @@ using cdmdotnet.Logging.Configuration;
 
 namespace cdmdotnet.Logging
 {
+	/// <summary>
+	/// Provides a set of methods that help you log events relating to the execution of your code outputting to a database
+	/// </summary>
 	public abstract class DatabaseLogger : Logger
 	{
+		/// <summary>
+		/// Instantiates a new instance of the <see cref="DatabaseLogger"/> class calling the constructor on <see cref="Logger"/>.
+		/// </summary>
 		protected DatabaseLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
 			: base(loggerSettings, correlationIdHelper)
 		{
 		}
 
+		/// <summary />
 		protected abstract string GetSqlConnectionString();
 
+		/// <summary />
 		protected abstract IDbConnection GetDbConnection(string connectionString);
 
+		/// <summary />
 		protected abstract IDbCommand GetCommand();
 
+		/// <summary />
 		protected abstract IDbTransaction GetWriteTransaction(IDbConnection dbConnection);
 
+		/// <summary>
+		/// Persists (or saves) the provided <paramref name="logInformation"></paramref> to the database
+		/// </summary>
+		/// <param name="logInformation">The <see cref="LogInformation"/> holding all the information you want to persist (save) to the database.</param>
 		protected override void PersistLog(LogInformation logInformation)
 		{
 			try
@@ -133,6 +147,9 @@ namespace cdmdotnet.Logging
 			}
 		}
 
+		/// <summary>
+		/// Creates the required table for storing logs in
+		/// </summary>
 		protected virtual void CreateTable()
 		{
 			try
@@ -177,6 +194,7 @@ VALUES
 (@Raised, @Level, @Module, @Instance, @Environment, @EnvironmentInstance, @CorrelationId, @Message, @Container, @Exception);";
 		}
 
+		/// <summary />
 		protected virtual string GetCreateTableStatement()
 		{
 			return @"IF NOT EXISTS (SELECT 1 FROM sysobjects WHERE name='Logs' and xtype='U')
