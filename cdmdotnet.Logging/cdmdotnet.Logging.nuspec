@@ -17,6 +17,6 @@
 		<copyright>Copyright 2015</copyright>
 	</metadata>
 	<files>
-		<file src="packaging\Logging\*.xdt" target="content" />
+		<file src="..\packaging\Logging\*.xdt" target="content" />
 	</files>
 </package>

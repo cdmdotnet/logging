@@ -18,6 +18,6 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="packaging\Sql\*.xdt" target="content" />
+		<file src="..\packaging\Sql\*.xdt" target="content" />
 	</files>
 </package>
