@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>cdmdotnet.Logging</id>
+		<title>C# Logging</title>
+		<version>$version$</version>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<projectUrl>https://github.com/cdmdotnet/logging</projectUrl>
+		<authors>cdmdotnet Limited</authors>
+		<iconUrl>https://raw.githubusercontent.com/Chinchilla-Software-Com/CQRS/master/wiki/ChinChilla-Software-Red.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>
+			cdmdotnet.Logging is an abstracted logging platform for .NET. It can help you collect reliable logs for your application regardless of its size or complexity with minimal performance implications.
+
+			This package installs cdmdotnet.Logging.dll with includes core logging functionality. Other packages depend on cdmdotnet.Logging for specific implementations.
+		</description>
+		<copyright>Copyright 2015</copyright>
+	</metadata>
+	<files>
+		<file src="packaging\Logging\*.xdt" target="content" />
+	</files>
+</package>

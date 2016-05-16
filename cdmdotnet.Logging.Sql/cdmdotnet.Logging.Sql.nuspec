@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>cdmdotnet.Logging.Sql</id>
+		<title>SqlServer C# Logging</title>
+		<version>$version$</version>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<projectUrl>https://github.com/cdmdotnet/logging</projectUrl>
+		<authors>cdmdotnet Limited</authors>
+		<iconUrl>https://raw.githubusercontent.com/Chinchilla-Software-Com/CQRS/master/wiki/ChinChilla-Software-Red.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>
+			A SqlServer implementation for cdmdotnet.Logging.
+		</description>
+		<copyright>Copyright 2015</copyright>
+		<dependencies>
+			<dependency id="cdmdotnet.Logging" version="[$version$]" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="packaging\Sql\*.xdt" target="content" />
+	</files>
+</package>

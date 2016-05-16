@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>cdmdotnet.Logging.Azure</id>
+		<title>Azure settings for C# Logging</title>
+		<version>$version$</version>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<projectUrl>https://github.com/cdmdotnet/logging</projectUrl>
+		<authors>cdmdotnet Limited</authors>
+		<iconUrl>https://raw.githubusercontent.com/Chinchilla-Software-Com/CQRS/master/wiki/ChinChilla-Software-Red.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>
+			Settings for using C# logging in Azure.
+		</description>
+		<copyright>Copyright 2015</copyright>
+		<dependencies>
+			<dependency id="cdmdotnet.Logging" version="[$version$]" />
+		</dependencies>
+	</metadata>
+</package>
