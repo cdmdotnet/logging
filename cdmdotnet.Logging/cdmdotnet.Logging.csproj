@@ -34,11 +34,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\cdmdotnet.Logging.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="cdmdotnet.Performance, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\cdmdotnet.Performance.1.0.5.8\lib\net40\cdmdotnet.Performance.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="cdmdotnet.StateManagement">
+      <HintPath>..\..\old\uSure\ReferenceLibrary\cdmdotnet\StateManagement\cdmdotnet.StateManagement.dll</HintPath>
+    </Reference>
+    <Reference Include="cdmdotnet.StateManagement.TestHelpers">
+      <HintPath>..\..\old\uSure\ReferenceLibrary\cdmdotnet\StateManagement\cdmdotnet.StateManagement.TestHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="cdmdotnet.StateManagement.Thread">
+      <HintPath>..\..\old\uSure\ReferenceLibrary\cdmdotnet\StateManagement\cdmdotnet.StateManagement.Thread.dll</HintPath>
+    </Reference>
+    <Reference Include="cdmdotnet.StateManagement.Web">
+      <HintPath>..\..\old\uSure\ReferenceLibrary\cdmdotnet\StateManagement\cdmdotnet.StateManagement.Web.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>

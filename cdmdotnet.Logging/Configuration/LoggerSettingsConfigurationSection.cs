@@ -11,7 +11,7 @@ using System.Configuration;
 namespace cdmdotnet.Logging.Configuration
 {
 	/// <summary>
-	/// The settings for all <see cref="ILogger"/> instances reading information from an app.config or web.config file.
+	/// The settings for all <see cref="ILogger"/> instances reading settings from an app.config or web.config file.
 	/// </summary>
 	/// <remarks>
 	/// http://haacked.com/archive/2007/03/12/custom-configuration-sections-in-3-easy-steps.aspx
