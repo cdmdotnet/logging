@@ -12,7 +12,7 @@
 	<connectionStrings xdt:Transform="InsertIfMissing">
 	</connectionStrings>
 
-	<appSettings>
+	<connectionStrings>
 		<add name="SqlDatabaseLogs" connectionString="User ID=UserId;Password=Password;Initial Catalog=Logs;Data Source=localhost; Enlist=False; Trusted_Connection=False; Connection Timeout=30; MultipleActiveResultSets=False;" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)" />
-	</appSettings>
+	</connectionStrings>
 </configuration>
