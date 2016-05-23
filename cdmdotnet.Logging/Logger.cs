@@ -37,13 +37,6 @@ namespace cdmdotnet.Logging
 			{
 				LoggingThreadsQueue = new Dictionary<Thread, LogInformation>();
 				CurrentRunningThreadCountLock = new ReaderWriterLockSlim();
-
-				var queueThread = new Thread(PollLoggingQueue)
-				{
-					Name = GetQueueThreadName() ?? "Log queue polling"
-				};
-
-				queueThread.Start();
 			}
 		}
 
@@ -61,6 +54,8 @@ namespace cdmdotnet.Logging
 		protected ICorrelationIdHelper CorrelationIdHelper { get; private set; }
 
 		private IDictionary<Thread, LogInformation> LoggingThreadsQueue { get; set; }
+
+		private Thread QueueThread { get; set; }
 
 		/// <summary />
 		protected bool IsDisposing { get; set; }
@@ -249,8 +244,15 @@ namespace cdmdotnet.Logging
 				Trace.TraceInformation("Logger: PollLoggingQueue:: {0}::: Getting keys from the queue.", Thread.CurrentThread.Name);
 			IList<Thread> loggingThreads = LoggingThreadsQueue.Keys.ToList();
 
-			while (loggingThreads.Any() || !IsDisposed)
+			int shutdownLoopCounter = 50;
+
+			while ((loggingThreads.Any() || shutdownLoopCounter > 0) && !IsDisposed)
 			{
+				// reset the counter as there is work to do;
+				if (loggingThreads.Any())
+					shutdownLoopCounter = 50;
+				else
+					shutdownLoopCounter--;
 				foreach (Thread loggingThread in loggingThreads)
 				{
 					if (EnableThreadedLoggingOutput)
@@ -288,7 +290,19 @@ namespace cdmdotnet.Logging
 				Thread.Sleep(50);
 				if (EnableThreadedLoggingOutput)
 					Trace.TraceInformation("Logger: PollLoggingQueue:: {0}::: Refreshing keys from the queue.", Thread.CurrentThread.Name);
-				loggingThreads = LoggingThreadsQueue.Keys.ToList();
+				int retryCount = 0;
+				while (retryCount < 10)
+				{
+					try
+					{
+						loggingThreads = LoggingThreadsQueue.Keys.ToList();
+						break;
+					}
+					catch (Exception)
+					{
+						retryCount++;
+					}
+				}
 			}
 			if (EnableThreadedLoggingOutput)
 				Trace.TraceInformation("Logger: PollLoggingQueue:: {0}::: Polling done.", Thread.CurrentThread.Name);
@@ -331,6 +345,30 @@ namespace cdmdotnet.Logging
 				throw new InvalidOperationException("The logger is disposed.");
 
 			LoggingThreadsQueue.Add(loggingThread, logInformation);
+
+			CurrentRunningThreadCountLock.EnterUpgradeableReadLock();
+
+			if (QueueThread == null || (QueueThread.ThreadState != ThreadState.Running && QueueThread.ThreadState != ThreadState.WaitSleepJoin))
+			{
+				CurrentRunningThreadCountLock.EnterWriteLock();
+				// Recheck we actually need to do this in-case another thread did this for us
+				if (QueueThread == null || (QueueThread.ThreadState != ThreadState.Running && QueueThread.ThreadState != ThreadState.WaitSleepJoin))
+				{
+					if (LoggerSettings.EnableThreadedLogging)
+					{
+						QueueThread = new Thread(PollLoggingQueue)
+						{
+							Name = GetQueueThreadName() ?? "Log queue polling"
+						};
+
+						QueueThread.Start();
+					}
+				}
+				CurrentRunningThreadCountLock.ExitWriteLock();
+				
+			}
+
+			CurrentRunningThreadCountLock.ExitUpgradeableReadLock();
 		}
 
 		#region Implementation of IDisposable
