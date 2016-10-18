@@ -194,6 +194,23 @@ namespace cdmdotnet.Logging.Configuration
 		}
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsConnectionStringName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		[ConfigurationProperty("SqlDatabaseLogsConnectionStringName", DefaultValue = "Logs", IsRequired = true)]
+		public string SqlDatabaseLogsConnectionStringName
+		{
+			get
+			{
+				return (string)this["SqlDatabaseLogsConnectionStringName"];
+			}
+			set
+			{
+				this["SqlDatabaseLogsConnectionStringName"] = value;
+			}
+		}
+
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
 		[ConfigurationProperty("EnableThreadedLoggingOutput", DefaultValue = false, IsRequired = true)]

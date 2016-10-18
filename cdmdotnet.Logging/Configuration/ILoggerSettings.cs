@@ -6,6 +6,8 @@
 // // -----------------------------------------------------------------------
 #endregion
 
+using System.Configuration;
+
 namespace cdmdotnet.Logging.Configuration
 {
 	/// <summary>
@@ -60,10 +62,17 @@ namespace cdmdotnet.Logging.Configuration
 		/// </summary>
 		string Instance { get; }
 
-		/// <summary />
+		/// <summary>
+		/// A friendly identifier to help identify different environments of the same application, such as deployments to different geo-graphical locations of the same application.
+		/// </summary>
 		string EnvironmentInstance { get; }
 
 		/// <summary />
 		string Environment { get; }
+
+		/// <summary>
+		/// The key of the <see cref="ConfigurationManager.AppSettings"/> item that holds the name of the connection string to use.
+		/// </summary>
+		string SqlDatabaseLogsConnectionStringName { get; }
 	}
 }

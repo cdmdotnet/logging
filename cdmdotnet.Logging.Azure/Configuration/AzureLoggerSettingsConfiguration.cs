@@ -107,6 +107,15 @@ namespace cdmdotnet.Logging.Azure.Configuration
 			get { return CloudConfigurationManager.GetSetting("Environment") ?? "Unknown"; }
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsConnectionStringName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		public string SqlDatabaseLogsConnectionStringName
+		{
+			get { return CloudConfigurationManager.GetSetting("SqlDatabaseLogsConnectionStringName") ?? "Logs"; }
+		}
+
+
 		#endregion
 	}
 }
