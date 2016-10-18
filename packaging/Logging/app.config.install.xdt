@@ -18,8 +18,12 @@
 		EnableFatalError="true"
 		EnableThreadedLogging="true"
 
-		ModuleName ="MyApplication"
-		Instance ="Production"
+		ModuleName ="MyCompany"
+		Instance ="MyApplication"
+
+		EnvironmentInstance="Server1"
+		Environment="Production"
+		EnableThreadedLoggingOutput="true"
 
 		xdt:Transform="InsertIfMissing" />
 </configuration>
