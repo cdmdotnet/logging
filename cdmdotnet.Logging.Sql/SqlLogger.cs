@@ -45,7 +45,7 @@ namespace cdmdotnet.Logging.Sql
 		/// <summary />
 		protected override string GetSqlConnectionString()
 		{
-			return ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["SqlDatabaseLogsConnectionStringName"]].ConnectionString;
+			return ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName].ConnectionString;
 		}
 
 		/// <summary />

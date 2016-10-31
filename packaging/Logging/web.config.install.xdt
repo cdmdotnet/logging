@@ -25,5 +25,7 @@
 		Environment="Production"
 		EnableThreadedLoggingOutput="true"
 
+		SqlDatabaseLogsConnectionStringName="SqlDatabaseLogs"
+
 		xdt:Transform="InsertIfMissing" />
 </configuration>
