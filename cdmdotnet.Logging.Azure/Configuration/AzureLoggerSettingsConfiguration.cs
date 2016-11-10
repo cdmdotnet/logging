@@ -24,7 +24,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableInfo
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableInfo") ?? "true"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableInfo", false) ?? "true"); }
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableDebug
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableDebug") ?? "false"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableDebug", false) ?? "false"); }
 		}
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableWarning
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableWarning") ?? "true"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableWarning", false) ?? "true"); }
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableError
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableError") ?? "true"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableError", false) ?? "true"); }
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableFatalError
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableFatalError") ?? "true"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableFatalError", false) ?? "true"); }
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableThreadedLogging
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableThreadedLogging") ?? "true"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableThreadedLogging", false) ?? "true"); }
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableThreadedLoggingOutput
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableThreadedLoggingOutput") ?? "false"); }
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableThreadedLoggingOutput", false) ?? "false"); }
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string ModuleName
 		{
-			get { return CloudConfigurationManager.GetSetting("ModuleName") ?? "All"; }
+			get { return CloudConfigurationManager.GetSetting("ModuleName", false) ?? "All"; }
 		}
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string Instance
 		{
-			get { return CloudConfigurationManager.GetSetting("Instance") ?? "All"; }
+			get { return CloudConfigurationManager.GetSetting("Instance", false) ?? "All"; }
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string EnvironmentInstance
 		{
-			get { return CloudConfigurationManager.GetSetting("EnvironmentInstance") ?? "All"; }
+			get { return CloudConfigurationManager.GetSetting("EnvironmentInstance", false) ?? "All"; }
 		}
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string Environment
 		{
-			get { return CloudConfigurationManager.GetSetting("Environment") ?? "Unknown"; }
+			get { return CloudConfigurationManager.GetSetting("Environment", false) ?? "Unknown"; }
 		}
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string SqlDatabaseLogsConnectionStringName
 		{
-			get { return CloudConfigurationManager.GetSetting("SqlDatabaseLogsConnectionStringName") ?? "Logs"; }
+			get { return CloudConfigurationManager.GetSetting("SqlDatabaseLogsConnectionStringName", false) ?? "Logs"; }
 		}
 
 

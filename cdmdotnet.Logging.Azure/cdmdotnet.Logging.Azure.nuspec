@@ -16,5 +16,11 @@
 		<dependencies>
 			<dependency id="cdmdotnet.Logging" version="[$version$]" />
 		</dependencies>
+
+		<releaseNotes>
+			Version 1.1.38
+
+			* Suppressed trace outputs when using the configuration class.
+		</releaseNotes>
 	</metadata>
 </package>
