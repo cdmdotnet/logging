@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace cdmdotnet.Logging
 {
@@ -39,5 +40,15 @@ namespace cdmdotnet.Logging
 		/// A serialised <see cref="Exception"/> if one was provided.
 		/// </summary>
 		public string Exception { get; set; }
+
+		/// <summary>
+		/// An un-serialised <see cref="IDictionary{TKey,TValue}"/> if one was provided.
+		/// </summary>
+		public IDictionary<string, object> AdditionalData { get; set; }
+
+		/// <summary>
+		/// A serialised <see cref="IDictionary{TKey,TValue}"/> if one was provided.
+		/// </summary>
+		public string MetaData { get; set; }
 	}
 }

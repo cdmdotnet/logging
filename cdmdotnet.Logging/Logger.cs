@@ -84,52 +84,52 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Writes an informational message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		public void LogInfo(string message, string container = null, Exception exception = null)
+		public void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableInfo)
-				Log("Info", message, container, exception);
+				Log("Info", message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes a debugging message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		public void LogDebug(string message, string container = null, Exception exception = null)
+		public void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableDebug)
-				Log("Debug", message, container, exception);
+				Log("Debug", message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes a warning message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		public void LogWarning(string message, string container = null, Exception exception = null)
+		public void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableWarning)
-				Log("Warning", message, container, exception);
+				Log("Warning", message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes an error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		public void LogError(string message, string container = null, Exception exception = null)
+		public void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableError)
-				Log("Error", message, container, exception);
+				Log("Error", message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes a fatal error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		public void LogFatalError(string message, string container = null, Exception exception = null)
+		public void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableFatalError)
-				Log("Fatal", message, container, exception);
+				Log("Fatal", message, container, exception, additionalData, metaData);
 		}
 
 		#endregion
 
 		/// <summary />
-		protected virtual void Log(string level, string message, string container, Exception exception)
+		protected virtual void Log(string level, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
 			try
 			{
@@ -165,7 +165,9 @@ namespace cdmdotnet.Logging
 				Level = level,
 				Message = message,
 				Container = container,
-				Exception = JsonConvert.SerializeObject(exception)
+				Exception = JsonConvert.SerializeObject(exception),
+				AdditionalData = additionalData,
+				MetaData = JsonConvert.SerializeObject(metaData)
 			};
 
 			if (LoggerSettings.EnableThreadedLogging)

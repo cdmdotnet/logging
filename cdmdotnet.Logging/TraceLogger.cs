@@ -7,8 +7,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using cdmdotnet.Logging.Configuration;
+using Newtonsoft.Json;
 
 namespace cdmdotnet.Logging
 {
@@ -41,46 +43,46 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Writes an informational message to <see cref="LogInfo(string)"/>
 		/// </summary>
-		public void LogInfo(string message, string container = null, Exception exception = null)
+		public void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableInfo)
-				Log("Info", LogInfo, message, container, exception);
+				Log("Info", LogInfo, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes a debugging message to <see cref="LogDebug(string)"/>
 		/// </summary>
-		public void LogDebug(string message, string container = null, Exception exception = null)
+		public void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableDebug)
-				Log("Debug", LogDebug, message, container, exception);
+				Log("Debug", LogDebug, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes a warning message to <see cref="LogWarning(string)"/>
 		/// </summary>
-		public void LogWarning(string message, string container = null, Exception exception = null)
+		public void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableWarning)
-				Log("Warning", LogWarning, message, container, exception);
+				Log("Warning", LogWarning, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes an error message to <see cref="LogError(string)"/>
 		/// </summary>
-		public void LogError(string message, string container = null, Exception exception = null)
+		public void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableError)
-				Log("Error", LogError, message, container, exception);
+				Log("Error", LogError, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes a fatal error message to <see cref="LogFatalError(string)"/>
 		/// </summary>
-		public void LogFatalError(string message, string container = null, Exception exception = null)
+		public void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableFatalError)
-				Log("Fatal", LogFatalError, message, container, exception);
+				Log("Fatal", LogFatalError, message, container, exception, additionalData, metaData);
 		}
 
 		#endregion
@@ -88,7 +90,7 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Format a message based on the input parameters to be sent to <paramref name="logAction"></paramref>
 		/// </summary>
-		protected virtual void Log(string level, Action<string> logAction, string message, string container, Exception exception)
+		protected virtual void Log(string level, Action<string> logAction, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
 			Guid corrolationId = Guid.Empty;
 			try
@@ -104,6 +106,10 @@ namespace cdmdotnet.Logging
 				pattern = string.Concat(pattern, " {3}:: {2}");
 			if (exception != null)
 				pattern = string.Concat(pattern, "\r\n{4}");
+			if (additionalData != null)
+				pattern = string.Concat(pattern, "\r\n{8}");
+			if (metaData != null)
+				pattern = string.Concat(pattern, "\r\n{9}");
 			string messageToLog = string.Format(pattern, level, // 0
 				DateTime.Now, // 1
 				message, // 2
@@ -111,7 +117,9 @@ namespace cdmdotnet.Logging
 				exception, // 4
 				exception == null ? null : exception.Message, // 5
 				exception == null ? null : exception.StackTrace, // 6
-				corrolationId // 7
+				corrolationId, // 7
+				JsonConvert.SerializeObject(additionalData), // 8
+				JsonConvert.SerializeObject(metaData) // 9
 			);
 
 			logAction(messageToLog);

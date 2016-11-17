@@ -7,6 +7,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 
 namespace cdmdotnet.Logging
 {
@@ -18,26 +19,26 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Writes an informational message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		void LogInfo(string message, string container = null, Exception exception = null);
+		void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
 
 		/// <summary>
 		/// Writes a debugging message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		void LogDebug(string message, string container = null, Exception exception = null);
+		void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
 
 		/// <summary>
 		/// Writes a warning message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		void LogWarning(string message, string container = null, Exception exception = null);
+		void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
 
 		/// <summary>
 		/// Writes an error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		void LogError(string message, string container = null, Exception exception = null);
+		void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
 
 		/// <summary>
 		/// Writes a fatal error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
-		void LogFatalError(string message, string container = null, Exception exception = null);
+		void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
 	}
 }

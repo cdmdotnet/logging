@@ -11,6 +11,8 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>
 			A SqlServer implementation for cdmdotnet.Logging.
+
+			Use the CreateTable() method to create the table you require.
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<dependencies>

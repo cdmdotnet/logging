@@ -10,6 +10,7 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using cdmdotnet.Logging.Configuration;
+using Newtonsoft.Json;
 
 namespace cdmdotnet.Logging
 {
@@ -135,6 +136,28 @@ namespace cdmdotnet.Logging
 						exceptionParameter.Value = logInformation.Exception ?? (object)DBNull.Value;
 						command.Parameters.Add(exceptionParameter);
 
+						foreach (string key in logInformation.AdditionalData.Keys)
+						{
+							object value = logInformation.AdditionalData[key];
+							IDbDataParameter additionalDataParameter = command.CreateParameter();
+							additionalDataParameter.DbType = DbType.String;
+							additionalDataParameter.Direction = ParameterDirection.Input;
+							additionalDataParameter.ParameterName = string.Format("@{0}", key);
+							additionalDataParameter.Value = value != null ? JsonConvert.SerializeObject(value) : (object)DBNull.Value;
+							command.Parameters.Add(additionalDataParameter);
+
+							command.CommandText = command.CommandText
+								.Replace(", Logs.MetaData", string.Format(", Logs.MetaData, Logs.{0}", key))
+								.Replace(", @MetaData", string.Format(", @MetaData, @{0}", key));
+						}
+
+						IDbDataParameter metaDataParameter = command.CreateParameter();
+						metaDataParameter.DbType = DbType.String;
+						metaDataParameter.Direction = ParameterDirection.Input;
+						metaDataParameter.ParameterName = "@MetaData";
+						metaDataParameter.Value = logInformation.MetaData ?? (object)DBNull.Value;
+						command.Parameters.Add(metaDataParameter);
+
 						command.ExecuteNonQuery();
 
 						dbTransaction.Commit();
@@ -189,9 +212,9 @@ namespace cdmdotnet.Logging
 		protected virtual string GetInsertStatement()
 		{
 			return @"INSERT INTO Logs
-(Logs.Raised, Logs.Level, Logs.Module, Logs.Instance, Logs.Environment, Logs.EnvironmentInstance, Logs.CorrelationId, Logs.Message, Logs.Container, Logs.Exception)
+(Logs.Raised, Logs.Level, Logs.Module, Logs.Instance, Logs.Environment, Logs.EnvironmentInstance, Logs.CorrelationId, Logs.Message, Logs.Container, Logs.Exception, Logs.MetaData)
 VALUES
-(@Raised, @Level, @Module, @Instance, @Environment, @EnvironmentInstance, @CorrelationId, @Message, @Container, @Exception);";
+(@Raised, @Level, @Module, @Instance, @Environment, @EnvironmentInstance, @CorrelationId, @Message, @Container, @Exception, @MetaData);";
 		}
 
 		/// <summary />
@@ -211,7 +234,8 @@ BEGIN
 		CorrelationId uniqueidentifier NOT NULL,
 		Message nvarchar(MAX) NULL,
 		Container nvarchar(MAX) NULL,
-		Exception nvarchar(MAX) NULL
+		Exception nvarchar(MAX) NULL,
+		MetaData nvarchar(MAX) NULL
 	);
 
 	ALTER TABLE Logs ADD CONSTRAINT
