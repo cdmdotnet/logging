@@ -21,6 +21,11 @@ namespace cdmdotnet.Logging.Configuration
 		bool EnableInfo { get; }
 
 		/// <summary>
+		/// If false <see cref="ILogger.LogProgress"/> will not do anything nor log anything.
+		/// </summary>
+		bool EnableProgress { get; }
+
+		/// <summary>
 		/// If false <see cref="ILogger.LogDebug"/> will not do anything nor log anything.
 		/// </summary>
 		bool EnableDebug { get; }

@@ -41,7 +41,9 @@ namespace cdmdotnet.Logging
 		#region Implementation of ILogger
 
 		/// <summary>
-		/// Writes an informational message to <see cref="LogInfo(string)"/>
+		/// This is for logging general information, effectively the least amount of information you'd want to know about a system operation,
+		/// to <see cref="LogInfo(string)"/>
+		/// Don't abuse this as you will flood the logs as this would normally never turned off. Use <see cref="LogDebug(string,string,System.Exception,System.Collections.Generic.IDictionary{string,object},System.Collections.Generic.IDictionary{string,object})"/> or <see cref="LogProgress(string,string,System.Exception,System.Collections.Generic.IDictionary{string,object},System.Collections.Generic.IDictionary{string,object})"/> for reporting additional information.
 		/// </summary>
 		public void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -50,7 +52,18 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes a debugging message to <see cref="LogDebug(string)"/>
+		/// Writes logging progress information such as "Process X is 24% done"
+		/// to <see cref="LogInfo(string)"/>
+		/// </summary>
+		public void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
+		{
+			if (LoggerSettings.EnableProgress)
+				Log("Progress", LogProgress, message, container, exception, additionalData, metaData);
+		}
+
+		/// <summary>
+		/// Writes diagnostic information 
+		/// to <see cref="LogDebug(string)"/>
 		/// </summary>
 		public void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -59,7 +72,8 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes a warning message to <see cref="LogWarning(string)"/>
+		/// Writes warnings, something not yet an error, but something to watch out for,
+		/// to <see cref="LogWarning(string)"/>
 		/// </summary>
 		public void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -68,7 +82,8 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes an error message to <see cref="LogError(string)"/>
+		/// Writes errors, something handled and to be investigated,
+		/// to <see cref="LogError(string)"/>
 		/// </summary>
 		public void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -77,7 +92,8 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes a fatal error message to <see cref="LogFatalError(string)"/>
+		/// Writes fatal errors that have a detrimental effect on the system,
+		/// to <see cref="LogFatalError(string)"/>
 		/// </summary>
 		public void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -129,6 +145,14 @@ namespace cdmdotnet.Logging
 		/// Writes an informational message to <see cref="Trace.TraceInformation(string)"/>
 		/// </summary>
 		public void LogInfo(string message)
+		{
+			Trace.TraceInformation(message);
+		}
+
+		/// <summary>
+		/// Writes logging progress information such as "Process X is 24% done" to <see cref="Trace.TraceInformation(string)"/>
+		/// </summary>
+		public void LogProgress(string message)
 		{
 			Trace.TraceInformation(message);
 		}

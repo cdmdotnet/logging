@@ -82,7 +82,9 @@ namespace cdmdotnet.Logging
 		#region Implementation of ILog
 
 		/// <summary>
-		/// Writes an informational message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// This is for logging general information, effectively the least amount of information you'd want to know about a system operation,
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// Don't abuse this as you will flood the logs as this would normally never turned off. Use <see cref="LogDebug"/> or <see cref="LogProgress"/> for reporting additional information.
 		/// </summary>
 		public void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -91,7 +93,18 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes a debugging message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// Writes logging progress information such as "Process X is 24% done"
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// </summary>
+		public void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
+		{
+			if (LoggerSettings.EnableProgress)
+				Log("Progress", message, container, exception, additionalData, metaData);
+		}
+
+		/// <summary>
+		/// Writes diagnostic information 
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
 		public void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -100,7 +113,8 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes a warning message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// Writes warnings, something not yet an error, but something to watch out for,
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
 		public void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -109,7 +123,8 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes an error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// Writes errors, something handled and to be investigated,
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
 		public void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
@@ -118,7 +133,8 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
-		/// Writes a fatal error message to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// Writes fatal errors that have a detrimental effect on the system,
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
 		public void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{

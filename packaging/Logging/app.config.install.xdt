@@ -12,16 +12,17 @@
 	<!-- If LoggerSettings tag is absent -->
 	<LoggerSettings
 		EnableInfo="true"
+		EnableProgress="true"
 		EnableDebug="false"
 		EnableWarning="true"
 		EnableError="true"
 		EnableFatalError="true"
 		EnableThreadedLogging="true"
 
-		ModuleName ="MyCompany"
-		Instance ="MyApplication"
+		ModuleName ="MyApplication"
+		Instance ="Server1"
 
-		EnvironmentInstance="Server1"
+		EnvironmentInstance="East-US Region"
 		Environment="Production"
 		EnableThreadedLoggingOutput="true"
 

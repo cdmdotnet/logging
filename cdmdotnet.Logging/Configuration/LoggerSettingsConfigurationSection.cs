@@ -50,6 +50,22 @@ namespace cdmdotnet.Logging.Configuration
 		}
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableProgress"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		[ConfigurationProperty("EnableProgress", DefaultValue = true, IsRequired = true)]
+		public bool EnableProgress
+		{
+			get
+			{
+				return (bool)this["EnableProgress"];
+			}
+			set
+			{
+				this["EnableProgress"] = value;
+			}
+		}
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableDebug"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
 		[ConfigurationProperty("EnableDebug", DefaultValue = false, IsRequired = true)]

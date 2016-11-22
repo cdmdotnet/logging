@@ -86,7 +86,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="cdmdotnet.Logging.nuspec" />
+    <None Include="cdmdotnet.Logging.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

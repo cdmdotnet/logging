@@ -28,6 +28,14 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		}
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableProgress"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// </summary>
+		public bool EnableProgress
+		{
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableProgress", false) ?? "true"); }
+		}
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableDebug"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableDebug
