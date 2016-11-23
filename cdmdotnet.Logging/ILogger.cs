@@ -17,6 +17,13 @@ namespace cdmdotnet.Logging
 	public interface ILogger
 	{
 		/// <summary>
+		/// This is for logging sensitive information,
+		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
+		/// Depending on the implementation this won't be obscured or encrypted in anyway. Use this sparingly.
+		/// </summary>
+		void LogSensitive(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
+
+		/// <summary>
 		/// This is for logging general information, effectively the least amount of information you'd want to know about a system operation,
 		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// Don't abuse this as you will flood the logs as this would normally never turned off. Use <see cref="LogDebug"/> or <see cref="LogProgress"/> for reporting additional information.

@@ -16,6 +16,11 @@ namespace cdmdotnet.Logging.Configuration
 	public interface ILoggerSettings
 	{
 		/// <summary>
+		/// If false <see cref="ILogger.LogSensitive"/> will not do anything nor log anything.
+		/// </summary>
+		bool EnableSensitive { get; }
+
+		/// <summary>
 		/// If false <see cref="ILogger.LogInfo"/> will not do anything nor log anything.
 		/// </summary>
 		bool EnableInfo { get; }

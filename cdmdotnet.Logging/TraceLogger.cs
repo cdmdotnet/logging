@@ -41,6 +41,17 @@ namespace cdmdotnet.Logging
 		#region Implementation of ILogger
 
 		/// <summary>
+		/// This is for logging sensitive information,
+		/// to <see cref="LogInfo(string)"/>
+		/// Depending on the implementation this won't be obscured or encrypted in anyway. Use this sparingly.
+		/// </summary>
+		public void LogSensitive(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
+		{
+			if (LoggerSettings.EnableSensitive)
+				Log("Sensitive", LogInfo, message, container, exception, additionalData, metaData);
+		}
+
+		/// <summary>
 		/// This is for logging general information, effectively the least amount of information you'd want to know about a system operation,
 		/// to <see cref="LogInfo(string)"/>
 		/// Don't abuse this as you will flood the logs as this would normally never turned off. Use <see cref="LogDebug(string,string,System.Exception,System.Collections.Generic.IDictionary{string,object},System.Collections.Generic.IDictionary{string,object})"/> or <see cref="LogProgress(string,string,System.Exception,System.Collections.Generic.IDictionary{string,object},System.Collections.Generic.IDictionary{string,object})"/> for reporting additional information.
@@ -48,7 +59,7 @@ namespace cdmdotnet.Logging
 		public void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableInfo)
-				Log("Info", LogInfo, message, container, exception, additionalData, metaData);
+				Log("Info", LogSensitive, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
@@ -139,6 +150,14 @@ namespace cdmdotnet.Logging
 			);
 
 			logAction(messageToLog);
+		}
+
+		/// <summary>
+		/// Writes sensitive information to <see cref="Trace.TraceInformation(string)"/>
+		/// </summary>
+		public void LogSensitive(string message)
+		{
+			Trace.TraceInformation(message);
 		}
 
 		/// <summary>
