@@ -20,6 +20,14 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		#region Implementation of ILoggerSettings
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableSensitive"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// </summary>
+		public bool EnableSensitive
+		{
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableSensitive", false) ?? "false"); }
+		}
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableInfo"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableInfo

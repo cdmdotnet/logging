@@ -34,6 +34,22 @@ namespace cdmdotnet.Logging.Configuration
 		#region Implementation of ILoggerSettings
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.EnableSensitive"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		[ConfigurationProperty("EnableSensitive", DefaultValue = false, IsRequired = true)]
+		public bool EnableSensitive
+		{
+			get
+			{
+				return (bool)this["EnableSensitive"];
+			}
+			set
+			{
+				this["EnableSensitive"] = value;
+			}
+		}
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableInfo"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
 		[ConfigurationProperty("EnableInfo", DefaultValue = true, IsRequired = true)]
