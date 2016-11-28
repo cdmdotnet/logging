@@ -274,6 +274,7 @@ namespace cdmdotnet.Logging
 			IList<Thread> loggingThreads = LoggingThreadsQueue.Keys.ToList();
 
 			int shutdownLoopCounter = 50;
+			long loop = long.MinValue;
 
 			while ((loggingThreads.Any() || shutdownLoopCounter > 0) && !IsDisposed)
 			{
@@ -316,7 +317,12 @@ namespace cdmdotnet.Logging
 				// sleep for a little bit
 				if (EnableThreadedLoggingOutput)
 					Trace.TraceInformation("Logger: PollLoggingQueue:: {0}::: About to sleep.", Thread.CurrentThread.Name);
-				Thread.Sleep(50);
+				if (loop++ % 5 == 0)
+					Thread.Yield();
+				else
+					Thread.Sleep(50);
+				if (loop == long.MaxValue)
+					loop = long.MinValue;
 				if (EnableThreadedLoggingOutput)
 					Trace.TraceInformation("Logger: PollLoggingQueue:: {0}::: Refreshing keys from the queue.", Thread.CurrentThread.Name);
 				int retryCount = 0;
@@ -416,12 +422,19 @@ namespace cdmdotnet.Logging
 			{
 				// This resolves any threaded issues where the collection can change on us.
 				ICollection<Thread> keys = LoggingThreadsQueue.Keys;
+				long loop = long.MinValue;
+
 				while (keys.Any(loggingThread => loggingThread.ThreadState != ThreadState.Stopped))
 				{
 					IsDisposing = true;
 					if (EnableThreadedLoggingOutput)
 						Trace.TraceInformation("Logger: Dispose:: {0}::: About to sleep.", Thread.CurrentThread.Name);
-					Thread.Sleep(100);
+					if (loop++ % 5 == 0)
+						Thread.Yield();
+					else
+						Thread.Sleep(100);
+					if (loop == long.MaxValue)
+						loop = long.MinValue;
 					// This resolves any threaded issues where the collection can change on us.
 					keys = LoggingThreadsQueue.Keys;
 				}
