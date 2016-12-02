@@ -16,7 +16,15 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
-			Version 1.1.44
+			Version 1.1.45
+
+			* Resolved an issue where a NullReferenceException if AdditionalData was null.
+
+			Version 1.1.46
+
+			* Remove cdmodtnet.Logging.Sql
+
+			Version 1.1.45
 
 			* Resolved an issue where a NullReferenceException could be raised during logging.
 			* Merged SqlLogger into cdmdotnet.Logging.

@@ -130,19 +130,22 @@ namespace cdmdotnet.Logging
 						exceptionParameter.Value = logInformation.Exception ?? (object)DBNull.Value;
 						command.Parameters.Add(exceptionParameter);
 
-						foreach (string key in logInformation.AdditionalData.Keys)
+						if (logInformation.AdditionalData != null)
 						{
-							object value = logInformation.AdditionalData[key];
-							IDbDataParameter additionalDataParameter = command.CreateParameter();
-							additionalDataParameter.DbType = DbType.String;
-							additionalDataParameter.Direction = ParameterDirection.Input;
-							additionalDataParameter.ParameterName = string.Format("@{0}", key);
-							additionalDataParameter.Value = value != null ? JsonConvert.SerializeObject(value) : (object)DBNull.Value;
-							command.Parameters.Add(additionalDataParameter);
+							foreach (string key in logInformation.AdditionalData.Keys)
+							{
+								object value = logInformation.AdditionalData[key];
+								IDbDataParameter additionalDataParameter = command.CreateParameter();
+								additionalDataParameter.DbType = DbType.String;
+								additionalDataParameter.Direction = ParameterDirection.Input;
+								additionalDataParameter.ParameterName = string.Format("@{0}", key);
+								additionalDataParameter.Value = value != null ? JsonConvert.SerializeObject(value) : (object)DBNull.Value;
+								command.Parameters.Add(additionalDataParameter);
 
-							command.CommandText = command.CommandText
-								.Replace(", Logs.MetaData", string.Format(", Logs.MetaData, Logs.{0}", key))
-								.Replace(", @MetaData", string.Format(", @MetaData, @{0}", key));
+								command.CommandText = command.CommandText
+									.Replace(", Logs.MetaData", string.Format(", Logs.MetaData, Logs.{0}", key))
+									.Replace(", @MetaData", string.Format(", @MetaData, @{0}", key));
+							}
 						}
 
 						IDbDataParameter metaDataParameter = command.CreateParameter();
