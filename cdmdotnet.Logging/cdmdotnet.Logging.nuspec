@@ -28,7 +28,6 @@
 		</releaseNotes>
 	</metadata>
 	<files>
-		<file src="..\packaging\Logging\*.xdt" target="content" />
-		<file src="..\packaging\Sql\*.xdt" target="content" />
+		<file src="..\packaging\**\*.xdt" target="content" />
 	</files>
 </package>
