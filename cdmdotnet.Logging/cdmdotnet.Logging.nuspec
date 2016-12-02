@@ -16,6 +16,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.1.49
+
+			* Replaced the threaded model with Parallel Tasks.
+
 			Version 1.1.48
 
 			* Resolved an issue where a NullReferenceException if AdditionalData was null.
