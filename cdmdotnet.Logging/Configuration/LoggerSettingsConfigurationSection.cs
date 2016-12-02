@@ -12,6 +12,7 @@ namespace cdmdotnet.Logging.Configuration
 {
 	/// <summary>
 	/// The settings for all <see cref="ILogger"/> instances reading settings from an app.config or web.config file.
+	/// This is used internally. Use <see cref="LoggerSettings"/> directly unless you know what you're doing.
 	/// </summary>
 	/// <remarks>
 	/// http://haacked.com/archive/2007/03/12/custom-configuration-sections-in-3-easy-steps.aspx
@@ -23,7 +24,7 @@ namespace cdmdotnet.Logging.Configuration
 		private static readonly LoggerSettingsConfigurationSection Settings = ConfigurationManager.GetSection(ConfigurationSectionKey) as LoggerSettingsConfigurationSection;
 
 		/// <summary />
-		public static ILoggerSettings Default
+		public static ILoggerSettings Current
 		{
 			get
 			{

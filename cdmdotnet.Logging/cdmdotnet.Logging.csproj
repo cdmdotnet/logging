@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\LoggerSettingsConfigurationSection.cs" />
     <Compile Include="Configuration\ILoggerSettings.cs" />
     <Compile Include="SqlLogger.cs" />
