@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>cdmdotnet.Logging</id>
-		<title>C# Logging</title>
+		<title>Simple Logging For .net</title>
 		<version>$version$</version>
 		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
 		<projectUrl>https://github.com/cdmdotnet/logging</projectUrl>
