@@ -16,13 +16,14 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
-			Version 1.1.45
+			Version 1.1.48
 
 			* Resolved an issue where a NullReferenceException if AdditionalData was null.
+			* Added some documentation to explain how MetaData and AdditionalData is stored.
 
 			Version 1.1.46
 
-			* Remove cdmodtnet.Logging.Sql
+			* Remove cdmdotnet.Logging.Sql
 
 			Version 1.1.45
 

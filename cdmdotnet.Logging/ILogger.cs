@@ -13,6 +13,9 @@ namespace cdmdotnet.Logging
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code.
+	/// The <see cref="IDictionary{TKey,TValue}">additionalData</see> parameter generally will map to something like a column is using a <see cref="DatabaseLogger"/> using the TKey as the column name and the TValue asn the column value
+	/// Or TKey as the property name and the TValue asn the property value.
+	/// The <see cref="IDictionary{TKey,TValue}">metaData</see> Will be serialised to a JSON string and if using a <see cref="DatabaseLogger"/> logging will be stored to a column named 'MetaData'.
 	/// </summary>
 	public interface ILogger
 	{
