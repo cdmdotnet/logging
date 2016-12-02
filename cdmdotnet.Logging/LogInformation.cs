@@ -50,5 +50,10 @@ namespace cdmdotnet.Logging
 		/// A serialised <see cref="IDictionary{TKey,TValue}"/> if one was provided.
 		/// </summary>
 		public string MetaData { get; set; }
+
+		/// <summary>
+		/// The value from <see cref="ICorrelationIdHelper.GetCorrelationId"/>
+		/// </summary>
+		public Guid CorrolationId { get; set; }
 	}
 }

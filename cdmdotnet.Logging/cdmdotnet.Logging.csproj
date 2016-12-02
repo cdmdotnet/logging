@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Configuration\LoggerSettingsConfigurationSection.cs" />
     <Compile Include="Configuration\ILoggerSettings.cs" />
+    <Compile Include="SqlLogger.cs" />
     <Compile Include="WebCorrelationIdHelper.cs" />
     <Compile Include="TraceLogger.cs" />
     <Compile Include="ConsoleLogger.cs" />
@@ -89,7 +90,9 @@
     <None Include="cdmdotnet.Logging.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

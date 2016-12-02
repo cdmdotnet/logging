@@ -13,9 +13,14 @@
 			cdmdotnet.Logging is an abstracted logging platform for .NET. It can help you collect reliable logs for your application regardless of its size or complexity with minimal performance implications.
 
 			This package installs cdmdotnet.Logging.dll with includes core logging functionality. Other packages depend on cdmdotnet.Logging for specific implementations.
-s		</description>
+		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.1.44
+
+			* Resolved an issue where a NullReferenceException could be raised during logging.
+			* Merged SqlLogger into cdmdotnet.Logging.
+
 			Version 1.1.39
 
 			* Added MetaData property
@@ -24,5 +29,6 @@ s		</description>
 	</metadata>
 	<files>
 		<file src="..\packaging\Logging\*.xdt" target="content" />
+		<file src="..\packaging\Sql\*.xdt" target="content" />
 	</files>
 </package>

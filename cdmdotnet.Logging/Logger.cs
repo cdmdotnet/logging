@@ -197,6 +197,15 @@ namespace cdmdotnet.Logging
 				MetaData = JsonConvert.SerializeObject(metaData)
 			};
 
+			try
+			{
+				logInformation.CorrolationId = CorrelationIdHelper.GetCorrelationId();
+			}
+			catch (NullReferenceException)
+			{
+				logInformation.CorrolationId = Guid.Empty;
+			}
+
 			if (LoggerSettings.EnableThreadedLogging)
 			{
 				var persistingThread = new Thread(PersistLog)

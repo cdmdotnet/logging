@@ -6,12 +6,13 @@
 // // -----------------------------------------------------------------------
 #endregion
 
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using cdmdotnet.Logging.Configuration;
 
-namespace cdmdotnet.Logging.Sql
+namespace cdmdotnet.Logging
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code outputting to a SqlServer database.
@@ -45,7 +46,13 @@ namespace cdmdotnet.Logging.Sql
 		/// <summary />
 		protected override string GetSqlConnectionString()
 		{
-			return ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName].ConnectionString;
+			string appSettingValue = LoggerSettings.SqlDatabaseLogsConnectionStringName;
+			if (string.IsNullOrWhiteSpace(appSettingValue))
+				throw new ConfigurationErrorsException("No value for the appSetting 'SqlDatabaseLogsConnectionStringName' was provided");
+			string connectionString = ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName].ConnectionString;
+			if (string.IsNullOrWhiteSpace(appSettingValue))
+				throw new ConfigurationErrorsException(string.Format("No value for the connection string name '{0}' was provided", appSettingValue));
+			return connectionString;
 		}
 
 		/// <summary />

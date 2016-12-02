@@ -99,13 +99,7 @@ namespace cdmdotnet.Logging
 						correlationIdParameter.DbType = DbType.Guid;
 						correlationIdParameter.Direction = ParameterDirection.Input;
 						correlationIdParameter.ParameterName = "@CorrelationId";
-						Guid corrolationId = Guid.Empty;
-						try
-						{
-							corrolationId = CorrelationIdHelper.GetCorrelationId();
-						}
-						catch { }
-						correlationIdParameter.Value = corrolationId;
+						correlationIdParameter.Value = logInformation.CorrolationId;
 						command.Parameters.Add(correlationIdParameter);
 
 						IDbDataParameter levelParameter = command.CreateParameter();

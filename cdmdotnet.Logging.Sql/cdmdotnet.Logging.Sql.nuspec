@@ -16,8 +16,18 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<dependencies>
-			<dependency id="cdmdotnet.Logging" version="[$version$]" />
+			<dependency id="cdmdotnet.Logging" version="$version$" />
 		</dependencies>
+		<releaseNotes>
+			Version 1.1.44
+
+			* Merged into cdmdotnet.Logging
+
+			Version 1.1.39
+
+			* Added MetaData property
+			* Added AdditionalData property
+		</releaseNotes>
 	</metadata>
 	<files>
 		<file src="..\packaging\Sql\*.xdt" target="content" />
