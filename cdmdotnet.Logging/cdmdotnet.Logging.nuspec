@@ -16,6 +16,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.52
+
+			* Switched to using (and referencing) cdmdotnet.Statemanagement for controlling the passing of the CorrelationId from thread to thread safely when using Parallel Tasks.
+
 			Version 1.2.51
 
 			* Added Logger settings as a better default when using app.config and web.config files.
