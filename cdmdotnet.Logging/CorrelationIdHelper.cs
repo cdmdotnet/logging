@@ -35,7 +35,10 @@ namespace cdmdotnet.Logging
 			ContextItemCollection = contextItemCollectionFactory.GetCurrentContext();
 		}
 
-		private const string CallContextPermissionScopeValueKey = "CorrelationIdValue";
+		/// <summary>
+		/// The key used in the internal collection to find the CorrelationId value by.
+		/// </summary>
+		public const string CallContextCorrelationIdValueKey = "CorrelationIdValue";
 
 		/// <summary>
 		/// The local collection that holds values.
@@ -52,7 +55,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public Guid GetCorrelationId()
 		{
-			return ContextItemCollection.GetData<Guid>(CallContextPermissionScopeValueKey);
+			return ContextItemCollection.GetData<Guid>(CallContextCorrelationIdValueKey);
 		}
 
 		/// <summary>
@@ -61,7 +64,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public Guid SetCorrelationId(Guid correlationId)
 		{
-			return ContextItemCollection.SetData(CallContextPermissionScopeValueKey, correlationId);
+			return ContextItemCollection.SetData(CallContextCorrelationIdValueKey, correlationId);
 		}
 
 		#endregion
