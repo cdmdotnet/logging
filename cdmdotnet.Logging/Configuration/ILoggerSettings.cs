@@ -88,6 +88,6 @@ namespace cdmdotnet.Logging.Configuration
 		/// <summary>
 		/// The name of the table to use.
 		/// </summary>
-		string SqlDatabaseLogsTableName { get; }
+		string SqlDatabaseTableName { get; }
 	}
 }

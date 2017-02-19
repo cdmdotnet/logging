@@ -27,6 +27,7 @@
 		EnableThreadedLoggingOutput="true"
 
 		SqlDatabaseLogsConnectionStringName="SqlDatabaseLogs"
+		SqlDatabaseLogsTableName="Logs"
 
 		xdt:Transform="InsertIfMissing" />
 </configuration>

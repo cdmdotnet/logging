@@ -208,7 +208,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		protected virtual string GetInsertStatement()
 		{
-			string tableName = LoggerSettings.SqlDatabaseLogsTableName;
+			string tableName = LoggerSettings.SqlDatabaseTableName;
 			return string.Format(@"INSERT INTO {0}
 ({0}.Raised, {0}.Level, {0}.Module, {0}.Instance, {0}.Environment, {0}.EnvironmentInstance, {0}.CorrelationId, {0}.Message, {0}.Container, {0}.Exception, {0}.MetaData)
 VALUES
@@ -218,7 +218,7 @@ VALUES
 		/// <summary />
 		protected virtual string GetCreateTableStatement()
 		{
-			string tableName = LoggerSettings.SqlDatabaseLogsTableName;
+			string tableName = LoggerSettings.SqlDatabaseTableName;
 			return string.Format(@"IF NOT EXISTS (SELECT 1 FROM sysobjects WHERE name='{0}' and xtype='U')
 BEGIN
 	CREATE TABLE {0}

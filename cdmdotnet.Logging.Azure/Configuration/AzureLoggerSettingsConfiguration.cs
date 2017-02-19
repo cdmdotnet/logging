@@ -132,11 +132,11 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
-		public string SqlDatabaseLogsTableName
+		public string SqlDatabaseTableName
 		{
-			get { return CloudConfigurationManager.GetSetting("SqlDatabaseLogsTableName", false) ?? "Logs"; }
+			get { return CloudConfigurationManager.GetSetting("SqlDatabaseTableName", false) ?? "Logs"; }
 		}
 
 		#endregion

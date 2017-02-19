@@ -124,9 +124,9 @@ namespace cdmdotnet.Logging.Configuration
 		/// <summary>
 		/// The name of the table to use.
 		/// </summary>
-		public string SqlDatabaseLogsTableName
+		public string SqlDatabaseTableName
 		{
-			get { return LoggerSettingsConfigurationSection.Current.SqlDatabaseLogsTableName; }
+			get { return LoggerSettingsConfigurationSection.Current.SqlDatabaseTableName; }
 		}
 
 		/// <summary>

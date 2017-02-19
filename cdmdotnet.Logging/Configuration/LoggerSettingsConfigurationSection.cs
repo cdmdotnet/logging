@@ -243,18 +243,18 @@ namespace cdmdotnet.Logging.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
-		[ConfigurationProperty("SqlDatabaseLogsTableName", DefaultValue = "Logs", IsRequired = true)]
-		public string SqlDatabaseLogsTableName
+		[ConfigurationProperty("SqlDatabaseTableName", DefaultValue = "Logs", IsRequired = true)]
+		public string SqlDatabaseTableName
 		{
 			get
 			{
-				return (string)this["SqlDatabaseLogsTableName"];
+				return (string)this["SqlDatabaseTableName"];
 			}
 			set
 			{
-				this["SqlDatabaseLogsTableName"] = value;
+				this["SqlDatabaseTableName"] = value;
 			}
 		}
 
