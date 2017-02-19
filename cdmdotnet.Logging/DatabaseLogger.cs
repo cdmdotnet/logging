@@ -208,18 +208,20 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		protected virtual string GetInsertStatement()
 		{
-			return @"INSERT INTO Logs
-(Logs.Raised, Logs.Level, Logs.Module, Logs.Instance, Logs.Environment, Logs.EnvironmentInstance, Logs.CorrelationId, Logs.Message, Logs.Container, Logs.Exception, Logs.MetaData)
+			string tableName = LoggerSettings.SqlDatabaseLogsTableName;
+			return string.Format(@"INSERT INTO {0}
+({0}.Raised, {0}.Level, {0}.Module, {0}.Instance, {0}.Environment, {0}.EnvironmentInstance, {0}.CorrelationId, {0}.Message, {0}.Container, {0}.Exception, {0}.MetaData)
 VALUES
-(@Raised, @Level, @Module, @Instance, @Environment, @EnvironmentInstance, @CorrelationId, @Message, @Container, @Exception, @MetaData);";
+(@Raised, @Level, @Module, @Instance, @Environment, @EnvironmentInstance, @CorrelationId, @Message, @Container, @Exception, @MetaData);", tableName);
 		}
 
 		/// <summary />
 		protected virtual string GetCreateTableStatement()
 		{
-			return @"IF NOT EXISTS (SELECT 1 FROM sysobjects WHERE name='Logs' and xtype='U')
+			string tableName = LoggerSettings.SqlDatabaseLogsTableName;
+			return string.Format(@"IF NOT EXISTS (SELECT 1 FROM sysobjects WHERE name='{0}' and xtype='U')
 BEGIN
-	CREATE TABLE Logs
+	CREATE TABLE {0}
 	(
 		Id int NOT NULL IDENTITY (1, 1),
 		Module nvarchar(50) NOT NULL,
@@ -235,51 +237,51 @@ BEGIN
 		MetaData nvarchar(MAX) NULL
 	);
 
-	ALTER TABLE Logs ADD CONSTRAINT
-	PK_Logs PRIMARY KEY CLUSTERED 
+	ALTER TABLE {0} ADD CONSTRAINT
+	PK_{0} PRIMARY KEY CLUSTERED 
 	(
 		Id
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_Level ON Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_Level ON {0}
 	(
 		[Level]
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_CorrelationId ON dbo.Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_CorrelationId ON dbo.{0}
 	(
 		CorrelationId
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_Raised ON dbo.Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_Raised ON dbo.{0}
 	(
 		Raised
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_Module ON Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_Module ON {0}
 	(
 		[Module]
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_Instance ON Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_Instance ON {0}
 	(
 		[Instance]
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_Environment ON Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_Environment ON {0}
 	(
 		[Environment]
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	CREATE NONCLUSTERED INDEX IX_Logs_EnvironmentInstance ON Logs
+	CREATE NONCLUSTERED INDEX IX_{0}_EnvironmentInstance ON {0}
 	(
 		[EnvironmentInstance]
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);
 
-	ALTER TABLE dbo.Logs SET (LOCK_ESCALATION = TABLE);
+	ALTER TABLE dbo.{0} SET (LOCK_ESCALATION = TABLE);
 
-	PRINT('Logs table created.')
-END";
+	PRINT('Logs table {0} created.')
+END", tableName);
 		}
 	}
 }

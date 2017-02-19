@@ -122,6 +122,14 @@ namespace cdmdotnet.Logging.Configuration
 		}
 
 		/// <summary>
+		/// The name of the table to use.
+		/// </summary>
+		public string SqlDatabaseLogsTableName
+		{
+			get { return LoggerSettingsConfigurationSection.Current.SqlDatabaseLogsTableName; }
+		}
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
 		public bool EnableThreadedLoggingOutput

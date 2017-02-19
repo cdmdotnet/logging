@@ -242,6 +242,22 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		[ConfigurationProperty("SqlDatabaseLogsTableName", DefaultValue = "Logs", IsRequired = true)]
+		public string SqlDatabaseLogsTableName
+		{
+			get
+			{
+				return (string)this["SqlDatabaseLogsTableName"];
+			}
+			set
+			{
+				this["SqlDatabaseLogsTableName"] = value;
+			}
+		}
+
 
 		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
