@@ -49,9 +49,12 @@ namespace cdmdotnet.Logging
 			string appSettingValue = LoggerSettings.SqlDatabaseLogsConnectionStringName;
 			if (string.IsNullOrWhiteSpace(appSettingValue))
 				throw new ConfigurationErrorsException("No value for the setting 'SqlDatabaseLogsConnectionStringName' was provided");
-			string connectionString = ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName].ConnectionString;
+			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName];
+			if (connectionStringSettings == null)
+				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", appSettingValue));
+			string connectionString = connectionStringSettings.ConnectionString;
 			if (string.IsNullOrWhiteSpace(appSettingValue))
-				throw new ConfigurationErrorsException(string.Format("No value for the connection string name '{0}' was provided", appSettingValue));
+				throw new ConfigurationErrorsException(string.Format("No value for the connection string named '{0}' was provided", appSettingValue));
 			return connectionString;
 		}
 
