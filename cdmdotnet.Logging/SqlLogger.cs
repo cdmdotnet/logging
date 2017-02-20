@@ -44,21 +44,6 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary />
-		protected override string GetSqlConnectionString()
-		{
-			string appSettingValue = LoggerSettings.SqlDatabaseLogsConnectionStringName;
-			if (string.IsNullOrWhiteSpace(appSettingValue))
-				throw new ConfigurationErrorsException("No value for the setting 'SqlDatabaseLogsConnectionStringName' was provided");
-			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName];
-			if (connectionStringSettings == null)
-				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", appSettingValue));
-			string connectionString = connectionStringSettings.ConnectionString;
-			if (string.IsNullOrWhiteSpace(appSettingValue))
-				throw new ConfigurationErrorsException(string.Format("No value for the connection string named '{0}' was provided", appSettingValue));
-			return connectionString;
-		}
-
-		/// <summary />
 		protected override IDbConnection GetDbConnection(string connectionString)
 		{
 			return new SqlConnection(connectionString);

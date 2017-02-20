@@ -7,6 +7,7 @@
 #endregion
 
 using System;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using cdmdotnet.Logging.Configuration;
@@ -28,7 +29,19 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary />
-		protected abstract string GetSqlConnectionString();
+		protected virtual string GetSqlConnectionString()
+		{
+			string appSettingValue = LoggerSettings.SqlDatabaseLogsConnectionStringName;
+			if (string.IsNullOrWhiteSpace(appSettingValue))
+				throw new ConfigurationErrorsException("No value for the setting 'SqlDatabaseLogsConnectionStringName' was provided");
+			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName];
+			if (connectionStringSettings == null)
+				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", appSettingValue));
+			string connectionString = connectionStringSettings.ConnectionString;
+			if (string.IsNullOrWhiteSpace(appSettingValue))
+				throw new ConfigurationErrorsException(string.Format("No value for the connection string named '{0}' was provided", appSettingValue));
+			return connectionString;
+		}
 
 		/// <summary />
 		protected abstract IDbConnection GetDbConnection(string connectionString);
@@ -142,8 +155,9 @@ namespace cdmdotnet.Logging
 								additionalDataParameter.Value = value != null ? JsonConvert.SerializeObject(value) : (object)DBNull.Value;
 								command.Parameters.Add(additionalDataParameter);
 
+								string tableName = LoggerSettings.SqlDatabaseTableName;
 								command.CommandText = command.CommandText
-									.Replace(", Logs.MetaData", string.Format(", Logs.MetaData, Logs.{0}", key))
+									.Replace(", " + tableName + ".MetaData", string.Format(", " + tableName +".MetaData, " + tableName + ".{0}", key))
 									.Replace(", @MetaData", string.Format(", @MetaData, @{0}", key));
 							}
 						}
