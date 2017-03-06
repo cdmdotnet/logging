@@ -16,6 +16,11 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.58
+
+			* Added the ability to specify the table to be used in the data so you can separate systems into different ables but have them all in the same DB
+			* Fixed poor handling of a missing connection string configuration.
+
 			Version 1.2.52
 
 			* Switched to using (and referencing) cdmdotnet.Statemanagement for controlling the passing of the CorrelationId from thread to thread safely when using Parallel Tasks.
