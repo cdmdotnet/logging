@@ -6,23 +6,23 @@
 // // -----------------------------------------------------------------------
 #endregion
 
+using cdmdotnet.Logging.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using cdmdotnet.Logging.Configuration;
 
 namespace cdmdotnet.Logging
 {
 	/// <summary>
-	/// Provides a set of methods that help you log events relating to the execution of your code outputting to the <see cref="Console"/>
+	/// Provides a set of methods that help you log events relating to the execution of your code when using persistence that is single string based, like a file, event log or tracer.
 	/// </summary>
-	public class ConsoleLogger : PrimitiveLogger
+	public abstract class StringLogger : PrimitiveLogger
 	{
 		/// <summary>
-		/// Instantiates a new instance of the <see cref="ConsoleLogger"/> class.
+		/// Instantiates a new instance of the <see cref="StringLogger"/> class.
 		/// </summary>
-		public ConsoleLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
+		protected StringLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
 			: base(loggerSettings, correlationIdHelper)
 		{
 		}
@@ -31,92 +31,84 @@ namespace cdmdotnet.Logging
 
 		/// <summary>
 		/// This is for logging sensitive information,
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.Gray"/>
+		/// to <see cref="LogInfoString(string)"/>
 		/// Depending on the implementation this won't be obscured or encrypted in anyway. Use this sparingly.
 		/// </summary>
 		public override void LogSensitive(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableSensitive)
-				Log("Sensitive", ConsoleColor.DarkYellow, message, container, exception, additionalData, metaData);
+				Log("Sensitive", LogInfoString, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// This is for logging general information, effectively the least amount of information you'd want to know about a system operation,
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.Gray"/>
-		/// Don't abuse this as you will flood the logs as this would normally never turned off. Use <see cref="LogDebug"/> or <see cref="LogProgress"/> for reporting additional information.
+		/// to <see cref="LogInfoString(string)"/>
+		/// Don't abuse this as you will flood the logs as this would normally never turned off. Use <see cref="LogDebug(string,string,System.Exception,System.Collections.Generic.IDictionary{string,object},System.Collections.Generic.IDictionary{string,object})"/> or <see cref="LogProgress(string,string,System.Exception,System.Collections.Generic.IDictionary{string,object},System.Collections.Generic.IDictionary{string,object})"/> for reporting additional information.
 		/// </summary>
 		public override void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableInfo)
-				Log("Info", ConsoleColor.Gray, message, container, exception, additionalData, metaData);
+				Log("Info", LogSensitiveString, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes logging progress information such as "Process X is 24% done"
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.Gray"/>
+		/// to <see cref="LogInfoString(string)"/>
 		/// </summary>
 		public override void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableProgress)
-				Log("Progress", ConsoleColor.Gray, message, container, exception, additionalData, metaData);
+				Log("Progress", LogProgressString, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes diagnostic information 
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.Blue"/>
+		/// to <see cref="LogDebugString(string)"/>
 		/// </summary>
 		public override void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableDebug)
-				Log("Debug", ConsoleColor.Blue, message, container, exception, additionalData, metaData);
+				Log("Debug", LogDebugString, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes warnings, something not yet an error, but something to watch out for,
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.DarkYellow"/>
+		/// to <see cref="LogWarningString(string)"/>
 		/// </summary>
 		public override void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableWarning)
-				Log("Warning", ConsoleColor.DarkYellow, message, container, exception, additionalData, metaData);
+				Log("Warning", LogWarningString, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes errors, something handled and to be investigated,
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.DarkRed"/>
+		/// to <see cref="LogErrorString(string)"/>
 		/// </summary>
 		public override void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableError)
-				Log("Error", ConsoleColor.DarkRed, message, container, exception, additionalData, metaData);
+				Log("Error", LogErrorString, message, container, exception, additionalData, metaData);
 		}
 
 		/// <summary>
 		/// Writes fatal errors that have a detrimental effect on the system,
-		/// to the <see cref="Console"/> in <see cref="ConsoleColor.Red"/>
+		/// to <see cref="LogFatalErrorString(string)"/>
 		/// </summary>
 		public override void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableFatalError)
-				Log("Fatal", ConsoleColor.Red, message, container, exception, additionalData, metaData);
+				Log("Fatal", LogFatalErrorString, message, container, exception, additionalData, metaData);
 		}
 
 		#endregion
 
 		/// <summary>
-		/// Format a message based on the input parameters to be sent to the <see cref="Console"/>
+		/// Format a message based on the input parameters to be sent to <paramref name="logAction"></paramref>
 		/// </summary>
-		protected virtual void Log(string level, ConsoleColor foregroundColor, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
+		protected virtual void Log(string level, Action<string> logAction, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
 			string messageToLog = GenerateLogMessage(level, message, container, exception, additionalData, metaData);
-
-			Action logAction = () =>
-			{
-				ConsoleColor originalColour = Console.ForegroundColor;
-				Console.ForegroundColor = foregroundColor;
-				Console.WriteLine(messageToLog);
-				Console.ForegroundColor = originalColour;
-			};
 
 			if (LoggerSettings.EnableThreadedLogging)
 			{
@@ -126,12 +118,47 @@ namespace cdmdotnet.Logging
 				{
 					using (tokenSource.Token.Register(Thread.CurrentThread.Abort))
 					{
-						PersistLogWithPerformanceTracking(logAction, level, container);
+						PersistLogWithPerformanceTracking(() => logAction(messageToLog), level, container);
 					}
 				}, tokenSource.Token);
 			}
 			else
-				PersistLogWithPerformanceTracking(logAction, level, container);
+				PersistLogWithPerformanceTracking(() => logAction(messageToLog), level, container);
 		}
+
+		/// <summary>
+		/// Writes sensitive information to the string based logger.
+		/// </summary>
+		protected abstract void LogSensitiveString(string message);
+
+		/// <summary>
+		/// Writes an informational message to the string based logger.
+		/// </summary>
+		protected abstract void LogInfoString(string message);
+
+		/// <summary>
+		/// Writes logging progress information such as "Process X is 24% done" to the string based logger.
+		/// </summary>
+		protected abstract void LogProgressString(string message);
+
+		/// <summary>
+		/// Writes a debugging message to the string based logger.
+		/// </summary>
+		protected abstract void LogDebugString(string message);
+
+		/// <summary>
+		/// Writes a warning message to the string based logger.
+		/// </summary>
+		protected abstract void LogWarningString(string message);
+
+		/// <summary>
+		/// Writes an error message to the string based logger.
+		/// </summary>
+		protected abstract void LogErrorString(string message);
+
+		/// <summary>
+		/// Writes a fatal error message to the string based logger.
+		/// </summary>
+		protected abstract void LogFatalErrorString(string message);
 	}
 }

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0"?>
 <package>
 	<metadata>
-		<id>cdmdotnet.Logging.Azure</id>
-		<title>Azure settings for Simple Logging For .net</title>
+		<id>cdmdotnet.Logging.Serilog</id>
+		<title>Serilog logger implementation of Simple Logging For .net</title>
 		<version>$version$</version>
 		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
 		<projectUrl>https://github.com/cdmdotnet/logging</projectUrl>
@@ -10,17 +10,17 @@
 		<iconUrl>https://raw.githubusercontent.com/Chinchilla-Software-Com/CQRS/master/wiki/ChinChilla-Software-Red.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>
-			Settings for using Simple Logging For .net on the Azure platform.
+			Serilog logger implementation of Simple Logging For .net.
 		</description>
-		<copyright>Copyright 2015</copyright>
+		<copyright>Copyright 2017</copyright>
 		<dependencies>
 			<dependency id="cdmdotnet.Logging" version="[$version$]" />
 		</dependencies>
-
+		
 		<releaseNotes>
-			Version 1.1.38
+			Version 1.2.62
 
-			* Suppressed trace outputs when using the configuration class.
+			* Added SerilogLogger.
 		</releaseNotes>
 	</metadata>
 </package>

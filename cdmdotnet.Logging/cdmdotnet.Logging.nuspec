@@ -16,6 +16,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.62
+
+			* Refactored all string based loggers to use a simplified base class for more consistency.
+
 			Version 1.2.60
 
 			* Added MultiLogger.

@@ -34,9 +34,6 @@ namespace cdmdotnet.Logging
 			// CreateTable();
 		}
 
-		/// <summary />
-		protected abstract string GetQueueThreadName();
-
 		/// <summary>
 		/// The <see cref="ILoggerSettings"/> for the instance, set during Instantiation
 		/// </summary>
@@ -160,18 +157,24 @@ namespace cdmdotnet.Logging
 
 							try
 							{
-								if (!method.ReflectedType.FullName.StartsWith(GetType().Namespace.Replace(".Sql", null)))
+								if (!method.ReflectedType.FullName.StartsWith("cdmdotnet.Logging"))
 								{
 									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
 									break;
 								}
 							}
-							catch { }
+							catch
+							{
+								// Just move on
+							}
 						}
 					}
 				}
 			}
-			catch { }
+			catch
+			{
+				// Just move on
+			}
 
 			var logInformation = new LogInformation
 			{
@@ -195,6 +198,7 @@ namespace cdmdotnet.Logging
 			if (LoggerSettings.EnableThreadedLogging)
 			{
 				var tokenSource = new CancellationTokenSource();
+				// Currently this doesn't need StartNewSafely as all thread based data is already collected and this would just slow things down.
 				Task.Factory.StartNew(() =>
 				{
 					using (tokenSource.Token.Register(Thread.CurrentThread.Abort))
@@ -236,7 +240,11 @@ namespace cdmdotnet.Logging
 					performanceTracker.ProcessActionStart();
 				}
 				catch (UnauthorizedAccessException) { }
-				catch (Exception) { }
+				catch (Exception)
+				{
+					// Just move on
+				}
+
 
 				PersistLog(logInformation);
 			}
@@ -252,7 +260,11 @@ namespace cdmdotnet.Logging
 					performanceTracker.ProcessActionComplete(false);
 				}
 				catch (UnauthorizedAccessException) { }
-				catch (Exception) { }
+				catch (Exception)
+				{
+					// Just move on
+				}
+
 			}
 		}
 
