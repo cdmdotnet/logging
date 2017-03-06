@@ -16,7 +16,7 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
-			Version 1.2.62
+			Version 1.2.64
 
 			* Refactored all string based loggers to use a simplified base class for more consistency.
 
