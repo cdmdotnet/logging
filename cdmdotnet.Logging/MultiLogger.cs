@@ -18,6 +18,9 @@ namespace cdmdotnet.Logging
 	/// </summary>
 	public abstract class MultiLogger : ILogger
 	{
+		/// <summary>
+		/// The internal loggers to log to.
+		/// </summary>
 		protected IList<ILogger> Loggers { get; private set; }
 
 		/// <summary>
@@ -28,6 +31,10 @@ namespace cdmdotnet.Logging
 			Loggers = new List<ILogger>();
 		}
 
+		/// <summary>
+		/// Puts the message to log into a set of <see cref="Task"/> one for each internal logger.
+		/// </summary>
+		/// <param name="logAction"></param>
 		protected virtual void Log(Action<ILogger> logAction)
 		{
 			IList<Task> loggerTasks = new List<Task>();
