@@ -63,6 +63,7 @@
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\LoggerSettingsConfigurationSection.cs" />
     <Compile Include="Configuration\ILoggerSettings.cs" />
+    <Compile Include="VeryPrimitiveLogger.cs" />
     <Compile Include="MultiLogger.cs" />
     <Compile Include="PrimitiveLogger.cs" />
     <Compile Include="StringLogger.cs" />

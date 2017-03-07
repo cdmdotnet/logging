@@ -9,8 +9,6 @@
 using cdmdotnet.Logging.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace cdmdotnet.Logging
 {
@@ -110,20 +108,7 @@ namespace cdmdotnet.Logging
 		{
 			string messageToLog = GenerateLogMessage(level, message, container, exception, additionalData, metaData);
 
-			if (LoggerSettings.EnableThreadedLogging)
-			{
-				var tokenSource = new CancellationTokenSource();
-				// Currently this doesn't need StartNewSafely as all thread based data is already collected and this would just slow things down.
-				Task.Factory.StartNewSafely(() =>
-				{
-					using (tokenSource.Token.Register(Thread.CurrentThread.Abort))
-					{
-						PersistLogWithPerformanceTracking(() => logAction(messageToLog), level, container);
-					}
-				}, tokenSource.Token);
-			}
-			else
-				PersistLogWithPerformanceTracking(() => logAction(messageToLog), level, container);
+			Log(() => logAction(messageToLog), level, container);
 		}
 
 		/// <summary>

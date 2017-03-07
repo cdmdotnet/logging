@@ -8,8 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using cdmdotnet.Logging.Configuration;
 
 namespace cdmdotnet.Logging
@@ -118,20 +116,7 @@ namespace cdmdotnet.Logging
 				Console.ForegroundColor = originalColour;
 			};
 
-			if (LoggerSettings.EnableThreadedLogging)
-			{
-				var tokenSource = new CancellationTokenSource();
-				// Currently this doesn't need StartNewSafely as all thread based data is already collected and this would just slow things down.
-				Task.Factory.StartNewSafely(() =>
-				{
-					using (tokenSource.Token.Register(Thread.CurrentThread.Abort))
-					{
-						PersistLogWithPerformanceTracking(logAction, level, container);
-					}
-				}, tokenSource.Token);
-			}
-			else
-				PersistLogWithPerformanceTracking(logAction, level, container);
+			Log(logAction, level, container);
 		}
 	}
 }
