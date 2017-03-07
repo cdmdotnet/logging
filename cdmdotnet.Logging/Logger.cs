@@ -125,7 +125,7 @@ namespace cdmdotnet.Logging
 							try
 							{
 								bool found = false;
-								if (ExclusionNamespaces.Any(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace)))
+								if (!ExclusionNamespaces.Any(@namespace => method.ReflectedType.FullName.StartsWith(@namespace)))
 								{
 									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
 									found = true;
