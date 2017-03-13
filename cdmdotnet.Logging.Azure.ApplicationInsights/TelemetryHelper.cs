@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace cdmdotnet.Logging.Azure.ApplicationInsights
 {
@@ -23,6 +24,7 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		public TelemetryHelper()
 			:this(new TelemetryClient())
 		{
+			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
 		}
 
 		/// <summary>
