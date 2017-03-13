@@ -17,7 +17,7 @@ namespace cdmdotnet.Logging
 	/// Or TKey as the property name and the TValue asn the property value.
 	/// The <see cref="IDictionary{TKey,TValue}">metaData</see> Will be serialised to a JSON string and if using a <see cref="DatabaseLogger"/> logging will be stored to a column named 'MetaData'.
 	/// </summary>
-	public interface ILogger
+	public interface ILogger : IDisposable
 	{
 		/// <summary>
 		/// This is for logging sensitive information,

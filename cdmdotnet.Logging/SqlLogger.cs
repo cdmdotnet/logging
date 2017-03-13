@@ -6,8 +6,6 @@
 // // -----------------------------------------------------------------------
 #endregion
 
-using System;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using cdmdotnet.Logging.Configuration;
@@ -59,16 +57,6 @@ namespace cdmdotnet.Logging
 		protected override IDbTransaction GetWriteTransaction(IDbConnection dbConnection)
 		{
 			return ((SqlConnection)dbConnection).BeginTransaction(IsolationLevel.ReadUncommitted);
-		}
-
-		#endregion
-
-		#region Overrides of Logger
-
-		/// <summary />
-		protected override string GetQueueThreadName()
-		{
-			return "Sql Database Log queue polling";
 		}
 
 		#endregion

@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace cdmdotnet.Logging
 				return tasks.Any(task => task.IsFaulted);
 			}).Result;
 			if (anyFailed)
-				throw new AggregateException("One of the loggers failed.");
+				Trace.TraceError("One of the loggers failed.");
 		}
 
 		#region Implementation of ILogger
@@ -65,7 +66,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogSensitive(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogSensitive(message, container, exception, additionalData, metaData);
 			};
@@ -80,7 +81,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogInfo(message, container, exception, additionalData, metaData);
 			};
@@ -94,7 +95,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogProgress(message, container, exception, additionalData, metaData);
 			};
@@ -108,7 +109,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogDebug(message, container, exception, additionalData, metaData);
 			};
@@ -122,7 +123,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogWarning(message, container, exception, additionalData, metaData);
 			};
@@ -136,7 +137,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogError(message, container, exception, additionalData, metaData);
 			};
@@ -150,12 +151,40 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public virtual void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			Action<ILogger> logAction = (logger) =>
+			Action<ILogger> logAction = logger =>
 			{
 				logger.LogFatalError(message, container, exception, additionalData, metaData);
 			};
 
 			Log(logAction);
+		}
+
+		#endregion
+
+		#region Implementation of IDisposable
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			IList<Task> loggerTasks = new List<Task>();
+			foreach (ILogger logger in Loggers)
+			{
+				ILogger log = logger;
+				var task = Task.Factory.StartNewSafely(() =>
+				{
+					log.Dispose();
+				});
+				loggerTasks.Add(task);
+			}
+
+			bool anyFailed = Task.Factory.ContinueWhenAll(loggerTasks.ToArray(), tasks =>
+			{
+				return tasks.Any(task => task.IsFaulted);
+			}).Result;
+			if (anyFailed)
+				Trace.TraceError("One of the loggers failed to dispose.");
 		}
 
 		#endregion

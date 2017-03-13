@@ -30,19 +30,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{751072FE-2FD
 		packaging\Sql\web.config.uninstall.xdt = packaging\Sql\web.config.uninstall.xdt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.logging.Tests.Integration", "cdmdotnet.logging.Tests.Integration\cdmdotnet.logging.Tests.Integration.csproj", "{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E9E509B4-44F6-4F27-819A-5EF9D3CDB3E8}"
-	ProjectSection(SolutionItems) = preProject
-		cdmdotnet.Logging.vsmdi = cdmdotnet.Logging.vsmdi
-		Local.testsettings = Local.testsettings
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.Logging.Serilog", "cdmdotnet.Logging.Serilog\cdmdotnet.Logging.Serilog.csproj", "{127883BC-3272-4964-B40A-CED8DF0D37B1}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = cdmdotnet.Logging.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -56,10 +46,10 @@ Global
 		{67FCA38A-1B9C-41D4-A8F5-74791D99DBC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67FCA38A-1B9C-41D4-A8F5-74791D99DBC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67FCA38A-1B9C-41D4-A8F5-74791D99DBC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
