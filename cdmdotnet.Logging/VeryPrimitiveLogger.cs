@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using cdmdotnet.Performance;
@@ -25,13 +26,26 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="StringLogger"/> class.
 		/// </summary>
-		protected VeryPrimitiveLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
+		protected VeryPrimitiveLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper)
 		{
 			LoggerSettings = loggerSettings;
 			CorrelationIdHelper = correlationIdHelper;
+			TelemetryHelper = telemetryHelper;
+			if (TelemetryHelper == null)
+			{
+				if (loggerSettings.UseApplicationInsightTelemetryHelper)
+					TelemetryHelper = (ITelemetryHelper)Activator.CreateInstanceFrom("cdmdotnet.Logging.Azure.ApplicationInsights.dll", "cdmdotnet.Logging.Azure.ApplicationInsights.TelemetryHelper").Unwrap();
+				else
+					TelemetryHelper = new NullTelemetryHelper();
+			}
 			ExclusionNamespaces = new List<string> { "cdmdotnet.Logging" };
 			InprogressThreads = new List<Guid>();
 		}
+
+		/// <summary>
+		/// The <see cref="ITelemetryHelper"/> for the instance, set during Instantiation
+		/// </summary>
+		protected ITelemetryHelper TelemetryHelper { get; private set; }
 
 		/// <summary>
 		/// The <see cref="ILoggerSettings"/> for the instance, set during Instantiation

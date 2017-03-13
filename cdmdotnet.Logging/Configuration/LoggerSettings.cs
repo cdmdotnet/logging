@@ -130,6 +130,14 @@ namespace cdmdotnet.Logging.Configuration
 		}
 
 		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		public bool UseApplicationInsightTelemetryHelper
+		{
+			get { return LoggerSettingsConfigurationSection.Current.UseApplicationInsightTelemetryHelper; }
+		}
+
+		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
 		public bool EnableThreadedLoggingOutput

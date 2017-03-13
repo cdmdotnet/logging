@@ -19,8 +19,8 @@ namespace cdmdotnet.Logging.Serilog
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="SerilogLogger"/> class.
 		/// </summary>
-		public SerilogLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
-			: base(loggerSettings, correlationIdHelper)
+		public SerilogLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper = null)
+			: base(loggerSettings, correlationIdHelper, telemetryHelper)
 		{
 		}
 

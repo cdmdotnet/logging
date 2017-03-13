@@ -139,6 +139,14 @@ namespace cdmdotnet.Logging.Azure.Configuration
 			get { return CloudConfigurationManager.GetSetting("SqlDatabaseTableName", false) ?? "Logs"; }
 		}
 
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		public bool UseApplicationInsightTelemetryHelper
+		{
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("UseApplicationInsightTelemetryHelper", false) ?? "false"); }
+		}
+
 		#endregion
 	}
 }

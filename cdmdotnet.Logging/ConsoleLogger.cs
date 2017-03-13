@@ -20,8 +20,8 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="ConsoleLogger"/> class.
 		/// </summary>
-		public ConsoleLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
-			: base(loggerSettings, correlationIdHelper)
+		public ConsoleLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper = null)
+			: base(loggerSettings, correlationIdHelper, telemetryHelper)
 		{
 		}
 

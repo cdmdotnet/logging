@@ -89,5 +89,10 @@ namespace cdmdotnet.Logging.Configuration
 		/// The name of the table to use.
 		/// </summary>
 		string SqlDatabaseTableName { get; }
+
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		bool UseApplicationInsightTelemetryHelper { get; }
 	}
 }

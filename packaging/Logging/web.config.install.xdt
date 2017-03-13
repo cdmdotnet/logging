@@ -19,6 +19,8 @@
 		EnableFatalError="true"
 		EnableThreadedLogging="true"
 
+		UseApplicationInsightTelemetryHelper="false"
+
 		ModuleName ="MyApplication"
 		Instance ="Server1"
 

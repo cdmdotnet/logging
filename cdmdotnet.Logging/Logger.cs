@@ -24,8 +24,8 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="Logger"/> class preparing the required thread pool polling if <see cref="ILoggerSettings.EnableThreadedLogging"/> is set to true.
 		/// </summary>
-		protected Logger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
-			: base(loggerSettings, correlationIdHelper)
+		protected Logger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper)
+			: base(loggerSettings, correlationIdHelper, telemetryHelper)
 		{
 		}
 
@@ -39,7 +39,12 @@ namespace cdmdotnet.Logging
 		public override void LogSensitive(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableSensitive)
+			{
 				Log("Sensitive", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogSensitive/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogSensitive/Disabled Call");
 		}
 
 		/// <summary>
@@ -50,7 +55,12 @@ namespace cdmdotnet.Logging
 		public override void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableInfo)
+			{
 				Log("Info", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogInfo/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogInfo/Disabled Call");
 		}
 
 		/// <summary>
@@ -60,7 +70,12 @@ namespace cdmdotnet.Logging
 		public override void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableProgress)
+			{
 				Log("Progress", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogProgress/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogProgress/Disabled Call");
 		}
 
 		/// <summary>
@@ -70,7 +85,12 @@ namespace cdmdotnet.Logging
 		public override void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableDebug)
+			{
 				Log("Debug", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogDebug/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogDebug/Disabled Call");
 		}
 
 		/// <summary>
@@ -80,7 +100,12 @@ namespace cdmdotnet.Logging
 		public override void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableWarning)
+			{
 				Log("Warning", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogWarning/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogWarning/Disabled Call");
 		}
 
 		/// <summary>
@@ -90,7 +115,12 @@ namespace cdmdotnet.Logging
 		public override void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableError)
+			{
 				Log("Error", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogError/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogError/Disabled Call");
 		}
 
 		/// <summary>
@@ -100,7 +130,12 @@ namespace cdmdotnet.Logging
 		public override void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
 			if (LoggerSettings.EnableFatalError)
+			{
 				Log("Fatal", message, container, exception, additionalData, metaData);
+				TelemetryHelper.TrackEvent("LogFatalError/Enabled Call");
+			}
+			else
+				TelemetryHelper.TrackEvent("LogFatalError/Disabled Call");
 		}
 
 		#endregion
