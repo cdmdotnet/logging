@@ -238,10 +238,10 @@ BEGIN
 	CREATE TABLE {0}
 	(
 		Id int NOT NULL IDENTITY (1, 1),
-		Module nvarchar(50) NOT NULL,
-		Instance nvarchar(50) NOT NULL,
-		Environment nvarchar(50) NOT NULL,
-		EnvironmentInstance nvarchar(50) NOT NULL,
+		Module nvarchar(255) NOT NULL,
+		Instance nvarchar(255) NOT NULL,
+		Environment nvarchar(255) NOT NULL,
+		EnvironmentInstance nvarchar(255) NOT NULL,
 		Raised datetime NOT NULL,
 		[Level] nvarchar(50) NOT NULL,
 		CorrelationId uniqueidentifier NOT NULL,
