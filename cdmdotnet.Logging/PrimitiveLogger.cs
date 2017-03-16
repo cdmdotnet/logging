@@ -24,8 +24,8 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="StringLogger"/> class.
 		/// </summary>
-		protected PrimitiveLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper)
-			:base(loggerSettings, correlationIdHelper)
+		protected PrimitiveLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper)
+			: base(loggerSettings, correlationIdHelper, telemetryHelper)
 		{
 		}
 

@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.Logging", "cdmdotnet.Logging\cdmdotnet.Logging.csproj", "{43A451BF-4C29-424C-B480-309595D103E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D883C0DA-45D0-4E48-BEC5-F921513444BB}"
@@ -32,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{751072FE-2FD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.Logging.Serilog", "cdmdotnet.Logging.Serilog\cdmdotnet.Logging.Serilog.csproj", "{127883BC-3272-4964-B40A-CED8DF0D37B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.Logging.Azure.ApplicationInsights", "cdmdotnet.Logging.Azure.ApplicationInsights\cdmdotnet.Logging.Azure.ApplicationInsights.csproj", "{8472B5F5-221A-4573-AA29-65DC8D1488CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,10 @@ Global
 		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{127883BC-3272-4964-B40A-CED8DF0D37B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8472B5F5-221A-4573-AA29-65DC8D1488CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8472B5F5-221A-4573-AA29-65DC8D1488CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8472B5F5-221A-4573-AA29-65DC8D1488CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8472B5F5-221A-4573-AA29-65DC8D1488CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

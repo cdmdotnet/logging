@@ -63,11 +63,13 @@
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\LoggerSettingsConfigurationSection.cs" />
     <Compile Include="Configuration\ILoggerSettings.cs" />
+    <Compile Include="NullTelemetryHelper.cs" />
     <Compile Include="VeryPrimitiveLogger.cs" />
     <Compile Include="MultiLogger.cs" />
     <Compile Include="PrimitiveLogger.cs" />
     <Compile Include="StringLogger.cs" />
     <Compile Include="SqlLogger.cs" />
+    <Compile Include="ITelemetryHelper.cs" />
     <Compile Include="WebCorrelationIdHelper.cs" />
     <Compile Include="TraceLogger.cs" />
     <Compile Include="ConsoleLogger.cs" />
