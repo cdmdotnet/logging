@@ -87,11 +87,15 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// <param name="startTime">The time when the dependency was called.</param>
 		/// <param name="duration">The time taken by the external dependency to handle the call.</param>
 		/// <param name="wasSuccessfull">True if the dependency call was handled successfully.</param>
-		public virtual void TrackDependency(string dependencyName, string commandName, DateTimeOffset startTime, TimeSpan duration, bool wasSuccessfull)
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		public virtual void TrackDependency(string dependencyName, string commandName, DateTimeOffset startTime, TimeSpan duration, bool wasSuccessfull, IDictionary<string, string> properties = null)
 		{
 #pragma warning disable 618
 			var dependencyTelemetry = new DependencyTelemetry(dependencyName, commandName, startTime, duration, wasSuccessfull);
 #pragma warning restore 618
+			if (properties != null)
+				foreach (KeyValuePair<string, string> pair in properties)
+					dependencyTelemetry.Properties.Add(pair);
 			SetCorrelationId(dependencyTelemetry.Properties);
 			TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull);
 		}
@@ -107,9 +111,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// <param name="duration">The time taken by the external dependency to handle the call.</param>
 		/// <param name="resultCode">Result code of dependency call execution.</param>
 		/// <param name="wasSuccessfull">True if the dependency call was handled successfully.</param>
-		public virtual void TrackDependency(string dependencyTypeName, string target, string dependencyName, string data, DateTimeOffset startTime, TimeSpan duration, string resultCode, bool wasSuccessfull)
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		public virtual void TrackDependency(string dependencyTypeName, string target, string dependencyName, string data, DateTimeOffset startTime, TimeSpan duration, string resultCode, bool wasSuccessfull, IDictionary<string, string> properties = null)
 		{
 			var dependencyTelemetry = new DependencyTelemetry(dependencyTypeName, target, dependencyName, data, startTime, duration, resultCode, wasSuccessfull);
+			if (properties != null)
+				foreach (KeyValuePair<string, string> pair in properties)
+					dependencyTelemetry.Properties.Add(pair);
 			SetCorrelationId(dependencyTelemetry.Properties);
 			TelemetryClient.TrackDependency(dependencyTelemetry);
 		}
@@ -122,9 +130,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// <param name="duration">The time taken by the application to handle the request.</param>
 		/// <param name="responseCode">The response status code.</param>
 		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
-		public virtual void TrackRequest(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull)
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		public virtual void TrackRequest(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull, IDictionary<string, string> properties = null)
 		{
 			var requestTelemetry = new RequestTelemetry(name, startTime, duration, responseCode, wasSuccessfull);
+			if (properties != null)
+				foreach (KeyValuePair<string, string> pair in properties)
+					requestTelemetry.Properties.Add(pair);
 			SetCorrelationId(requestTelemetry.Properties);
 			try
 			{
@@ -154,7 +166,7 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 			{
 				properties["CorrelationId"] = CorrelationIdHelper.GetCorrelationId().ToString("N");
 			}
-			catch { }
+			catch { /* Move On */ }
 		}
 	}
 }
