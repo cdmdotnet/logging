@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+
 namespace cdmdotnet.Logging
 {
 	/// <summary>
@@ -70,5 +71,10 @@ namespace cdmdotnet.Logging
 		/// <param name="responseCode">The response status code.</param>
 		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
 		void TrackRequest(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull);
+
+		/// <summary>
+		/// Flushes the in-memory buffer, if one exists
+		/// </summary>
+		void Flush();
 	}
 }
