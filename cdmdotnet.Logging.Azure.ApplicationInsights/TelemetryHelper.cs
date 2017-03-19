@@ -126,6 +126,12 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			var requestTelemetry = new RequestTelemetry(name, startTime, duration, responseCode, wasSuccessfull);
 			SetCorrelationId(requestTelemetry.Properties);
+			try
+			{
+				requestTelemetry.Url = new Uri(string.Format("cqrs://{0}", name));
+			}
+			catch { /* Move on for now */ }
+
 			TelemetryClient.TrackRequest(requestTelemetry);
 		}
 
