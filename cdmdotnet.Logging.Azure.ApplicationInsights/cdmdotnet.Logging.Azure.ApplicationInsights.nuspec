@@ -18,6 +18,9 @@
 		</dependencies>
 
 		<releaseNotes>
+			Version 1.2.74
+
+			* Added Telemetry flushing.
 		</releaseNotes>
 	</metadata>
 </package>
