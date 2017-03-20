@@ -16,6 +16,14 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.77
+
+			* Added optional properties to all telemetry methods.
+
+			Version 1.2.74
+
+			* Added Telemetry.
+
 			Version 1.2.65
 
 			* Refactored all loggers to use a simplified classes for more consistency.
@@ -26,7 +34,7 @@
 
 			Version 1.2.58
 
-			* Added the ability to specify the table to be used in the data so you can separate systems into different ables but have them all in the same DB
+			* Added the ability to specify the table to be used in the data so you can separate systems into different tables but have them all in the same DB
 			* Fixed poor handling of a missing connection string configuration.
 
 			Version 1.2.52
