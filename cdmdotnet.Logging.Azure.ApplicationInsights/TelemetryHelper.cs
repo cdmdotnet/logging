@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -12,19 +15,68 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 	public class TelemetryHelper : ITelemetryHelper
 	{
 		/// <summary>
+		/// Indicates if all operations are handled off thread.
+		/// </summary>
+		public bool EnableThreadedOperations { get; set; }
+
+		private ConcurrentQueue<Action> ActionQueue { get; set; }
+
+		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
-		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper)
+		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
 		{
 			TelemetryClient = telemetryClient;
 			CorrelationIdHelper = correlationIdHelper;
+			ActionQueue = new ConcurrentQueue<Action>();
+			EnableThreadedOperations = enableThreadedOperations;
+
+			if (EnableThreadedOperations)
+			{
+				Task.Factory.StartNew
+				(
+					() =>
+					{
+						long loop = long.MinValue;
+						Action action;
+						while (true)
+						{
+							if (ActionQueue.TryDequeue(out action))
+								action();
+
+							if (loop++ % 5 == 0)
+								Thread.Yield();
+							else
+								Thread.Sleep(10);
+							if (loop == long.MaxValue)
+								loop = long.MinValue;
+						}
+					}
+				);
+			}
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
+		/// </summary>
+		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper)
+			: this(telemetryClient, correlationIdHelper, false)
+		{
 		}
 
 		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper)
-			:this(new TelemetryClient(), correlationIdHelper)
+			: this(correlationIdHelper, false)
+		{
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
+		/// </summary>
+		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
+			: this(new TelemetryClient(), correlationIdHelper, enableThreadedOperations)
 		{
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
 		}
@@ -50,7 +102,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
 			SetCorrelationId(telemetryProperties);
-			TelemetryClient.TrackEvent(eventName, telemetryProperties);
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.TrackEvent(eventName, telemetryProperties));
+			else
+				TelemetryClient.TrackEvent(eventName, telemetryProperties);
 		}
 
 		/// <summary>
@@ -63,7 +118,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
 			SetCorrelationId(telemetryProperties);
-			TelemetryClient.TrackMetric(name, value, telemetryProperties);
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.TrackMetric(name, value, telemetryProperties));
+			else
+				TelemetryClient.TrackMetric(name, value, telemetryProperties);
 		}
 
 		/// <summary>
@@ -76,7 +134,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
 			SetCorrelationId(telemetryProperties);
-			TelemetryClient.TrackException(exception, telemetryProperties, metrics);
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.TrackException(exception, telemetryProperties, metrics));
+			else
+				TelemetryClient.TrackException(exception, telemetryProperties, metrics);
 		}
 
 		/// <summary>
@@ -97,7 +158,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 				foreach (KeyValuePair<string, string> pair in properties)
 					dependencyTelemetry.Properties.Add(pair);
 			SetCorrelationId(dependencyTelemetry.Properties);
-			TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull);
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull));
+			else
+				TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull);
 		}
 
 		/// <summary>
@@ -119,7 +183,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 				foreach (KeyValuePair<string, string> pair in properties)
 					dependencyTelemetry.Properties.Add(pair);
 			SetCorrelationId(dependencyTelemetry.Properties);
-			TelemetryClient.TrackDependency(dependencyTelemetry);
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyTelemetry));
+			else
+				TelemetryClient.TrackDependency(dependencyTelemetry);
 		}
 
 		/// <summary>
@@ -144,7 +211,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 			}
 			catch { /* Move on for now */ }
 
-			TelemetryClient.TrackRequest(requestTelemetry);
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.TrackRequest(requestTelemetry));
+			else
+				TelemetryClient.TrackRequest(requestTelemetry);
 		}
 
 		/// <summary>
@@ -152,7 +222,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// </summary>
 		public virtual void Flush()
 		{
-			TelemetryClient.Flush();
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() => TelemetryClient.Flush());
+			else
+				TelemetryClient.Flush();
 		}
 
 		#endregion
