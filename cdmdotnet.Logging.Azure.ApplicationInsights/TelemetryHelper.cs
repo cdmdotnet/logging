@@ -246,6 +246,7 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 					requestTelemetry.Properties.Add(pair);
 			string correlationId = SetCorrelationId(requestTelemetry.Properties);
 
+			TelemetryClient.Context.Operation.Name = name;
 			requestTelemetry.Context.Operation.Id = correlationId;
 			if (!string.IsNullOrWhiteSpace(userId))
 				requestTelemetry.Context.User.Id = userId;
