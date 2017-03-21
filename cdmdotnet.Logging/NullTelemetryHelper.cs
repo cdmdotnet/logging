@@ -82,6 +82,22 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary>
+		/// Send information about a request handled by the application.
+		/// </summary>
+		/// <param name="name">The request name.</param>
+		/// <param name="url"></param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="startTime">The time when the page was requested.</param>
+		/// <param name="duration">The time taken by the application to handle the request.</param>
+		/// <param name="responseCode">The response status code.</param>
+		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID.</param>
+		public void TrackRequest(string name, Uri url, string userId, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+		}
+
+		/// <summary>
 		/// Flushes the in-memory buffer, if one exists
 		/// </summary>
 		public virtual void Flush()
