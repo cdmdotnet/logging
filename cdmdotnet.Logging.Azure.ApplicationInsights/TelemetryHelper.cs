@@ -101,9 +101,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		public virtual void TrackEvent(string eventName, IDictionary<string, string> properties = null)
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
-			SetCorrelationId(telemetryProperties);
+			string correlationId = SetCorrelationId(telemetryProperties);
 			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() => TelemetryClient.TrackEvent(eventName, telemetryProperties));
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					TelemetryClient.TrackEvent(eventName, telemetryProperties);
+				});
 			else
 				TelemetryClient.TrackEvent(eventName, telemetryProperties);
 		}
@@ -117,9 +121,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		public virtual void TrackMetric(string name, double value, IDictionary<string, string> properties = null)
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
-			SetCorrelationId(telemetryProperties);
+			string correlationId = SetCorrelationId(telemetryProperties);
 			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() => TelemetryClient.TrackMetric(name, value, telemetryProperties));
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					TelemetryClient.TrackMetric(name, value, telemetryProperties);
+				});
 			else
 				TelemetryClient.TrackMetric(name, value, telemetryProperties);
 		}
@@ -133,9 +141,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		public virtual void TrackException(Exception exception, IDictionary<string, double> metrics = null, IDictionary<string, string> properties = null)
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
-			SetCorrelationId(telemetryProperties);
+			string correlationId = SetCorrelationId(telemetryProperties);
 			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() => TelemetryClient.TrackException(exception, telemetryProperties, metrics));
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					ActionQueue.Enqueue(() => TelemetryClient.TrackException(exception, telemetryProperties, metrics));
+				});
 			else
 				TelemetryClient.TrackException(exception, telemetryProperties, metrics);
 		}
@@ -157,9 +169,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 			if (properties != null)
 				foreach (KeyValuePair<string, string> pair in properties)
 					dependencyTelemetry.Properties.Add(pair);
-			SetCorrelationId(dependencyTelemetry.Properties);
+			string correlationId = SetCorrelationId(dependencyTelemetry.Properties);
 			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull));
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull));
+				});
 			else
 				TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull);
 		}
@@ -182,9 +198,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 			if (properties != null)
 				foreach (KeyValuePair<string, string> pair in properties)
 					dependencyTelemetry.Properties.Add(pair);
-			SetCorrelationId(dependencyTelemetry.Properties);
+			string correlationId = SetCorrelationId(dependencyTelemetry.Properties);
 			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyTelemetry));
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyTelemetry));
+				});
 			else
 				TelemetryClient.TrackDependency(dependencyTelemetry);
 		}
@@ -200,19 +220,44 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// <param name="properties">Named string values you can use to search and classify events.</param>
 		public virtual void TrackRequest(string name, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull, IDictionary<string, string> properties = null)
 		{
-			var requestTelemetry = new RequestTelemetry(name, startTime, duration, responseCode, wasSuccessfull);
+			TrackRequest(name, new Uri(string.Format("//{0}", name)), null, startTime, duration, responseCode, wasSuccessfull, properties);
+		}
+
+		/// <summary>
+		/// Send information about a request handled by the application.
+		/// </summary>
+		/// <param name="name">The request name.</param>
+		/// <param name="url"></param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="startTime">The time when the page was requested.</param>
+		/// <param name="duration">The time taken by the application to handle the request.</param>
+		/// <param name="responseCode">The response status code.</param>
+		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID.</param>
+		public virtual void TrackRequest(string name, Uri url, string userId, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+			var requestTelemetry = new RequestTelemetry(name, startTime, duration, responseCode, wasSuccessfull)
+			{
+				Url = url
+			};
 			if (properties != null)
 				foreach (KeyValuePair<string, string> pair in properties)
 					requestTelemetry.Properties.Add(pair);
-			SetCorrelationId(requestTelemetry.Properties);
-			try
-			{
-				requestTelemetry.Url = new Uri(string.Format("cqrs://{0}", name));
-			}
-			catch { /* Move on for now */ }
+			string correlationId = SetCorrelationId(requestTelemetry.Properties);
+
+			requestTelemetry.Context.Operation.Id = correlationId;
+			if (!string.IsNullOrWhiteSpace(userId))
+				requestTelemetry.Context.User.Id = userId;
+			if (!string.IsNullOrWhiteSpace(sessionId))
+				requestTelemetry.Context.Session.Id = sessionId;
 
 			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() => TelemetryClient.TrackRequest(requestTelemetry));
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					ActionQueue.Enqueue(() => TelemetryClient.TrackRequest(requestTelemetry));
+				});
 			else
 				TelemetryClient.TrackRequest(requestTelemetry);
 		}
@@ -233,13 +278,22 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// <summary>
 		/// Sets the CorrelationId into the provided <paramref name="properties"/>
 		/// </summary>
-		protected virtual void SetCorrelationId(IDictionary<string, string> properties)
+		/// <remarks>
+		/// See https://dzimchuk.net/event-correlation-in-application-insights/ for details on correlating things together.
+		/// </remarks>
+		protected virtual string SetCorrelationId(IDictionary<string, string> properties)
 		{
 			try
 			{
-				properties["CorrelationId"] = CorrelationIdHelper.GetCorrelationId().ToString("N");
+				string correlationId = CorrelationIdHelper.GetCorrelationId().ToString("N");
+				properties["CorrelationId"] = correlationId;
+				TelemetryClient.Context.Operation.Id = correlationId;
+				return correlationId;
 			}
-			catch { /* Move On */ }
+			catch
+			{
+				return null;
+			}
 		}
 	}
 }

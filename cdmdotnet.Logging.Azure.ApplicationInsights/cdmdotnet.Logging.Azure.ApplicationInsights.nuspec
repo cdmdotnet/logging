@@ -18,6 +18,10 @@
 		</dependencies>
 
 		<releaseNotes>
+			Version 1.2.79
+
+			* Added correlation to application insights via OperationId.
+
 			Version 1.2.78
 
 			* Added optional properties to all telemetry methods.

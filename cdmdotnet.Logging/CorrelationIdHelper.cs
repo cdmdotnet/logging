@@ -17,6 +17,7 @@ namespace cdmdotnet.Logging
 	/// <summary>
 	/// A <see cref="ICorrelationIdHelper"/> that uses the <see cref="ThreadedContextItemCollectionFactory.GetCurrentContext"/> method to get a transport collection within the <see cref="Thread"/>.
 	/// </summary>
+	/// <remarks>https://dzimchuk.net/event-correlation-in-application-insights/</remarks>
 	public class CorrelationIdHelper : ICorrelationIdHelper
 	{
 		/// <summary>
