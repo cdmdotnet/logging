@@ -18,7 +18,7 @@
 		</dependencies>
 
 		<releaseNotes>
-			Version 1.2.80
+			Version 1.2.83
 
 			* Added correlation to application insights via OperationId.
 
