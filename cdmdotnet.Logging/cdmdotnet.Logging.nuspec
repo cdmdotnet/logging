@@ -27,29 +27,25 @@
 			Usage is in the form of:
 			static void Main()
 			{
-				ICorrelationIdHelper correlationIdHelper = new WebCorrelationIdHelper();
-				// This value will be set automatically to all logs within this thread... so long as System.Threading.Tasks.Task.Factory.StartNew is used.
-				correlationIdHelper.SetCorrelationId(Guid.NewGuid());
-				DoSyncWork();
-				DoAsyncWork();
+			  ICorrelationIdHelper correlationIdHelper = new WebCorrelationIdHelper();
+			  // This value will be set automatically to all logs within this thread... so long as System.Threading.Tasks.Task.Factory.StartNew is used.
+			  correlationIdHelper.SetCorrelationId(Guid.NewGuid());
+			  DoSyncWork();
+			  DoAsyncWork();
 			}
 
 			static void DoSyncWork()
 			{
-				ILogger logger = new SqlLogger();
-				logger.LogDebug("Some technical debugging details.");
+			  ILogger logger = new SqlLogger();
+			  logger.LogDebug("Some technical debugging details.");
 			}
 
 			static void DoAsyncWork()
 			{
-				System.Threading.Tasks.Task.Factory.StartNew
-				(
-					() =>
-					{
-						ILogger logger = new ConsoleLogger();
-						logger.LogInfo("An informative message.");
-					}
-				);
+			  System.Threading.Tasks.Task.Factory.StartNew(() => {
+			    ILogger logger = new ConsoleLogger();
+			    logger.LogInfo("An informative message.");
+			  });
 			}
 
 			This package installs cdmdotnet.Logging.dll with includes core logging functionality. Other packages depend on cdmdotnet.Logging for specific implementations.
