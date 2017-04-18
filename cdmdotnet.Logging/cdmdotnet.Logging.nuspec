@@ -52,6 +52,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.87
+
+			* Added the ability to turn off using performance counters. You may need to add a new property to your app.config or web.config "UsePerformanceCounters" with a boolean value.
+
 			Version 1.2.77
 
 			* Added optional properties to all telemetry methods.

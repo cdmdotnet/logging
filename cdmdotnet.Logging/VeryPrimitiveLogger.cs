@@ -129,15 +129,18 @@ namespace cdmdotnet.Logging
 
 			try
 			{
-				try
+				if (LoggerSettings.UsePerformanceCounters)
 				{
-					performanceTracker = new PerformanceTracker(CreateActionInfo(level, container));
-					performanceTracker.ProcessActionStart();
-				}
-				catch (UnauthorizedAccessException) { }
-				catch (Exception)
-				{
-					// Just move on
+					try
+					{
+						performanceTracker = new PerformanceTracker(CreateActionInfo(level, container));
+						performanceTracker.ProcessActionStart();
+					}
+					catch (UnauthorizedAccessException) { }
+					catch (Exception)
+					{
+						// Just move on
+					}
 				}
 
 				logAction();

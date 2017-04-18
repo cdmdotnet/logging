@@ -18,6 +18,10 @@
 		</dependencies>
 
 		<releaseNotes>
+			Version 1.2.87
+
+			* Added the ability to turn off using performance counters
+
 			Version 1.1.38
 
 			* Suppressed trace outputs when using the configuration class.

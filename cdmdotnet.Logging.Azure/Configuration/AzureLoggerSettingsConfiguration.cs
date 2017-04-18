@@ -147,6 +147,14 @@ namespace cdmdotnet.Logging.Azure.Configuration
 			get { return bool.Parse(CloudConfigurationManager.GetSetting("UseApplicationInsightTelemetryHelper", false) ?? "false"); }
 		}
 
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		public bool UsePerformanceCounters
+		{
+			get { return bool.Parse(CloudConfigurationManager.GetSetting("UsePerformanceCounters", false) ?? "false"); }
+		}
+
 		#endregion
 	}
 }

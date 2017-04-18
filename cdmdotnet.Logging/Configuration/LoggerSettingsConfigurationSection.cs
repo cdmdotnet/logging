@@ -274,7 +274,21 @@ namespace cdmdotnet.Logging.Configuration
 			}
 		}
 
-
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		[ConfigurationProperty("UsePerformanceCounters", DefaultValue = false, IsRequired = true)]
+		public bool UsePerformanceCounters
+		{
+			get
+			{
+				return (bool)this["UsePerformanceCounters"];
+			}
+			set
+			{
+				this["UsePerformanceCounters"] = value;
+			}
+		}
 
 		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.

@@ -20,6 +20,7 @@
 		EnableThreadedLogging="true"
 
 		UseApplicationInsightTelemetryHelper="false"
+		UsePerformanceCounters="false"
 
 		ModuleName ="MyApplication"
 		Instance ="Server1"

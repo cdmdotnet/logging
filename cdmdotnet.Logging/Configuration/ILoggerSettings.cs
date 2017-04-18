@@ -94,5 +94,10 @@ namespace cdmdotnet.Logging.Configuration
 		/// If true, all log calls will be telemetered.
 		/// </summary>
 		bool UseApplicationInsightTelemetryHelper { get; }
+
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		bool UsePerformanceCounters { get; }
 	}
 }
