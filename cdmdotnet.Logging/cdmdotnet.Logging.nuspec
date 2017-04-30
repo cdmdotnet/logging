@@ -52,6 +52,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.88
+
+			* Added a sample SQL script for creating the logs table, see the tools folder.
+
 			Version 1.2.87
 
 			* Added the ability to turn off using performance counters. You may need to add a new property to your app.config or web.config "UsePerformanceCounters" with a boolean value.
@@ -111,5 +115,6 @@
 	</metadata>
 	<files>
 		<file src="..\packaging\**\*.xdt" target="content" />
+		<file src="Tools\*.sql" target="Tools" />
 	</files>
 </package>
