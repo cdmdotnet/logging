@@ -18,6 +18,13 @@
 		</dependencies>
 
 		<releaseNotes>
+			Version 1.2.89
+
+			* Added overloads for Azure application settings as follows:
+				* EnableDebug becomes EnableLogDebug with a fallback of EnableDebug
+				* EnableWarning becomes EnableLogWarning with a fallback of EnableWarning
+			and so on. The original settings will act as a fallback before resolving to default values, so this isn't a breaking change.
+
 			Version 1.2.87
 
 			* Added the ability to turn off using performance counters
