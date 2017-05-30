@@ -52,6 +52,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.89
+
+			* Added better support for serialisation issue with exceptions and meta-data - which are both considered secondary to trying to save all other information.
+
 			Version 1.2.88
 
 			* Added a sample SQL script for creating the logs table, see the tools folder.

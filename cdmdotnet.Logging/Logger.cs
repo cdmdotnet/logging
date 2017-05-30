@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using cdmdotnet.Logging.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace cdmdotnet.Logging
 {
@@ -21,6 +22,31 @@ namespace cdmdotnet.Logging
 	/// </summary>
 	public abstract class Logger : VeryPrimitiveLogger
 	{
+		/// <summary>
+		/// Default settings used to serialise objects for storage
+		/// </summary>
+		public static JsonSerializerSettings DefaultJsonSerializerSettings { get; private set; }
+
+		static Logger()
+		{
+			DefaultJsonSerializerSettings = new JsonSerializerSettings
+			{
+				Formatting = Formatting.None,
+				MissingMemberHandling = MissingMemberHandling.Ignore,
+				DateParseHandling = DateParseHandling.DateTimeOffset,
+				DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind,
+				Converters = new List<JsonConverter> { new StringEnumConverter() },
+				DateFormatHandling = DateFormatHandling.IsoDateFormat,
+				DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+				FloatFormatHandling = FloatFormatHandling.DefaultValue,
+				NullValueHandling = NullValueHandling.Include,
+				PreserveReferencesHandling = PreserveReferencesHandling.All,
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				StringEscapeHandling = StringEscapeHandling.EscapeNonAscii,
+				TypeNameHandling = TypeNameHandling.All,
+			};
+		}
+
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="Logger"/> class preparing the required thread pool polling if <see cref="ILoggerSettings.EnableThreadedLogging"/> is set to true.
 		/// </summary>
@@ -186,11 +212,19 @@ namespace cdmdotnet.Logging
 				Level = level,
 				Message = message,
 				Container = container,
-				Exception = JsonConvert.SerializeObject(exception),
-				AdditionalData = additionalData,
-				MetaData = JsonConvert.SerializeObject(metaData)
+				AdditionalData = additionalData
 			};
 
+			try
+			{
+				logInformation.Exception = JsonConvert.SerializeObject(exception, DefaultJsonSerializerSettings);
+			}
+			catch (JsonSerializationException) { }
+			try
+			{
+				logInformation.MetaData = JsonConvert.SerializeObject(metaData, DefaultJsonSerializerSettings);
+			}
+			catch (JsonSerializationException) { }
 			try
 			{
 				logInformation.CorrolationId = CorrelationIdHelper.GetCorrelationId();
