@@ -6,6 +6,7 @@
 // // -----------------------------------------------------------------------
 #endregion
 
+using System;
 using System.Configuration;
 
 namespace cdmdotnet.Logging.Configuration
@@ -28,6 +29,8 @@ namespace cdmdotnet.Logging.Configuration
 		{
 			get
 			{
+				if (Settings == null)
+					throw new NullReferenceException("No LoggerSettings section was found in your app.config or web.config file. Alternatively it might not have all required settings defined... make sure ALL settings of the LoggerSettings have been defined.");
 				return Settings;
 			}
 		}

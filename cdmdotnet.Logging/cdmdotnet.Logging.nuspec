@@ -52,6 +52,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.92
+
+			* Added a null reference check to the configuration file base settings class to return a better error if there is an issue.
+
 			Version 1.2.88
 
 			* Added a sample SQL script for creating the logs table, see the tools folder.
