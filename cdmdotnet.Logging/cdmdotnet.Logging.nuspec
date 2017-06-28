@@ -56,6 +56,10 @@
 
 			* Added a null reference check to the configuration file base settings class to return a better error if there is an issue.
 
+			Version 1.2.91
+
+			* Added better support for serialisation issue with exceptions and meta-data - which are both considered secondary to trying to save all other information.
+
 			Version 1.2.88
 
 			* Added a sample SQL script for creating the logs table, see the tools folder.
