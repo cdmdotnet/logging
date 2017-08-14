@@ -52,6 +52,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.93
+
+			* Replaced a few usages of collections with better thread safe collections for much higher usage environments.
+
 			Version 1.2.92
 
 			* Added a null reference check to the configuration file base settings class to return a better error if there is an issue.

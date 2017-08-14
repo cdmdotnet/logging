@@ -29,7 +29,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		protected MultiLogger()
 		{
-			Loggers = new List<ILogger>();
+			Loggers = new SynchronizedCollection<ILogger>();
 		}
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace cdmdotnet.Logging
 		/// <param name="logAction"></param>
 		protected virtual void Log(Action<ILogger> logAction)
 		{
-			IList<Task> loggerTasks = new List<Task>();
+			IList<Task> loggerTasks = new SynchronizedCollection<Task>();
 			foreach (ILogger logger in Loggers)
 			{
 				ILogger log = logger;
@@ -168,7 +168,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public void Dispose()
 		{
-			IList<Task> loggerTasks = new List<Task>();
+			IList<Task> loggerTasks = new SynchronizedCollection<Task>();
 			foreach (ILogger logger in Loggers)
 			{
 				ILogger log = logger;

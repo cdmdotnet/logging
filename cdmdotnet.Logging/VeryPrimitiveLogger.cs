@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using cdmdotnet.Performance;
@@ -38,8 +37,8 @@ namespace cdmdotnet.Logging
 				else
 					TelemetryHelper = new NullTelemetryHelper();
 			}
-			ExclusionNamespaces = new List<string> { "cdmdotnet.Logging" };
-			InprogressThreads = new List<Guid>();
+			ExclusionNamespaces = new SynchronizedCollection<string> { "cdmdotnet.Logging" };
+			InprogressThreads = new SynchronizedCollection<Guid>();
 		}
 
 		/// <summary>
