@@ -103,8 +103,8 @@ namespace cdmdotnet.Logging
 				exception == null ? null : exception.Message, // 5
 				exception == null ? null : exception.StackTrace, // 6
 				corrolationId, // 7
-				additionalData == null ? null : JsonConvert.SerializeObject(additionalData), // 8
-				metaData == null ? null : JsonConvert.SerializeObject(metaData) // 9
+				additionalData == null || !additionalData.Any() ? null : JsonConvert.SerializeObject(additionalData), // 8
+				metaData == null || !metaData.Any() ? null : JsonConvert.SerializeObject(metaData) // 9
 			);
 
 			return messageToLog;
