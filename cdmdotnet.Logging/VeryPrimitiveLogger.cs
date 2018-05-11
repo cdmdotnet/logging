@@ -49,7 +49,7 @@ namespace cdmdotnet.Logging
 		/// <summary>
 		/// The <see cref="ILoggerSettings"/> for the instance, set during Instantiation
 		/// </summary>
-		protected ILoggerSettings LoggerSettings { get; private set; }
+		public ILoggerSettings LoggerSettings { get; private set; }
 
 		/// <summary>
 		/// The <see cref="ICorrelationIdHelper"/> for the instance, set during Instantiation
