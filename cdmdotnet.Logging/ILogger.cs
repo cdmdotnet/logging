@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using cdmdotnet.Logging.Configuration;
 
 namespace cdmdotnet.Logging
 {
@@ -62,5 +63,10 @@ namespace cdmdotnet.Logging
 		/// to the <see cref="ILogger"/> using the specified <paramref name="message"></paramref>.
 		/// </summary>
 		void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null);
+
+		/// <summary>
+		/// The <see cref="ILoggerSettings"/> for the instance, set during instantiation.
+		/// </summary>
+		ILoggerSettings LoggerSettings { get; }
 	}
 }

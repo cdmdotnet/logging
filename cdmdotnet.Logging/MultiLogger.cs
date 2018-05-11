@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using cdmdotnet.Logging.Configuration;
 
 namespace cdmdotnet.Logging
 {
@@ -158,6 +159,11 @@ namespace cdmdotnet.Logging
 
 			Log(logAction);
 		}
+
+		/// <summary>
+		/// The <see cref="ILoggerSettings"/> for the instance, set during instantiation.
+		/// </summary>
+		public ILoggerSettings LoggerSettings { get { return Loggers.First().LoggerSettings; } }
 
 		#endregion
 
