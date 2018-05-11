@@ -51,7 +51,7 @@ namespace cdmdotnet.Logging
 							try
 							{
 								bool found = false;
-								if (ExclusionNamespaces.Any(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace)))
+								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace)))
 								{
 									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
 									found = true;
@@ -103,8 +103,8 @@ namespace cdmdotnet.Logging
 				exception == null ? null : exception.Message, // 5
 				exception == null ? null : exception.StackTrace, // 6
 				corrolationId, // 7
-				JsonConvert.SerializeObject(additionalData), // 8
-				JsonConvert.SerializeObject(metaData) // 9
+				additionalData == null || !additionalData.Any() ? null : JsonConvert.SerializeObject(additionalData), // 8
+				metaData == null || !metaData.Any() ? null : JsonConvert.SerializeObject(metaData) // 9
 			);
 
 			return messageToLog;
