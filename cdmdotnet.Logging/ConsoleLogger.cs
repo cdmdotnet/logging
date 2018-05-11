@@ -17,6 +17,13 @@ namespace cdmdotnet.Logging
 	/// </summary>
 	public class ConsoleLogger : PrimitiveLogger
 	{
+		static object OutputLock { get; set; }
+
+		static ConsoleLogger()
+		{
+			OutputLock = new object();
+		}
+
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="ConsoleLogger"/> class.
 		/// </summary>
@@ -110,10 +117,13 @@ namespace cdmdotnet.Logging
 
 			Action logAction = () =>
 			{
-				ConsoleColor originalColour = Console.ForegroundColor;
-				Console.ForegroundColor = foregroundColor;
-				Console.WriteLine(messageToLog);
-				Console.ForegroundColor = originalColour;
+				lock (OutputLock)
+				{
+					ConsoleColor originalColour = Console.ForegroundColor;
+					Console.ForegroundColor = foregroundColor;
+					Console.WriteLine(messageToLog);
+					Console.ForegroundColor = originalColour;
+				}
 			};
 
 			Log(logAction, level, container);

@@ -159,6 +159,16 @@ namespace cdmdotnet.logging.Tests.Integration
 		/// </summary>
 		public string SqlDatabaseTableName { get; set; }
 
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		public bool UseApplicationInsightTelemetryHelper { get; set; }
+
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		public bool UsePerformanceCounters { get; set; }
+
 		#endregion
 	}
 }
