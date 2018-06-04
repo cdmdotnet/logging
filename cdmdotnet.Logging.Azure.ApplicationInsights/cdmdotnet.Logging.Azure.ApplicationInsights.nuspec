@@ -18,6 +18,10 @@
 		</dependencies>
 
 		<releaseNotes>
+			Version 1.2.101
+
+			* Added RoleName and RoleInstance information to application insights via Context.Cloud.
+
 			Version 1.2.84
 
 			* Added correlation to application insights via OperationId.

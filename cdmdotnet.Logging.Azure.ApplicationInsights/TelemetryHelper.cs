@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using cdmdotnet.Logging.Configuration;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -22,14 +23,20 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		private ConcurrentQueue<Action> ActionQueue { get; set; }
 
 		/// <summary>
+		/// Generalised Logger settings.
+		/// </summary>
+		protected ILoggerSettings LoggerSettings { get; private set; }
+
+		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
-		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
+		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
 		{
 			TelemetryClient = telemetryClient;
 			CorrelationIdHelper = correlationIdHelper;
 			ActionQueue = new ConcurrentQueue<Action>();
 			EnableThreadedOperations = enableThreadedOperations;
+			LoggerSettings = loggerSettings;
 
 			if (EnableThreadedOperations)
 			{
@@ -60,7 +67,7 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
 		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper)
-			: this(telemetryClient, correlationIdHelper, false)
+			: this(telemetryClient, correlationIdHelper, null, false)
 		{
 		}
 
@@ -76,7 +83,24 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
-			: this(new TelemetryClient(), correlationIdHelper, enableThreadedOperations)
+			: this(new TelemetryClient(), correlationIdHelper, null, enableThreadedOperations)
+		{
+			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
+		/// </summary>
+		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings)
+			: this(correlationIdHelper, loggerSettings, false)
+		{
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
+		/// </summary>
+		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
+			: this(new TelemetryClient(), correlationIdHelper, loggerSettings, enableThreadedOperations)
 		{
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
 		}
@@ -102,6 +126,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
 			string correlationId = SetCorrelationId(telemetryProperties);
+
+			if (LoggerSettings != null)
+			{
+				TelemetryClient.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
@@ -122,6 +153,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
 			string correlationId = SetCorrelationId(telemetryProperties);
+
+			if (LoggerSettings != null)
+			{
+				TelemetryClient.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
@@ -142,6 +180,13 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		{
 			IDictionary<string, string> telemetryProperties = (properties ?? new Dictionary<string, string>());
 			string correlationId = SetCorrelationId(telemetryProperties);
+
+			if (LoggerSettings != null)
+			{
+				TelemetryClient.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
@@ -170,6 +215,16 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 				foreach (KeyValuePair<string, string> pair in properties)
 					dependencyTelemetry.Properties.Add(pair);
 			string correlationId = SetCorrelationId(dependencyTelemetry.Properties);
+
+			TelemetryClient.Context.Operation.Name = dependencyName;
+			dependencyTelemetry.Context.Operation.Id = correlationId;
+			dependencyTelemetry.Context.Operation.Name = dependencyName;
+			if (LoggerSettings != null)
+			{
+				dependencyTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				dependencyTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
@@ -199,10 +254,21 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 				foreach (KeyValuePair<string, string> pair in properties)
 					dependencyTelemetry.Properties.Add(pair);
 			string correlationId = SetCorrelationId(dependencyTelemetry.Properties);
+
+			TelemetryClient.Context.Operation.Name = dependencyName;
+			dependencyTelemetry.Context.Operation.Id = correlationId;
+			dependencyTelemetry.Context.Operation.Name = dependencyName;
+			if (LoggerSettings != null)
+			{
+				dependencyTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				dependencyTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
+					TelemetryClient.Context.Operation.Name = dependencyName;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyTelemetry));
 				});
 			else
@@ -246,17 +312,25 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 					requestTelemetry.Properties.Add(pair);
 			string correlationId = SetCorrelationId(requestTelemetry.Properties);
 
-			TelemetryClient.Context.Operation.Name = name;
-			requestTelemetry.Context.Operation.Id = correlationId;
 			if (!string.IsNullOrWhiteSpace(userId))
 				requestTelemetry.Context.User.Id = userId;
 			if (!string.IsNullOrWhiteSpace(sessionId))
 				requestTelemetry.Context.Session.Id = sessionId;
 
+			TelemetryClient.Context.Operation.Name = name;
+			requestTelemetry.Context.Operation.Id = correlationId;
+			requestTelemetry.Context.Operation.Name = name;
+			if (LoggerSettings != null)
+			{
+				requestTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				requestTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
+					TelemetryClient.Context.Operation.Name = name;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackRequest(requestTelemetry));
 				});
 			else
