@@ -313,7 +313,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 			string correlationId = SetCorrelationId(requestTelemetry.Properties);
 
 			if (!string.IsNullOrWhiteSpace(userId))
+			{
 				requestTelemetry.Context.User.Id = userId;
+				requestTelemetry.Context.User.AuthenticatedUserId = userId;
+			}
 			if (!string.IsNullOrWhiteSpace(sessionId))
 				requestTelemetry.Context.Session.Id = sessionId;
 
