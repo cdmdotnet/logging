@@ -52,7 +52,7 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
-			Version 1.2.103
+			Version 1.2.104
 
 			* Added support for IContainerLoggerSettings, an interface that allows container based settings at a very granular level.
 

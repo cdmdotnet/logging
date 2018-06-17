@@ -78,6 +78,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			container = UseOrBuildContainerName(container);
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableInfo, LoggerSettings.EnableInfo))
 			{
 				Log("Info", message, container, exception, additionalData, metaData);
@@ -93,6 +94,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			container = UseOrBuildContainerName(container);
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableProgress, LoggerSettings.EnableProgress))
 			{
 				Log("Progress", message, container, exception, additionalData, metaData);
@@ -108,6 +110,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			container = UseOrBuildContainerName(container);
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableDebug, LoggerSettings.EnableDebug))
 			{
 				Log("Debug", message, container, exception, additionalData, metaData);
@@ -123,6 +126,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			container = UseOrBuildContainerName(container);
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableWarning, LoggerSettings.EnableWarning))
 			{
 				Log("Warning", message, container, exception, additionalData, metaData);
@@ -138,6 +142,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			container = UseOrBuildContainerName(container);
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableError, LoggerSettings.EnableError))
 			{
 				Log("Error", message, container, exception, additionalData, metaData);
@@ -153,6 +158,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			container = UseOrBuildContainerName(container);
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableFatalError, LoggerSettings.EnableFatalError))
 			{
 				Log("Fatal", message, container, exception, additionalData, metaData);
