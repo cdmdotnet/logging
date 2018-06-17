@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IContainerLoggerSettings.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\LoggerSettingsConfigurationSection.cs" />
     <Compile Include="Configuration\ILoggerSettings.cs" />

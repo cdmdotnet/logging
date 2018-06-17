@@ -29,12 +29,12 @@ namespace cdmdotnet.Logging
 		}
 
 		/// <summary />
-		protected virtual string GetSqlConnectionString()
+		protected virtual string GetSqlConnectionString(string container)
 		{
-			string appSettingValue = LoggerSettings.SqlDatabaseLogsConnectionStringName;
+			string appSettingValue = GetSetting(container, containerLoggerSettings => containerLoggerSettings.SqlDatabaseLogsConnectionStringName, LoggerSettings.SqlDatabaseLogsConnectionStringName);
 			if (string.IsNullOrWhiteSpace(appSettingValue))
 				throw new ConfigurationErrorsException("No value for the setting 'SqlDatabaseLogsConnectionStringName' was provided");
-			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[LoggerSettings.SqlDatabaseLogsConnectionStringName];
+			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[appSettingValue];
 			if (connectionStringSettings == null)
 				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", appSettingValue));
 			string connectionString = connectionStringSettings.ConnectionString;
@@ -60,7 +60,7 @@ namespace cdmdotnet.Logging
 		{
 			try
 			{
-				using (IDbConnection dbConnection = GetDbConnection(GetSqlConnectionString()))
+				using (IDbConnection dbConnection = GetDbConnection(GetSqlConnectionString(logInformation.Container)))
 				{
 					dbConnection.Open();
 					IDbCommand command = GetCommand();
@@ -71,7 +71,7 @@ namespace cdmdotnet.Logging
 					{
 						command.Transaction = dbTransaction;
 
-						command.CommandText = GetInsertStatement();
+						command.CommandText = GetInsertStatement(logInformation.Container);
 
 						IDbDataParameter raisedParameter = command.CreateParameter();
 						raisedParameter.DbType = DbType.DateTime;
@@ -155,7 +155,7 @@ namespace cdmdotnet.Logging
 								additionalDataParameter.Value = value != null ? JsonConvert.SerializeObject(value) : (object)DBNull.Value;
 								command.Parameters.Add(additionalDataParameter);
 
-								string tableName = LoggerSettings.SqlDatabaseTableName;
+								string tableName = GetSetting(logInformation.Container, containerLoggerSettings => containerLoggerSettings.SqlDatabaseTableName, LoggerSettings.SqlDatabaseTableName);
 								command.CommandText = command.CommandText
 									.Replace(", " + tableName + ".MetaData", string.Format(", " + tableName +".MetaData, " + tableName + ".{0}", key))
 									.Replace(", @MetaData", string.Format(", @MetaData, @{0}", key));
@@ -188,7 +188,7 @@ namespace cdmdotnet.Logging
 		{
 			try
 			{
-				using (IDbConnection dbConnection = GetDbConnection(GetSqlConnectionString()))
+				using (IDbConnection dbConnection = GetDbConnection(GetSqlConnectionString(null)))
 				{
 					dbConnection.Open();
 					IDbCommand command = GetCommand();
@@ -220,9 +220,9 @@ namespace cdmdotnet.Logging
 		/// VALUES
 		/// (@Raised, @Level, @Module, @Instance, @Environment, @EnvironmentInstance, @CorrelationId,@Message, @Container, @Exception);
 		/// </summary>
-		protected virtual string GetInsertStatement()
+		protected virtual string GetInsertStatement(string container)
 		{
-			string tableName = LoggerSettings.SqlDatabaseTableName;
+			string tableName = GetSetting(container, containerLoggerSettings => containerLoggerSettings.SqlDatabaseTableName, LoggerSettings.SqlDatabaseTableName);
 			return string.Format(@"INSERT INTO {0}
 ({0}.Raised, {0}.Level, {0}.Module, {0}.Instance, {0}.Environment, {0}.EnvironmentInstance, {0}.CorrelationId, {0}.Message, {0}.Container, {0}.Exception, {0}.MetaData)
 VALUES

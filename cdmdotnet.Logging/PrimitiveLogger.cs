@@ -9,9 +9,7 @@
 using cdmdotnet.Logging.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace cdmdotnet.Logging
@@ -34,44 +32,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		protected virtual string GenerateLogMessage(string level, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
-			try
-			{
-				if (string.IsNullOrWhiteSpace(container))
-				{
-					var stackTrace = new StackTrace();
-					StackFrame[] stackFrames = stackTrace.GetFrames();
-					if (stackFrames != null)
-					{
-						foreach (StackFrame frame in stackFrames)
-						{
-							MethodBase method = frame.GetMethod();
-							if (method.ReflectedType == null)
-								continue;
-
-							try
-							{
-								bool found = false;
-								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace)))
-								{
-									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
-									found = true;
-								}
-								if (found)
-									break;
-							}
-							catch
-							{
-								// Just move on
-							}
-						}
-					}
-				}
-			}
-			catch
-			{
-				// Just move on
-			}
-
+			container = UseOrBuildContainerName(container);
 
 			Guid corrolationId = Guid.Empty;
 			try
@@ -82,7 +43,6 @@ namespace cdmdotnet.Logging
 			{
 				// Default already set
 			}
-
 
 			string pattern = "[{0}] {1:r}:";
 			if (corrolationId != Guid.Empty)

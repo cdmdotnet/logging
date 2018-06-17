@@ -8,9 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using cdmdotnet.Logging.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -64,7 +61,8 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogSensitive(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableSensitive)
+			container = UseOrBuildContainerName(container);
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableSensitive, LoggerSettings.EnableSensitive))
 			{
 				Log("Sensitive", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogSensitive/Enabled Call");
@@ -80,7 +78,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableInfo)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableInfo, LoggerSettings.EnableInfo))
 			{
 				Log("Info", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogInfo/Enabled Call");
@@ -95,7 +93,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogProgress(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableProgress)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableProgress, LoggerSettings.EnableProgress))
 			{
 				Log("Progress", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogProgress/Enabled Call");
@@ -110,7 +108,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogDebug(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableDebug)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableDebug, LoggerSettings.EnableDebug))
 			{
 				Log("Debug", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogDebug/Enabled Call");
@@ -125,7 +123,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogWarning(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableWarning)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableWarning, LoggerSettings.EnableWarning))
 			{
 				Log("Warning", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogWarning/Enabled Call");
@@ -140,7 +138,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableError)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableError, LoggerSettings.EnableError))
 			{
 				Log("Error", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogError/Enabled Call");
@@ -155,7 +153,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		public override void LogFatalError(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
-			if (LoggerSettings.EnableFatalError)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableFatalError, LoggerSettings.EnableFatalError))
 			{
 				Log("Fatal", message, container, exception, additionalData, metaData);
 				TelemetryHelper.TrackEvent("LogFatalError/Enabled Call");
@@ -169,43 +167,7 @@ namespace cdmdotnet.Logging
 		/// <summary />
 		protected virtual void Log(string level, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
-			try
-			{
-				if (string.IsNullOrWhiteSpace(container))
-				{
-					var stackTrace = new StackTrace();
-					StackFrame[] stackFrames = stackTrace.GetFrames();
-					if (stackFrames != null)
-					{
-						foreach (StackFrame frame in stackFrames)
-						{
-							MethodBase method = frame.GetMethod();
-							if (method.ReflectedType == null)
-								continue;
-
-							try
-							{
-								bool found = false;
-								if (!ExclusionNamespaces.Any(@namespace => method.ReflectedType.FullName.StartsWith(@namespace)))
-								{
-									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
-									found = true;
-								}
-								if (found)
-									break;
-							}
-							catch
-							{
-								// Just move on
-							}
-						}
-					}
-				}
-			}
-			catch
-			{
-				// Just move on
-			}
+			container = UseOrBuildContainerName(container);
 
 			var logInformation = new LogInformation
 			{

@@ -52,6 +52,10 @@
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>
+			Version 1.2.103
+
+			* Added support for IContainerLoggerSettings, an interface that allows container based settings at a very granular level.
+
 			Version 1.2.93
 
 			* Replaced a few usages of collections with better thread safe collections for much higher usage environments.

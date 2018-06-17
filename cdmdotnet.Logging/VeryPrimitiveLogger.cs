@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using cdmdotnet.Performance;
@@ -80,7 +81,7 @@ namespace cdmdotnet.Logging
 		/// </summary>
 		protected virtual void Log(Action logAction, string level, string container)
 		{
-			if (LoggerSettings.EnableThreadedLogging)
+			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableThreadedLogging, LoggerSettings.EnableThreadedLogging))
 			{
 				Guid threadGuid = Guid.NewGuid();
 				InprogressThreads.Add(threadGuid);
@@ -112,7 +113,7 @@ namespace cdmdotnet.Logging
 		protected virtual ActionInfo CreateActionInfo(string level, string container)
 		{
 			int processId = ConfigInfo.Value.ProcessId;
-			String categoryName = ConfigInfo.Value.PerformanceCategoryName;
+			string categoryName = ConfigInfo.Value.PerformanceCategoryName;
 
 			ActionInfo info = new ActionInfo(processId, categoryName, "Logger", container, string.Empty, level, string.Empty);
 
@@ -128,7 +129,7 @@ namespace cdmdotnet.Logging
 
 			try
 			{
-				if (LoggerSettings.UsePerformanceCounters)
+				if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.UsePerformanceCounters, LoggerSettings.UsePerformanceCounters))
 				{
 					try
 					{
@@ -161,6 +162,71 @@ namespace cdmdotnet.Logging
 					// Just move on
 				}
 			}
+		}
+
+		/// <summary>
+		/// If <paramref name="container"/> is null or empty, generate a container name, otherwise return <paramref name="container"/>.
+		/// </summary>
+		protected virtual string UseOrBuildContainerName(string container)
+		{
+			try
+			{
+				if (string.IsNullOrWhiteSpace(container))
+				{
+					var stackTrace = new StackTrace();
+					StackFrame[] stackFrames = stackTrace.GetFrames();
+					if (stackFrames != null)
+					{
+						foreach (StackFrame frame in stackFrames)
+						{
+							MethodBase method = frame.GetMethod();
+							if (method.ReflectedType == null)
+								continue;
+
+							try
+							{
+								bool found = false;
+								if (method.ReflectedType == null || string.IsNullOrWhiteSpace(method.ReflectedType.FullName))
+									continue;
+								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace)))
+								{
+									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
+									found = true;
+								}
+								if (found)
+									break;
+							}
+							catch
+							{
+								// Just move on
+							}
+						}
+					}
+				}
+			}
+			catch
+			{
+				// Just move on
+			}
+			return container;
+		}
+
+		/// <summary>
+		/// Get a boolean setting trying a <see cref="IContainerLoggerSettings"/> first then <see cref="LoggerSettings"/>
+		/// </summary>
+		protected virtual bool GetSetting(string container, Func<IContainerLoggerSettings, Func<string, bool>> setting, bool defaultValue)
+		{
+			var containerLoggerSettings = LoggerSettings as IContainerLoggerSettings;
+			return ((containerLoggerSettings == null ? defaultValue : setting(containerLoggerSettings)(container)));
+		}
+
+		/// <summary>
+		/// Get a string setting trying a <see cref="IContainerLoggerSettings"/> first then <see cref="LoggerSettings"/>
+		/// </summary>
+		protected virtual string GetSetting(string container, Func<IContainerLoggerSettings, Func<string, string>> setting, string defaultValue)
+		{
+			var containerLoggerSettings = LoggerSettings as IContainerLoggerSettings;
+			return containerLoggerSettings == null ? defaultValue : setting(containerLoggerSettings)(container);
 		}
 
 		#region Implementation of IDisposable

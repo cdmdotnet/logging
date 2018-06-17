@@ -15,7 +15,9 @@ namespace cdmdotnet.Logging.Azure.Configuration
 	/// <summary>
 	/// The settings for all <see cref="ILogger"/> instances reading settings from the Azure Portal.
 	/// </summary>
-	public class AzureLoggerSettingsConfiguration : ILoggerSettings
+	public class AzureLoggerSettingsConfiguration
+		: ILoggerSettings
+		, IContainerLoggerSettings
 	{
 		#region Implementation of ILoggerSettings
 
@@ -24,7 +26,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableSensitive
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogSensitive", false) ?? CloudConfigurationManager.GetSetting("EnableSensitive", false) ?? "false"); }
+			get { return ((IContainerLoggerSettings)this).EnableSensitive(null); }
 		}
 
 		/// <summary>
@@ -32,7 +34,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableInfo
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogInfo", false) ?? CloudConfigurationManager.GetSetting("EnableInfo", false) ?? "true"); }
+			get { return ((IContainerLoggerSettings)this).EnableInfo(null); }
 		}
 
 		/// <summary>
@@ -40,7 +42,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableProgress
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogProgress", false) ?? CloudConfigurationManager.GetSetting("EnableProgress", false) ?? "true"); }
+			get { return ((IContainerLoggerSettings)this).EnableProgress(null); }
 		}
 
 		/// <summary>
@@ -48,7 +50,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableDebug
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogDebug", false) ?? CloudConfigurationManager.GetSetting("EnableDebug", false) ?? "false"); }
+			get { return ((IContainerLoggerSettings)this).EnableDebug(null); }
 		}
 
 		/// <summary>
@@ -56,7 +58,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableWarning
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogWarning", false) ?? CloudConfigurationManager.GetSetting("EnableWarning", false) ?? "true"); }
+			get { return ((IContainerLoggerSettings)this).EnableWarning(null); }
 		}
 
 		/// <summary>
@@ -64,7 +66,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableError
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogError", false) ?? CloudConfigurationManager.GetSetting("EnableError", false) ?? "true"); }
+			get { return ((IContainerLoggerSettings)this).EnableError(null); }
 		}
 
 		/// <summary>
@@ -72,7 +74,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableFatalError
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableLogFatalError", false) ?? CloudConfigurationManager.GetSetting("EnableFatalError", false) ?? "true"); }
+			get { return ((IContainerLoggerSettings)this).EnableFatalError(null); }
 		}
 
 		/// <summary>
@@ -80,7 +82,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableThreadedLogging
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableThreadedLogging", false) ?? "true"); }
+			get { return ((IContainerLoggerSettings)this).EnableThreadedLogging(null); }
 		}
 
 		/// <summary>
@@ -128,7 +130,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string SqlDatabaseLogsConnectionStringName
 		{
-			get { return CloudConfigurationManager.GetSetting("SqlDatabaseLogsConnectionStringName", false) ?? "Logs"; }
+			get { return ((IContainerLoggerSettings)this).SqlDatabaseLogsConnectionStringName(null); }
 		}
 
 		/// <summary>
@@ -136,7 +138,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string SqlDatabaseTableName
 		{
-			get { return CloudConfigurationManager.GetSetting("SqlDatabaseTableName", false) ?? "Logs"; }
+			get { return ((IContainerLoggerSettings)this).SqlDatabaseTableName(null); }
 		}
 
 		/// <summary>
@@ -144,7 +146,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool UseApplicationInsightTelemetryHelper
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("UseApplicationInsightTelemetryHelper", false) ?? "false"); }
+			get { return ((IContainerLoggerSettings)this).UseApplicationInsightTelemetryHelper(null); }
 		}
 
 		/// <summary>
@@ -152,9 +154,149 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool UsePerformanceCounters
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("UsePerformanceCounters", false) ?? "false"); }
+			get { return ((IContainerLoggerSettings)this).UsePerformanceCounters(null); }
 		}
 
 		#endregion
+
+		#region Implementation of IContainerLoggerSettings
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogSensitive"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableSensitive(string container)
+		{
+			return GetBooleanValue("EnableLogSensitive", container, "false", "EnableSensitive");
+		}
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogInfo"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableInfo(string container)
+		{
+			return GetBooleanValue("EnableLogInfo", container, "true", "EnableInfo");
+		}
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogProgress"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableProgress(string container)
+		{
+			return GetBooleanValue("EnableLogProgress", container, "true", "EnableProgress");
+		}
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogDebug"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableDebug(string container)
+		{
+			return GetBooleanValue("EnableLogDebug", container, "false", "EnableDebug");
+		}
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogWarning"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableWarning(string container)
+		{
+			return GetBooleanValue("EnableLogWarning", container, "true", "EnableWarning");
+		}
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogError"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableError(string container)
+		{
+			return GetBooleanValue("EnableLogError", container, "true", "EnableError");
+		}
+
+		/// <summary>
+		/// If false <see cref="ILogger.LogFatalError"/> will not do anything nor log anything.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableFatalError(string container)
+		{
+			return GetBooleanValue("EnableLogFatalError", container, "true", "EnableFatalError");
+		}
+
+		/// <summary>
+		/// If true, the <see cref="ILogger"/> will use one extra thread per instance to persist logs. 
+		/// This means the log methods like <see cref="ILogger.LogInfo"/> will return indicating the information is in a queue to be logged.
+		/// This greatly increases the performance in the event your <see cref="ILogger"/> is under heavy load, for example, if your logging database is under strain, your application will continue to perform, but logs will be queued.
+		/// </summary>
+		bool IContainerLoggerSettings.EnableThreadedLogging(string container)
+		{
+			return GetBooleanValue("EnableThreadedLoggingOutput", container, "false");
+		}
+
+		/// <summary>
+		/// The key of the <see cref="ConfigurationManager.AppSettings"/> item that holds the name of the connection string to use.
+		/// </summary>
+		string IContainerLoggerSettings.SqlDatabaseLogsConnectionStringName(string container)
+		{
+			return GetStringValue("SqlDatabaseLogsConnectionStringName", container, "Logs");
+		}
+
+		/// <summary>
+		/// The name of the table to use.
+		/// </summary>
+		string IContainerLoggerSettings.SqlDatabaseTableName(string container)
+		{
+			return GetStringValue("SqlDatabaseTableName", container, "Logs");
+		}
+
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		bool IContainerLoggerSettings.UseApplicationInsightTelemetryHelper(string container)
+		{
+			return GetBooleanValue("UseApplicationInsightTelemetryHelper", container, "false");
+		}
+
+		/// <summary>
+		/// If true, all log calls will be telemetered.
+		/// </summary>
+		bool IContainerLoggerSettings.UsePerformanceCounters(string container)
+		{
+			return GetBooleanValue("UsePerformanceCounters", container, "false");
+		}
+
+		#endregion
+
+		/// <summary />
+		protected virtual bool GetBooleanValue(string key, string container, string defaultValue, string key2 = null)
+		{
+			string value = null;
+			if (!string.IsNullOrWhiteSpace(container))
+			{
+				value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key, container), false);
+				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
+					value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key2, container), false);
+			}
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				value = CloudConfigurationManager.GetSetting(key, false);
+				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
+					value = CloudConfigurationManager.GetSetting(key2, false);
+			}
+			return bool.Parse(value ?? defaultValue);
+		}
+
+		/// <summary />
+		protected virtual string GetStringValue(string key, string container, string defaultValue, string key2 = null)
+		{
+			string value = null;
+			if (!string.IsNullOrWhiteSpace(container))
+			{
+				value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key, container), false);
+				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
+					value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key2, container), false);
+			}
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				value = CloudConfigurationManager.GetSetting(key, false);
+				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
+					value = CloudConfigurationManager.GetSetting(key2, false);
+			}
+			return value ?? defaultValue;
+		}
 	}
 }
