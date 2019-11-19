@@ -30,3 +30,4 @@ There are three built-in ICorrelationIdHelper implementations, `CorrelationIdHel
 ### ConsoleLogger
 ### SqlLogger
 ### SerilogLogger
+### MultiLogger - for those odd times to need to use multiple technology stacks for logging.
