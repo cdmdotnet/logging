@@ -235,3 +235,7 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 /.svn
+/Chinchilla.Logging.Azure/Chinchilla.Logging.Azure.xml
+/Chinchilla.Logging.Serilog/Chinchilla.Logging.Serilog.xml
+/Chinchilla.Logging/Chinchilla.Logging.xml
+/Chinchilla.Logging.Azure.ApplicationInsights/Chinchilla.Logging.Azure.ApplicationInsights.xml

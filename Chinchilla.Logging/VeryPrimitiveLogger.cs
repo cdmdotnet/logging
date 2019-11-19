@@ -1,26 +1,29 @@
 ﻿#region Copyright
 // // -----------------------------------------------------------------------
-// // <copyright company="cdmdotnet Limited">
-// // 	Copyright cdmdotnet Limited. All rights reserved.
+// // <copyright company="Chinchilla Software Limited">
+// // 	Copyright Chinchilla Software Limited. All rights reserved.
 // // </copyright>
 // // -----------------------------------------------------------------------
 #endregion
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using cdmdotnet.Logging.Configuration;
-using cdmdotnet.Performance;
+using Chinchilla.Logging.Configuration;
 
-namespace cdmdotnet.Logging
+namespace Chinchilla.Logging
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code.
 	/// </summary>
+	/// <remarks>
+	/// Due to .NET Core no longer having access to SynchronizedCollection We're using Concurrent Dictionaries, which means a little messy work with values equalling keys.
+	/// </remarks>
 	public abstract class VeryPrimitiveLogger : ILogger
 	{
 		/// <summary>
@@ -34,12 +37,13 @@ namespace cdmdotnet.Logging
 			if (TelemetryHelper == null)
 			{
 				if (loggerSettings.UseApplicationInsightTelemetryHelper)
-					TelemetryHelper = (ITelemetryHelper)Activator.CreateInstanceFrom("cdmdotnet.Logging.Azure.ApplicationInsights.dll", "cdmdotnet.Logging.Azure.ApplicationInsights.TelemetryHelper").Unwrap();
+					TelemetryHelper = (ITelemetryHelper)Activator.CreateInstanceFrom("Chinchilla.Logging.Azure.ApplicationInsights.dll", "Chinchilla.Logging.Azure.ApplicationInsights.TelemetryHelper").Unwrap();
 				else
 					TelemetryHelper = new NullTelemetryHelper();
 			}
-			ExclusionNamespaces = new SynchronizedCollection<string> { "cdmdotnet.Logging" };
-			InprogressThreads = new SynchronizedCollection<Guid>();
+			ExclusionNamespaces = new ConcurrentDictionary<string, string>();
+			ExclusionNamespaces.Add("Chinchilla.Logging", "Chinchilla.Logging");
+			InprogressThreads = new ConcurrentDictionary<Guid, string>();
 		}
 
 		/// <summary>
@@ -58,9 +62,9 @@ namespace cdmdotnet.Logging
 		protected ICorrelationIdHelper CorrelationIdHelper { get; private set; }
 
 		/// <summary>
-		/// A list of namespaces to exclude when trying to automatically determine the container.
+		/// A list of namespaces to exclude when trying to automatically determine the container. The key and the value MUST match each other.
 		/// </summary>
-		protected IList<string> ExclusionNamespaces { get; private set; }
+		protected IDictionary<string, string> ExclusionNamespaces { get; private set; }
 
 		private bool? _enableThreadedLoggingOutput;
 		/// <summary />
@@ -74,7 +78,7 @@ namespace cdmdotnet.Logging
 			}
 		}
 
-		internal IList<Guid> InprogressThreads { get; set; }
+		internal IDictionary<Guid, string> InprogressThreads { get; set; }
 
 		/// <summary>
 		/// Format a message based on the input parameters to be sent to <paramref name="logAction"></paramref>
@@ -84,7 +88,7 @@ namespace cdmdotnet.Logging
 			if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.EnableThreadedLogging, LoggerSettings.EnableThreadedLogging))
 			{
 				Guid threadGuid = Guid.NewGuid();
-				InprogressThreads.Add(threadGuid);
+				InprogressThreads.Add(threadGuid, string.Empty);
 				var tokenSource = new CancellationTokenSource();
 				// Currently this doesn't need StartNewSafely as all thread based data is already collected and this would just slow things down.
 				Task.Factory.StartNewSafely(() =>
@@ -93,7 +97,7 @@ namespace cdmdotnet.Logging
 					{
 						try
 						{
-							PersistLogWithPerformanceTracking(logAction, level, container);
+							logAction();
 						}
 						finally
 						{
@@ -103,65 +107,7 @@ namespace cdmdotnet.Logging
 				}, tokenSource.Token);
 			}
 			else
-				PersistLogWithPerformanceTracking(logAction, level, container);
-		}
-
-		/// <summary>
-		/// Helper method to create the ActionInfo object containing the info about the action that is getting called
-		/// </summary>
-		/// <returns>An ActionInfo object that contains all the information pertaining to what action is being executed</returns>
-		protected virtual ActionInfo CreateActionInfo(string level, string container)
-		{
-			int processId = ConfigInfo.Value.ProcessId;
-			string categoryName = ConfigInfo.Value.PerformanceCategoryName;
-
-			ActionInfo info = new ActionInfo(processId, categoryName, "Logger", container, string.Empty, level, string.Empty);
-
-			return info;
-		}
-
-		/// <summary>
-		/// Added performance counters to persistence.
-		/// </summary>
-		protected virtual void PersistLogWithPerformanceTracking(Action logAction, string level, string container)
-		{
-			IPerformanceTracker performanceTracker = null;
-
-			try
-			{
-				if (GetSetting(container, containerLoggerSettings => containerLoggerSettings.UsePerformanceCounters, LoggerSettings.UsePerformanceCounters))
-				{
-					try
-					{
-						performanceTracker = new PerformanceTracker(CreateActionInfo(level, container));
-						performanceTracker.ProcessActionStart();
-					}
-					catch (UnauthorizedAccessException) { }
-					catch (Exception)
-					{
-						// Just move on
-					}
-				}
-
 				logAction();
-			}
-			catch (Exception exception)
-			{
-				Trace.TraceError("VeryPrimitiveLogger: Persisting log failed with the following exception:\r\n{0}\r\n{1}", exception.Message, exception.StackTrace);
-			}
-
-			if (performanceTracker != null)
-			{
-				try
-				{
-					performanceTracker.ProcessActionComplete(false);
-				}
-				catch (UnauthorizedAccessException) { }
-				catch (Exception)
-				{
-					// Just move on
-				}
-			}
 		}
 
 		/// <summary>
@@ -188,7 +134,7 @@ namespace cdmdotnet.Logging
 								bool found = false;
 								if (method.ReflectedType == null || string.IsNullOrWhiteSpace(method.ReflectedType.FullName))
 									continue;
-								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace)))
+								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace.Key)))
 								{
 									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
 									found = true;
@@ -230,31 +176,47 @@ namespace cdmdotnet.Logging
 		}
 
 		#region Implementation of IDisposable
+#pragma warning disable CA1063 // Implement IDisposable Correctly
 
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
 		public virtual void Dispose()
 		{
+			// Dispose of unmanaged resources.
+			Dispose(true);
+			// Suppress finalization.
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public virtual void Dispose(bool disposing)
+		{
 			if (EnableThreadedLoggingOutput)
 				Trace.TraceInformation("VeryPrimitiveLogger: Dispose:: About to dispose.");
 
-			int count = 0;
-			while (InprogressThreads.Any())
+			if (disposing)
 			{
-				Trace.TraceWarning("VeryPrimitiveLogger: Dispose:: Waiting for {0} logs to complete.", InprogressThreads.Count);
-				Thread.Sleep(20);
-				if (count++ > 1000)
-					break;
-			}
+				int count = 0;
+				while (InprogressThreads.Any())
+				{
+					Trace.TraceWarning("VeryPrimitiveLogger: Dispose:: Waiting for {0} logs to complete.", InprogressThreads.Count);
+					Thread.Sleep(20);
+					if (count++ > 1000)
+						break;
+				}
 
-			if (InprogressThreads.Any())
-				Trace.TraceWarning("VeryPrimitiveLogger: Dispose:: Disposed with {0} logs remaining.", InprogressThreads.Count);
+				if (InprogressThreads.Any())
+					Trace.TraceWarning("VeryPrimitiveLogger: Dispose:: Disposed with {0} logs remaining.", InprogressThreads.Count);
+			}
 
 			if (EnableThreadedLoggingOutput)
 				Trace.TraceInformation("VeryPrimitiveLogger: Dispose:: Disposed.");
 		}
 
+#pragma warning restore CA1063 // Implement IDisposable Correctly
 		#endregion
 
 		#region Implementation of ILogger

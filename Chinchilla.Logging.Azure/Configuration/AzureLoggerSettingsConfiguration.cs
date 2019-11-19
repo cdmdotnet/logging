@@ -7,16 +7,16 @@
 #endregion
 
 using System.Configuration;
-using cdmdotnet.Logging.Configuration;
+using Chinchilla.Logging.Configuration;
 
 #if NETCOREAPP3_0
-using Microsoft.Azure;
+using Microsoft.Extensions.Configuration;
 #endif
 #if NET40
 using Microsoft.Azure;
 #endif
 
-namespace cdmdotnet.Logging.Azure.Configuration
+namespace Chinchilla.Logging.Azure.Configuration
 {
 	/// <summary>
 	/// The settings for all <see cref="ILogger"/> instances reading settings from the Azure Portal.
@@ -25,7 +25,22 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		: ILoggerSettings
 		, IContainerLoggerSettings
 	{
-#region Implementation of ILoggerSettings
+#if NETCOREAPP3_0
+		/// <summary>
+		/// Instantiates a new instance of the <see cref="AzureLoggerSettingsConfiguration"/> class using the provided <paramref name="configuration"/> to get configuration settings from.
+		/// </summary>
+		public AzureLoggerSettingsConfiguration(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
+
+		/// <summary>
+		/// The <see cref="IConfiguration"/> to get application settings from.
+		/// </summary>
+		protected IConfiguration Configuration { get; }
+#endif
+
+		#region Implementation of ILoggerSettings
 
 		/// <summary>
 		/// Reads the <see cref="ILoggerSettings.EnableSensitive"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
@@ -96,7 +111,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public bool EnableThreadedLoggingOutput
 		{
-			get { return bool.Parse(CloudConfigurationManager.GetSetting("EnableThreadedLoggingOutput", false) ?? "false"); }
+			get { return bool.Parse(GetSetting("EnableThreadedLoggingOutput") ?? "false"); }
 		}
 
 		/// <summary>
@@ -104,7 +119,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string ModuleName
 		{
-			get { return CloudConfigurationManager.GetSetting("ModuleName", false) ?? "All"; }
+			get { return GetSetting("ModuleName") ?? "All"; }
 		}
 
 		/// <summary>
@@ -112,7 +127,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string Instance
 		{
-			get { return CloudConfigurationManager.GetSetting("Instance", false) ?? "All"; }
+			get { return GetSetting("Instance") ?? "All"; }
 		}
 
 		/// <summary>
@@ -120,7 +135,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string EnvironmentInstance
 		{
-			get { return CloudConfigurationManager.GetSetting("EnvironmentInstance", false) ?? "All"; }
+			get { return GetSetting("EnvironmentInstance") ?? "All"; }
 		}
 
 		/// <summary>
@@ -128,11 +143,11 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		public string Environment
 		{
-			get { return CloudConfigurationManager.GetSetting("Environment", false) ?? "Unknown"; }
+			get { return GetSetting("Environment") ?? "Unknown"; }
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsConnectionStringName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsConnectionStringName"/> from the <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string SqlDatabaseLogsConnectionStringName
 		{
@@ -140,7 +155,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string SqlDatabaseTableName
 		{
@@ -165,7 +180,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 
 #endregion
 
-#region Implementation of IContainerLoggerSettings
+		#region Implementation of IContainerLoggerSettings
 
 		/// <summary>
 		/// If false <see cref="ILogger.LogSensitive"/> will not do anything nor log anything.
@@ -267,21 +282,36 @@ namespace cdmdotnet.Logging.Azure.Configuration
 
 #endregion
 
+		/// <summary>
+		/// Reads configurations settings from .NET Core and .NET Framework support app.config, web.config and other locations, including Azure Portal.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		protected virtual string GetSetting(string name)
+		{
+#if NETCOREAPP3_0
+			return Configuration.GetSection(name)?.Value;
+#endif
+#if NET40
+			return CloudConfigurationManager.GetSetting(name, false);
+#endif
+		}
+
 		/// <summary />
 		protected virtual bool GetBooleanValue(string key, string container, string defaultValue, string key2 = null)
 		{
 			string value = null;
 			if (!string.IsNullOrWhiteSpace(container))
 			{
-				value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key, container), false);
+				value = GetSetting(string.Format("{0}.{1}", key, container));
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
-					value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key2, container), false);
+					value = GetSetting(string.Format("{0}.{1}", key2, container));
 			}
 			if (string.IsNullOrWhiteSpace(value))
 			{
-				value = CloudConfigurationManager.GetSetting(key, false);
+				value = GetSetting(key);
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
-					value = CloudConfigurationManager.GetSetting(key2, false);
+					value = GetSetting(key2);
 			}
 			return bool.Parse(value ?? defaultValue);
 		}
@@ -292,15 +322,15 @@ namespace cdmdotnet.Logging.Azure.Configuration
 			string value = null;
 			if (!string.IsNullOrWhiteSpace(container))
 			{
-				value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key, container), false);
+				value = GetSetting(string.Format("{0}.{1}", key, container));
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
-					value = CloudConfigurationManager.GetSetting(string.Format("{0}.{1}", key2, container), false);
+					value = GetSetting(string.Format("{0}.{1}", key2, container));
 			}
 			if (string.IsNullOrWhiteSpace(value))
 			{
-				value = CloudConfigurationManager.GetSetting(key, false);
+				value = GetSetting(key);
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
-					value = CloudConfigurationManager.GetSetting(key2, false);
+					value = GetSetting(key2);
 			}
 			return value ?? defaultValue;
 		}

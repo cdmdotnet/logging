@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // // -----------------------------------------------------------------------
-// // <copyright company="cdmdotnet Limited">
-// // 	Copyright cdmdotnet Limited. All rights reserved.
+// // <copyright company="Chinchilla Software Limited">
+// // 	Copyright Chinchilla Software Limited. All rights reserved.
 // // </copyright>
 // // -----------------------------------------------------------------------
 #endregion
@@ -9,10 +9,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using cdmdotnet.Logging.Configuration;
+using Chinchilla.Logging.Configuration;
 using Newtonsoft.Json;
 
-namespace cdmdotnet.Logging
+namespace Chinchilla.Logging
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code.

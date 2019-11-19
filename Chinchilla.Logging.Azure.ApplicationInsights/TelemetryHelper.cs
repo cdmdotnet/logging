@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // // -----------------------------------------------------------------------
-// // <copyright company="cdmdotnet Limited">
-// // 	Copyright cdmdotnet Limited. All rights reserved.
+// // <copyright company="Chinchilla Software Limited">
+// // 	Copyright Chinchilla Software Limited. All rights reserved.
 // // </copyright>
 // // -----------------------------------------------------------------------
 #endregion
@@ -11,12 +11,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using cdmdotnet.Logging.Configuration;
+using Chinchilla.Logging.Configuration;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace cdmdotnet.Logging.Azure.ApplicationInsights
+namespace Chinchilla.Logging.Azure.ApplicationInsights
 {
 	/// <summary>
 	/// An <see cref="ITelemetryHelper"/> implemented with Application Insights.
@@ -35,12 +35,32 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// </summary>
 		protected ILoggerSettings LoggerSettings { get; private set; }
 
+#if NETCOREAPP3_0
+		/// <summary>
+		/// The delegate used internally to get the current <see cref="TelemetryConfiguration"/>.
+		/// <see cref="TelemetryConfiguration.CreateDefault"/> will be used if this is not set.
+		/// </summary>
+		public static Func<TelemetryConfiguration> GetTelemetryConfigurationDelegate { get; set; }
+#endif
+
 		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
 		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
 		{
-			TelemetryClient = telemetryClient;
+			if (telemetryClient == null)
+			{
+#if NETCOREAPP3_0
+				TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+				telemetryClient = new TelemetryClient(config);
+#endif
+#if NET45
+				telemetryClient = new TelemetryClient();
+#endif
+			}
+			else
+				TelemetryClient = telemetryClient;
+
 			CorrelationIdHelper = correlationIdHelper;
 			ActionQueue = new ConcurrentQueue<Action>();
 			EnableThreadedOperations = enableThreadedOperations;
@@ -91,9 +111,15 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
-			: this(new TelemetryClient(), correlationIdHelper, null, enableThreadedOperations)
+			: this(null, correlationIdHelper, null, enableThreadedOperations)
 		{
+#if NETCOREAPP3_0
+			TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
+#endif
+#if NET45
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
+#endif
 		}
 
 		/// <summary>
@@ -108,9 +134,15 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
-			: this(new TelemetryClient(), correlationIdHelper, loggerSettings, enableThreadedOperations)
+			: this(null, correlationIdHelper, loggerSettings, enableThreadedOperations)
 		{
+#if NETCOREAPP3_0
+			TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
+#endif
+#if NET45
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
+#endif
 		}
 
 		/// <summary>
@@ -214,33 +246,10 @@ namespace cdmdotnet.Logging.Azure.ApplicationInsights
 		/// <param name="duration">The time taken by the external dependency to handle the call.</param>
 		/// <param name="wasSuccessfull">True if the dependency call was handled successfully.</param>
 		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		[Obsolete("This is now deprecated in ApplicationInsights.")]
 		public virtual void TrackDependency(string dependencyName, string commandName, DateTimeOffset startTime, TimeSpan duration, bool wasSuccessfull, IDictionary<string, string> properties = null)
 		{
-#pragma warning disable 618
-			var dependencyTelemetry = new DependencyTelemetry(dependencyName, commandName, startTime, duration, wasSuccessfull);
-#pragma warning restore 618
-			if (properties != null)
-				foreach (KeyValuePair<string, string> pair in properties)
-					dependencyTelemetry.Properties.Add(pair);
-			string correlationId = SetCorrelationId(dependencyTelemetry.Properties);
-
-			TelemetryClient.Context.Operation.Name = dependencyName;
-			dependencyTelemetry.Context.Operation.Id = correlationId;
-			dependencyTelemetry.Context.Operation.Name = dependencyName;
-			if (LoggerSettings != null)
-			{
-				dependencyTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
-				dependencyTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
-			}
-
-			if (EnableThreadedOperations)
-				ActionQueue.Enqueue(() =>
-				{
-					TelemetryClient.Context.Operation.Id = correlationId;
-					ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull));
-				});
-			else
-				TelemetryClient.TrackDependency(dependencyName, commandName, startTime, duration, wasSuccessfull);
+			throw new NotSupportedException("This is now deprecated in ApplicationInsights.");
 		}
 
 		/// <summary>

@@ -1,16 +1,16 @@
 ﻿#region Copyright
 // // -----------------------------------------------------------------------
-// // <copyright company="cdmdotnet Limited">
-// // 	Copyright cdmdotnet Limited. All rights reserved.
+// // <copyright company="Chinchilla Software Limited">
+// // 	Copyright Chinchilla Software Limited. All rights reserved.
 // // </copyright>
 // // -----------------------------------------------------------------------
 #endregion
 
 using System;
 using System.Collections.Generic;
-using cdmdotnet.Logging.Configuration;
+using Chinchilla.Logging.Configuration;
 
-namespace cdmdotnet.Logging
+namespace Chinchilla.Logging
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code when using persistence that is single string based, like a file, event log or tracer.

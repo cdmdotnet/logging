@@ -1,0 +1,150 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.0;net40</TargetFrameworks>
+		<title>Simple Logging For .NET and .NET Core</title>
+		<Authors>Chinchilla Software</Authors>
+		<Company>Chinchilla Software</Company>
+		<Description>
+			Chinchilla.Logging is a .NET Core port of cdmdotnet.Logging, an abstracted logging platform for .NET. It can help you collect reliable logs for your application regardless of its size or complexity with minimal performance implications.
+
+			This logging library makes large use of enterprise correlation.
+			In a lot of applications that incorporate various small and large services, it is often important to correlate events that happen across these services. It gives us a business workflow view of the various events that happen in the application, its components and services.
+			This library provide operation and activity ID management and propagation.
+
+			The main difference with this library over other is that you can configure each type of log separately. You can enable fatal, error, warning, debugging, informational, progress and sensitive data logging all independently of each other.
+			This is more flexible than the concept of minimum level logging, such as that in log4net or serilog e.g. enabling one warning in this libraries will enable error and fatal logging as well. This library allows you to set those settings independently of each other.
+
+			The SqlLogger maps AdditionalData to table columns, where the key of the dictionary entry is the column name and the value is serialised to JSON as the column value.
+			MetaData is serialised to a single JSON value stored in the MetaData column.
+			This means you can store data such as a User ID or Job ID in a separate column so you can filter more efficiently with indexes and partitions.
+
+			TraceLogger and ConsoleLogger both seralise and format all information into a single string.
+			The MultiLogger allows you to configure several different loggers to be used at once with different settings for each logger.
+
+			Usage is in the form of:
+			static void Main()
+			{
+			  ICorrelationIdHelper correlationIdHelper = new WebCorrelationIdHelper();
+			  // This value will be set automatically to all logs within this thread... so long as System.Threading.Tasks.Task.Factory.StartNew is used.
+			  correlationIdHelper.SetCorrelationId(Guid.NewGuid());
+			  DoSyncWork();
+			  DoAsyncWork();
+			}
+
+			static void DoSyncWork()
+			{
+			  ILogger logger = new SqlLogger();
+			  logger.LogDebug("Some technical debugging details.");
+			}
+
+			static void DoAsyncWork()
+			{
+			  System.Threading.Tasks.Task.Factory.StartNew(() =&gt; {
+			    ILogger logger = new ConsoleLogger();
+			    logger.LogInfo("An informative message.");
+			  });
+			}
+
+			This package installs Chinchilla.Logging.dll with includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
+		</Description>
+		<Copyright>Copyright ©  2019</Copyright>
+		<PackageLicenseFile></PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/cdmdotnet/logging</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
+		<PackageReleaseNotes>
+			Version 4.0.0
+
+			* Added .NET Core 3.0 support.
+
+			Breaking Changes
+
+			* Removed Performance Trackers
+
+			Version 1.2.104
+
+			* Added support for IContainerLoggerSettings, an interface that allows container based settings at a very granular level.
+		</PackageReleaseNotes>
+		<PackageIcon>images\icon.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\icon.png" Link="icon.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\Packaging\Logging\app.config.install.xdt.png" Link="Packaging\Logging\app.config.install.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+		<None Include="..\Packaging\Logging\app.config.uninstall.xdt.png" Link="Packaging\Logging\app.config.uninstall.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+		<None Include="..\Packaging\Logging\web.config.install.xdt.png" Link="Packaging\Logging\web.config.install.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+		<None Include="..\Packaging\Logging\web.config.uninstall.xdt.png" Link="Packaging\Logging\web.config.uninstall.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+
+		<None Include="..\Packaging\Sql\app.config.install.xdt.png" Link="Packaging\Sql\app.config.install.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+		<None Include="..\Packaging\Sql\app.config.uninstall.xdt.png" Link="Packaging\Sql\app.config.uninstall.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+		<None Include="..\Packaging\Sql\web.config.install.xdt.png" Link="Packaging\Sql\web.config.install.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+		<None Include="..\Packaging\Sql\web.config.uninstall.xdt.png" Link="Packaging\Sql\web.config.uninstall.xdt.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<OutputType>library</OutputType>
+		<TargetFrameworks>net40;netcoreapp3.0</TargetFrameworks>
+		<DocumentationFile>Chinchilla.Logging.xml</DocumentationFile>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="tools\Create-Log-Table.sql">
+			<Pack>True</Pack>
+			<PackagePath>tools\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Chinchilla.StateManagement" Version="4.0.33.18" />
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="App.config">
+			<SubType>Designer</SubType>
+		</None>
+		<None Update="cdmdotnet.Logging.nuspec">
+			<SubType>Designer</SubType>
+		</None>
+	</ItemGroup>
+
+</Project>
