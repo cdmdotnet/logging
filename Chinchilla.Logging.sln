@@ -40,9 +40,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging", "Chinc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Azure", "Chinchilla.Logging.Azure\Chinchilla.Logging.Azure.csproj", "{FD8496A0-41F7-4A0B-8D31-B417D8D0A79F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.Azure.ApplicationInsights", "Chinchilla.Logging.Azure.ApplicationInsights\Chinchilla.Logging.Azure.ApplicationInsights.csproj", "{26F36A94-7646-46B9-85AC-788BBABDF2DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Azure.ApplicationInsights", "Chinchilla.Logging.Azure.ApplicationInsights\Chinchilla.Logging.Azure.ApplicationInsights.csproj", "{26F36A94-7646-46B9-85AC-788BBABDF2DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.Serilog", "Chinchilla.Logging.Serilog\Chinchilla.Logging.Serilog.csproj", "{0BE98865-12E5-4624-9F4F-9F24BEE3C708}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Serilog", "Chinchilla.Logging.Serilog\Chinchilla.Logging.Serilog.csproj", "{0BE98865-12E5-4624-9F4F-9F24BEE3C708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.logging.Tests.Integration", "cdmdotnet.logging.Tests.Integration\cdmdotnet.logging.Tests.Integration.csproj", "{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +84,10 @@ Global
 		{0BE98865-12E5-4624-9F4F-9F24BEE3C708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BE98865-12E5-4624-9F4F-9F24BEE3C708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BE98865-12E5-4624-9F4F-9F24BEE3C708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30B63F7C-936E-4DD5-8CCA-CB021FB93F5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
