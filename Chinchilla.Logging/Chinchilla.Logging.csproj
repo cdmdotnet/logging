@@ -56,36 +56,36 @@
 	<ItemGroup>
 		<None Include="..\Packaging\Logging\app.config.install.xdt" Link="Packaging\Logging\app.config.install.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Logging\</PackagePath>
 		</None>
 		<None Include="..\Packaging\Logging\app.config.uninstall.xdt" Link="Packaging\Logging\app.config.uninstall.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Logging\</PackagePath>
 		</None>
 		<None Include="..\Packaging\Logging\web.config.install.xdt" Link="Packaging\Logging\web.config.install.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Logging\</PackagePath>
 		</None>
 		<None Include="..\Packaging\Logging\web.config.uninstall.xdt" Link="Packaging\Logging\web.config.uninstall.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Logging\</PackagePath>
 		</None>
 
 		<None Include="..\Packaging\Sql\app.config.install.xdt" Link="Packaging\Sql\app.config.install.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Sql\</PackagePath>
 		</None>
 		<None Include="..\Packaging\Sql\app.config.uninstall.xdt" Link="Packaging\Sql\app.config.uninstall.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Sql\</PackagePath>
 		</None>
 		<None Include="..\Packaging\Sql\web.config.install.xdt" Link="Packaging\Sql\web.config.install.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Sql\</PackagePath>
 		</None>
 		<None Include="..\Packaging\Sql\web.config.uninstall.xdt" Link="Packaging\Sql\web.config.uninstall.xdt">
 			<Pack>True</Pack>
-			<PackagePath>images\</PackagePath>
+			<PackagePath>Packaging\Sql\</PackagePath>
 		</None>
 	</ItemGroup>
 
