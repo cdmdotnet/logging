@@ -10,45 +10,45 @@
 		<iconUrl>https://raw.githubusercontent.com/Chinchilla-Software-Com/CQRS/master/wiki/ChinChilla-Software-Red.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>
-			This logging library makes large use of enterprise correlation.
-			In a lot of applications that incorporate various small and large services, it is often important to correlate events that happen across these services. It gives us a business workflow view of the various events that happen in the application, its components and services.
-			This library provide operation and activity ID management and propagation.
+This logging library makes large use of enterprise correlation.
+In a lot of applications that incorporate various small and large services, it is often important to correlate events that happen across these services. It gives us a business workflow view of the various events that happen in the application, its components and services.
+This library provide operation and activity ID management and propagation.
 
-			The main difference with this library over other is that you can configure each type of log separately. You can enable fatal, error, warning, debugging, informational, progress and sensitive data logging all independently of each other.
-			This is more flexible than the concept of minimum level logging, such as that in log4net or serilog e.g. enabling one warning in this libraries will enable error and fatal logging as well. This library allows you to set those settings independently of each other.
+The main difference with this library over other is that you can configure each type of log separately. You can enable fatal, error, warning, debugging, informational, progress and sensitive data logging all independently of each other.
+This is more flexible than the concept of minimum level logging, such as that in log4net or serilog e.g. enabling one warning in this libraries will enable error and fatal logging as well. This library allows you to set those settings independently of each other.
 
-			The SqlLogger maps AdditionalData to table columns, where the key of the dictionary entry is the column name and the value is serialised to JSON as the column value.
-			MetaData is serialised to a single JSON value stored in the MetaData column.
-			This means you can store data such as a User ID or Job ID in a separate column so you can filter more efficiently with indexes and partitions.
+The SqlLogger maps AdditionalData to table columns, where the key of the dictionary entry is the column name and the value is serialised to JSON as the column value.
+MetaData is serialised to a single JSON value stored in the MetaData column.
+This means you can store data such as a User ID or Job ID in a separate column so you can filter more efficiently with indexes and partitions.
 
-			TraceLogger and ConsoleLogger both seralise and format all information into a single string.
-			The MultiLogger allows you to configure several different loggers to be used at once with different settings for each logger.
+TraceLogger and ConsoleLogger both seralise and format all information into a single string.
+The MultiLogger allows you to configure several different loggers to be used at once with different settings for each logger.
 
-			Usage is in the form of:
-			static void Main()
-			{
+Usage is in the form of:
+static void Main()
+{
 			  ICorrelationIdHelper correlationIdHelper = new WebCorrelationIdHelper();
 			  // This value will be set automatically to all logs within this thread... so long as System.Threading.Tasks.Task.Factory.StartNew is used.
 			  correlationIdHelper.SetCorrelationId(Guid.NewGuid());
 			  DoSyncWork();
 			  DoAsyncWork();
-			}
+}
 
-			static void DoSyncWork()
-			{
+static void DoSyncWork()
+{
 			  ILogger logger = new SqlLogger();
 			  logger.LogDebug("Some technical debugging details.");
-			}
+}
 
-			static void DoAsyncWork()
-			{
+static void DoAsyncWork()
+{
 			  System.Threading.Tasks.Task.Factory.StartNew(() => {
 			    ILogger logger = new ConsoleLogger();
 			    logger.LogInfo("An informative message.");
 			  });
-			}
+}
 
-			This package installs Chinchilla.Logging.dll with includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
+This package installs Chinchilla.Logging.dll which includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
 		</description>
 		<copyright>Copyright 2015</copyright>
 		<releaseNotes>

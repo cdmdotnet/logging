@@ -46,7 +46,7 @@
 			  });
 			}
 
-			This package installs Chinchilla.Logging.dll with includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
+			This package installs Chinchilla.Logging.dll which includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
 		</Description>
 		<Copyright>Copyright ©  2019</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
