@@ -1,11 +1,13 @@
 # C# Logging
 An abstracted logging platform for .NET. It can help you collect reliable logs for your application regardless of its size or complexity with minimal performance implications.
 
-## Packages:
+## Nuget Packages:
 
-* cdmdotnet.Logging - core library with Console and Trace based outputs
-* cdmdotnet.Logging.Azure - an azure based package to allow configuration settings to be set via the Azure portal
-* cdmdotnet.Logging.Sql - a SqlServer based package to store outputs in SqlServer.
+* Chinchilla.Logging - core library with Console and Trace based outputs
+* Chinchilla.Logging.Azure - an Azure based package to allow configuration settings to be set via the Azure portal
+* Chinchilla.Logging.Azure.ApplicationInsights - an Azure based package to add Telemetry automatically as a result of logging to ApplicationInsights
+* Chinchilla.Logging.Sql - a SqlServer based package to store outputs in SqlServer.
+* Chinchilla.Logging.Serilog - a Serilog based package to store outputs using Serilog.
 
 ## The CorrelationId and ICorrelationIdHelper
 
@@ -27,3 +29,5 @@ There are three built-in ICorrelationIdHelper implementations, `CorrelationIdHel
 ### TraceLogger
 ### ConsoleLogger
 ### SqlLogger
+### SerilogLogger
+### MultiLogger - for those odd times to need to use multiple technology stacks for logging.
