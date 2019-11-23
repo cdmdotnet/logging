@@ -51,7 +51,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			if (telemetryClient == null)
 			{
 #if NETCOREAPP3_0
-				TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+				TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
 				TelemetryClient = new TelemetryClient(config);
 #endif
 #if NET45
@@ -114,7 +114,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			: this(null, correlationIdHelper, null, enableThreadedOperations)
 		{
 #if NETCOREAPP3_0
-			TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+			TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
 			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
 #endif
 #if NET45

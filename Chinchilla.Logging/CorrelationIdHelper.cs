@@ -30,7 +30,7 @@ namespace Chinchilla.Logging
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="CorrelationIdHelper"/> class requiring <paramref name="contextItemCollectionFactory"/>, used to set <see cref="ContextItemCollection"/> with an instance.
 		/// </summary>
-		public CorrelationIdHelper(ContextItemCollectionFactory contextItemCollectionFactory)
+		public CorrelationIdHelper(IContextItemCollectionFactory contextItemCollectionFactory)
 		{
 			ContextItemCollection = contextItemCollectionFactory.GetCurrentContext();
 		}

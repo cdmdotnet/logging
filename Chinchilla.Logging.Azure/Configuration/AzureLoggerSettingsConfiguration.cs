@@ -11,8 +11,7 @@ using Chinchilla.Logging.Configuration;
 
 #if NETCOREAPP3_0
 using Microsoft.Extensions.Configuration;
-#endif
-#if NET40
+#else
 using Microsoft.Azure;
 #endif
 
@@ -43,7 +42,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		#region Implementation of ILoggerSettings
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableSensitive"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableSensitive"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableSensitive
 		{
@@ -51,7 +50,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableInfo"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableInfo"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableInfo
 		{
@@ -59,7 +58,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableProgress"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableProgress"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableProgress
 		{
@@ -67,7 +66,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableDebug"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableDebug"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableDebug
 		{
@@ -75,7 +74,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableWarning"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableWarning"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableWarning
 		{
@@ -83,7 +82,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableError"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableError"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableError
 		{
@@ -91,7 +90,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableFatalError"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableFatalError"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableFatalError
 		{
@@ -99,7 +98,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableThreadedLogging"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableThreadedLogging"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableThreadedLogging
 		{
@@ -107,7 +106,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnableThreadedLoggingOutput"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public bool EnableThreadedLoggingOutput
 		{
@@ -115,7 +114,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.ModuleName"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.ModuleName"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string ModuleName
 		{
@@ -123,7 +122,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.Instance"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.Instance"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string Instance
 		{
@@ -131,7 +130,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.EnvironmentInstance"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.EnvironmentInstance"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string EnvironmentInstance
 		{
@@ -139,7 +138,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.Environment"/> from <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.Environment"/> from app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string Environment
 		{
@@ -147,7 +146,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsConnectionStringName"/> from the <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseLogsConnectionStringName"/> from the app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string SqlDatabaseLogsConnectionStringName
 		{
@@ -155,7 +154,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the <see cref="AppSettingsSection"/> of the app.config or web.config file with Azure portal providing runtime overrides.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
 		/// </summary>
 		public string SqlDatabaseTableName
 		{
@@ -249,7 +248,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
-		/// The key of the <see cref="ConfigurationManager.AppSettings"/> item that holds the name of the connection string to use.
+		/// The key of the app setting item that holds the name of the connection string to use.
 		/// </summary>
 		string IContainerLoggerSettings.SqlDatabaseLogsConnectionStringName(string container)
 		{
@@ -290,9 +289,9 @@ namespace Chinchilla.Logging.Azure.Configuration
 		protected virtual string GetSetting(string name)
 		{
 #if NETCOREAPP3_0
-			return Configuration.GetSection(name)?.Value;
-#endif
-#if NET40
+			IConfigurationSection loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
+			return loggingSection[name];
+#else
 			return CloudConfigurationManager.GetSetting(name, false);
 #endif
 		}
@@ -300,26 +299,53 @@ namespace Chinchilla.Logging.Azure.Configuration
 		/// <summary />
 		protected virtual bool GetBooleanValue(string key, string container, string defaultValue, string key2 = null)
 		{
-			string value = null;
-			if (!string.IsNullOrWhiteSpace(container))
-			{
-				value = GetSetting(string.Format("{0}.{1}", key, container));
-				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
-					value = GetSetting(string.Format("{0}.{1}", key2, container));
-			}
-			if (string.IsNullOrWhiteSpace(value))
-			{
-				value = GetSetting(key);
-				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
-					value = GetSetting(key2);
-			}
-			return bool.Parse(value ?? defaultValue);
+			string value = GetStringValue(key, container, defaultValue, key2);
+			return bool.Parse(value);
 		}
 
 		/// <summary />
 		protected virtual string GetStringValue(string key, string container, string defaultValue, string key2 = null)
 		{
 			string value = null;
+#if NETCOREAPP3_0
+			IConfigurationSection loggingSection;
+			if (!string.IsNullOrWhiteSpace(container))
+			{
+				try
+				{
+					loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging").GetSection(container);
+					value = loggingSection[key];
+				}
+				catch { }
+				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
+				{
+					try
+					{
+						loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging").GetSection(container);
+						value = loggingSection[key2];
+					}
+					catch { }
+				}
+			}
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				try
+				{
+					loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
+					value = loggingSection[key];
+				}
+				catch { }
+				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
+				{
+					try
+					{
+						loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
+						value = loggingSection[key2];
+					}
+					catch { }
+				}
+			}
+#else
 			if (!string.IsNullOrWhiteSpace(container))
 			{
 				value = GetSetting(string.Format("{0}.{1}", key, container));
@@ -332,6 +358,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
 					value = GetSetting(key2);
 			}
+#endif
 			return value ?? defaultValue;
 		}
 	}

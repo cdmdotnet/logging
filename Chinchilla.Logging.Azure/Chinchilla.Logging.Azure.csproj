@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp3.0;net40</TargetFrameworks>
+		<TargetFrameworks>netcoreapp3.0;net40;net452</TargetFrameworks>
 		<title>Azure settings for Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -24,7 +24,7 @@
 
 	<PropertyGroup>
 		<OutputType>library</OutputType>
-		<TargetFrameworks>netcoreapp3.0;net40</TargetFrameworks>
+		<TargetFrameworks>netcoreapp3.0;net40;net452</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.Azure.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
@@ -60,12 +60,14 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.1" />
+		<PackageReference Include="microsoft.extensions.configuration.abstractions" Version="3.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
 		<Reference Include="System.Configuration" />
 		<PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+		<PackageReference Include="Microsoft.Azure.ConfigurationManager" Version="4.0.0" />
 	</ItemGroup>
 </Project>
