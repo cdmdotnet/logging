@@ -52,10 +52,10 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			{
 #if NETCOREAPP3_0
 				TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
-				telemetryClient = new TelemetryClient(config);
+				TelemetryClient = new TelemetryClient(config);
 #endif
 #if NET45
-				telemetryClient = new TelemetryClient();
+				TelemetryClient = new TelemetryClient();
 #endif
 			}
 			else
