@@ -35,7 +35,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// </summary>
 		protected ILoggerSettings LoggerSettings { get; private set; }
 
-#if NETCOREAPP3_0
+#if NETCOREAPP3_0 || NETSTANDARD2_0
 		/// <summary>
 		/// The delegate used internally to get the current <see cref="TelemetryConfiguration"/>.
 		/// <see cref="TelemetryConfiguration.CreateDefault"/> will be used if this is not set.
@@ -50,12 +50,11 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		{
 			if (telemetryClient == null)
 			{
-#if NETCOREAPP3_0
-				TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
-				TelemetryClient = new TelemetryClient(config);
-#endif
 #if NET45
 				TelemetryClient = new TelemetryClient();
+#else
+				TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
+				TelemetryClient = new TelemetryClient(config);
 #endif
 			}
 			else
@@ -113,12 +112,11 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
 			: this(null, correlationIdHelper, null, enableThreadedOperations)
 		{
-#if NETCOREAPP3_0
-			TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
-			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
-#endif
 #if NET45
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
+#else
+			TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
+			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
 #endif
 		}
 
@@ -136,12 +134,11 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
 			: this(null, correlationIdHelper, loggerSettings, enableThreadedOperations)
 		{
-#if NETCOREAPP3_0
-			TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
-			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
-#endif
 #if NET45
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
+#else
+			TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
 #endif
 		}
 
