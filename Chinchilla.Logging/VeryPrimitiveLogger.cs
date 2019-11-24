@@ -37,7 +37,13 @@ namespace Chinchilla.Logging
 			if (TelemetryHelper == null)
 			{
 				if (loggerSettings.UseApplicationInsightTelemetryHelper)
+				{
+#if NETSTANDARD2_0
+					TelemetryHelper = (ITelemetryHelper)CreateInstanceFrom("Chinchilla.Logging.Azure.ApplicationInsights.dll", "Chinchilla.Logging.Azure.ApplicationInsights.TelemetryHelper");
+#else
 					TelemetryHelper = (ITelemetryHelper)Activator.CreateInstanceFrom("Chinchilla.Logging.Azure.ApplicationInsights.dll", "Chinchilla.Logging.Azure.ApplicationInsights.TelemetryHelper").Unwrap();
+#endif
+				}
 				else
 					TelemetryHelper = new NullTelemetryHelper();
 			}
@@ -46,6 +52,15 @@ namespace Chinchilla.Logging
 			InprogressThreads = new ConcurrentDictionary<Guid, string>();
 		}
 
+#if NETSTANDARD2_0
+		private static object CreateInstanceFrom(string assemblyFile, string typeName)
+		{
+			Assembly assembly = Assembly.LoadFrom(assemblyFile);
+			Type t = assembly.GetType(typeName);
+
+			return Activator.CreateInstance(t);
+		}
+#endif
 		/// <summary>
 		/// The <see cref="ITelemetryHelper"/> for the instance, set during Instantiation
 		/// </summary>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp3.0;net40;net452</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net40;net452</TargetFrameworks>
 		<title>Azure settings for Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -11,6 +11,10 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 4.1.0
+
+			* Switched to .NET Standard 2.0 support from .NET Core 3.0.
+
 			Version 4.0.0
 
 			* Added .NET Core 3.0 support.
@@ -23,10 +27,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<OutputType>library</OutputType>
-		<TargetFrameworks>netcoreapp3.0;net40;net452</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>netstandard2.0;net40;net452</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.Azure.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ApplicationIcon />
+		<StartupObject />
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -53,13 +59,14 @@
 
 	<ItemGroup>
 		<None Remove="cdmdotnet.Logging.Azure.nuspec" />
+		<None Remove="Chinchilla.Logging.Azure.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Chinchilla.Logging\Chinchilla.Logging.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
 		<PackageReference Include="microsoft.extensions.configuration.abstractions" Version="3.0.1" />
 	</ItemGroup>
 

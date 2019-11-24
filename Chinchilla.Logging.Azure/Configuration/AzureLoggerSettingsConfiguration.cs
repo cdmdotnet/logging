@@ -9,7 +9,7 @@
 using System.Configuration;
 using Chinchilla.Logging.Configuration;
 
-#if NETCOREAPP3_0
+#if NETSTANDARD2_0
 using Microsoft.Extensions.Configuration;
 #else
 using Microsoft.Azure;
@@ -24,7 +24,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		: ILoggerSettings
 		, IContainerLoggerSettings
 	{
-#if NETCOREAPP3_0
+#if NETSTANDARD2_0
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="AzureLoggerSettingsConfiguration"/> class using the provided <paramref name="configuration"/> to get configuration settings from.
 		/// </summary>
@@ -288,7 +288,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		/// <returns></returns>
 		protected virtual string GetSetting(string name)
 		{
-#if NETCOREAPP3_0
+#if NETSTANDARD2_0
 			IConfigurationSection loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
 			return loggingSection[name];
 #else
@@ -307,7 +307,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		protected virtual string GetStringValue(string key, string container, string defaultValue, string key2 = null)
 		{
 			string value = null;
-#if NETCOREAPP3_0
+#if NETSTANDARD2_0
 			IConfigurationSection loggingSection;
 			if (!string.IsNullOrWhiteSpace(container))
 			{

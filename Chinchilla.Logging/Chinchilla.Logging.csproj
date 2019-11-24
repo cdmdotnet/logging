@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp3.0;net40</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net40;netcoreapp3.0</TargetFrameworks>
 		<title>Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -31,6 +31,10 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 4.1.0
+
+			* Added additional Support for .NET Standard 2.0.
+
 			Version 4.0.0
 
 			* Added .NET Core 3.0 support.
@@ -45,6 +49,10 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Chinchilla.Logging.xml" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="tools\init.ps1">
@@ -101,10 +109,12 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 	</ItemGroup>
 
 	<PropertyGroup>
-		<OutputType>library</OutputType>
-		<TargetFrameworks>net40;netcoreapp3.0</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net40;netstandard2.0;netcoreapp3.0</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ApplicationIcon />
+		<StartupObject />
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -114,7 +124,7 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 		</None>
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp3.0' ">
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
 	</ItemGroup>
@@ -124,7 +134,7 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Chinchilla.StateManagement" Version="4.0.43.24" />
+	  <PackageReference Include="Chinchilla.StateManagement" Version="4.1.51.31" />
 	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 	<ItemGroup>
