@@ -25,5 +25,7 @@ jobs:
     - name: Pack with dotnet CLI
       run: |
         forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release --include-symbols --include-source"
+    - name: Push with NuGet
+      run: |
         .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.GITHUB_TOKEN }}
         forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c .nuget\NuGet.exe push @PATH -Source "GitHub" -SkipDuplicate
