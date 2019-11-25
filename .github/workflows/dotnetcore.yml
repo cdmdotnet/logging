@@ -28,4 +28,4 @@ jobs:
     - name: Push with NuGet
       run: |
         .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.GITHUB_TOKEN }}
-        forfiles /s /m Chinchilla.Logging*.nupkg /c "cmd /c dotnet nuget push @PATH -s ""GitHub"""
+        forfiles /s /m Chinchilla.Logging*.nupkg /c "cmd /c .nuget\NuGet.exe push @PATH -s ""GitHub"""
