@@ -17,8 +17,6 @@ jobs:
     - name: Prepare Legacy NuGet
       run: |
         cd .\.nuget
-        ren NuGet.ex_ NuGet.exe
-        cd ..
-        .nuget\NuGet.exe restore Chinchilla.Logging.sln
+        NuGet.exe restore ..\Chinchilla.Logging.sln
     - name: Build with dotnet CLI
       run: dotnet build --configuration Release .\Chinchilla.Logging.sln
