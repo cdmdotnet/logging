@@ -289,8 +289,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		protected virtual string GetSetting(string name)
 		{
 #if NETSTANDARD2_0
-			IConfigurationSection loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
-			return loggingSection[name];
+			return Configuration.GetValue<string>($"Chinchilla.Logging.{name}".Replace(".", ":"));
 #else
 			return CloudConfigurationManager.GetSetting(name, false);
 #endif
@@ -308,21 +307,18 @@ namespace Chinchilla.Logging.Azure.Configuration
 		{
 			string value = null;
 #if NETSTANDARD2_0
-			IConfigurationSection loggingSection;
 			if (!string.IsNullOrWhiteSpace(container))
 			{
 				try
 				{
-					loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging").GetSection(container);
-					value = loggingSection[key];
+					value = GetSetting($"{container}.{key}");
 				}
 				catch { }
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
 				{
 					try
 					{
-						loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging").GetSection(container);
-						value = loggingSection[key2];
+						value = GetSetting($"{container}.{key2}");
 					}
 					catch { }
 				}
@@ -331,16 +327,14 @@ namespace Chinchilla.Logging.Azure.Configuration
 			{
 				try
 				{
-					loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
-					value = loggingSection[key];
+					value = GetSetting(key);
 				}
 				catch { }
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
 				{
 					try
 					{
-						loggingSection = Configuration.GetSection("Chinchilla").GetSection("Logging");
-						value = loggingSection[key2];
+						value = GetSetting(key2);
 					}
 					catch { }
 				}

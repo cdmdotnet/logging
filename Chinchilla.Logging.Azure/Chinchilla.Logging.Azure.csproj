@@ -5,7 +5,13 @@
 		<title>Azure settings for Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
-		<Description>Settings for using Simple Logging For .NET and .NET Core on the Azure platform.</Description>
+		<Description>
+Settings for using Simple Logging For .NET and .NET Core on the Azure platform.
+
+See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage details.
+
+
+</Description>
 		<Copyright>Copyright ©  2019</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
@@ -67,7 +73,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-		<PackageReference Include="microsoft.extensions.configuration.abstractions" Version="3.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">

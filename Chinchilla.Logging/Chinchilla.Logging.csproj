@@ -135,7 +135,7 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 
 	<ItemGroup>
 	  <PackageReference Include="Chinchilla.StateManagement" Version="4.1.51.31" />
-	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	  <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="App.config">
