@@ -1,0 +1,18 @@
+name: Build Core Framework
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup dotnet CLI
+      uses: actions/setup-dotnet@v1.2.0
+      with:
+        dotnet-version: 3.0.100
+    - name: Build with dotnet CLI
+      run: dotnet build --configuration Release .\Chinchilla.Logging.sln
