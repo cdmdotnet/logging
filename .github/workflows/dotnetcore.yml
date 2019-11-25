@@ -24,8 +24,8 @@ jobs:
       run: dotnet build --configuration Release .\Chinchilla.Logging.sln
     - name: Pack with dotnet CLI
       run: |
-        forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=4.1.999 -p:PackageVersion=4.1.999-beta --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
-    - name: Push with NuGet
+        forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=4.2 -p:PackageVersion=4.2 --version-suffix beta-$(date +%Y%m%d%H%M%S) --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
+    - name: Push with dotnet CLI
       run: |
         .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.GITHUB_TOKEN }}
-        .nuget\NuGet.exe dotnet nuget push Packaged\*.nupkg -s "GitHub"
+        dotnet nuget push Packaged\*.nupkg -s "GitHub"
