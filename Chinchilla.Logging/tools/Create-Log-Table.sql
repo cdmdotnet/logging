@@ -100,5 +100,13 @@ CREATE NONCLUSTERED INDEX IX_' + @TableName + '_Raised ON dbo.' + @TableName + '
 
  ALTER INDEX IX_' + @TableName + '_Raised ON dbo.' + @TableName + ' DISABLE 
 
+CREATE NONCLUSTERED INDEX [IX_' + @TableName + '_Raised_Descending_WithAllFields] ON dbo.' + @TableName + '
+	(
+	Raised DESC
+	)
+	  INCLUDE([Id],[Level],[CorrelationId],[Message],[Container],[Exception],[Module],[Instance],[Environment],[EnvironmentInstance],[MetaData])
+	  WITH (SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF) ON [PRIMARY]
+go
+
 COMMIT
 ');
