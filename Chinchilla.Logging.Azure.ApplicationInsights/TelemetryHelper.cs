@@ -53,7 +53,9 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 #if NET45
 				TelemetryClient = new TelemetryClient();
 #else
-				TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
+				TelemetryConfiguration config = GetTelemetryConfigurationDelegate == null
+					? TelemetryConfiguration.CreateDefault()
+					: GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
 				TelemetryClient = new TelemetryClient(config);
 #endif
 			}
@@ -137,7 +139,9 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 #if NET45
 			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
 #else
-			TelemetryConfiguration config = GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
+			TelemetryConfiguration config = GetTelemetryConfigurationDelegate == null
+				? TelemetryConfiguration.CreateDefault()
+				: GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
 			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
 #endif
 		}
