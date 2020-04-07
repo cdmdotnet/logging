@@ -132,7 +132,7 @@ namespace Chinchilla.Logging
 		/// <summary>
 		/// Format a message based on the input parameters.
 		/// </summary>
-		protected virtual string GenerateLogMessage(string level, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
+		protected override string GenerateLogMessage(string level, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
 			container = UseOrBuildContainerName(container);
 
