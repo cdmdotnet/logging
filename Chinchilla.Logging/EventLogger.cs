@@ -146,7 +146,7 @@ namespace Chinchilla.Logging
 				// Default already set
 			}
 
-			string pattern = "Instance: {10}\r\nEnvironment: {11}\r\nEnvironment Instance: {11}\r\n";
+			string pattern = "Instance: {10}\r\nEnvironment: {11}\r\nEnvironment Instance: {12}\r\n";
 			pattern = string.Concat(pattern, "Level: {0}\r\nTime: {1:r}\r\n");
 			if (corrolationId != Guid.Empty)
 				pattern = string.Concat(pattern, "Correlation ID: {7:N}\r\nTime: {1:r}\r\n");
