@@ -146,9 +146,10 @@ namespace Chinchilla.Logging
 				// Default already set
 			}
 
-			string pattern = "Level: {0}\r\nTime: {1:r}\r\n";
+			string pattern = "Instance: {10}\r\nEnvironment: {11}\r\nEnvironment Instance: {11}\r\n";
+			pattern = string.Concat(pattern, "Level: {0}\r\nTime: {1:r}\r\n");
 			if (corrolationId != Guid.Empty)
-				pattern = "Correlation ID: {7:N}\r\nTime: {1:r}\r\n";
+				pattern = string.Concat(pattern, "Correlation ID: {7:N}\r\nTime: {1:r}\r\n");
 			if (!string.IsNullOrWhiteSpace(container))
 				pattern = string.Concat(pattern, "Container: {3}\r\n");
 			pattern = string.Concat(pattern, "Message: {2}\r\n");
@@ -167,7 +168,10 @@ namespace Chinchilla.Logging
 				exception == null ? null : exception.StackTrace, // 6
 				corrolationId, // 7
 				additionalData == null || !additionalData.Any() ? null : JsonConvert.SerializeObject(additionalData), // 8
-				metaData == null || !metaData.Any() ? null : JsonConvert.SerializeObject(metaData) // 9
+				metaData == null || !metaData.Any() ? null : JsonConvert.SerializeObject(metaData), // 9
+				LoggerSettings.Instance, // 10
+				LoggerSettings.Environment, // 11
+				LoggerSettings.EnvironmentInstance // 12
 			);
 
 			return messageToLog;
