@@ -118,7 +118,7 @@ namespace Chinchilla.Logging
 		/// </summary>
 		protected virtual void Log(EventLogEntryType eventLogEntryType, string level, string message, string container, Exception exception, IDictionary<string, object> additionalData, IDictionary<string, object> metaData)
 		{
-			string messageToLog = GenerateLogMessage(message, level, container, exception, additionalData, metaData);
+			string messageToLog = GenerateLogMessage(level, message, container, exception, additionalData, metaData);
 			Action logAction = () =>
 			{
 				lock (OutputLock)
