@@ -19,7 +19,7 @@ The SqlLogger maps AdditionalData to table columns, where the key of the diction
 MetaData is serialised to a single JSON value stored in the MetaData column.
 This means you can store data such as a User ID or Job ID in a separate column so you can filter more efficiently with indexes and partitions.
 
-TraceLogger and ConsoleLogger both seralise and format all information into a single string.
+EventLogger, TraceLogger and ConsoleLogger both seralise and format all information into a single string.
 The MultiLogger allows you to configure several different loggers to be used at once with different settings for each logger.
 
 See https://github.com/cdmdotnet/logging/wiki/Quick-How-To for usage details.
@@ -31,6 +31,10 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 4.2.0
+
+			* Added support for logging to the windows EventLog.
+
 			Version 4.1.0
 
 			* Added additional Support for .NET Standard 2.0.
@@ -127,6 +131,7 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp3.0' ">
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.1.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
