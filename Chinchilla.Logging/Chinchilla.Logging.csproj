@@ -34,6 +34,7 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 			Version 4.2.0
 
 			* Added support for logging to the windows EventLog.
+			* Better SQL support for SqlLogger in .Net Core.
 
 			Version 4.1.0
 
@@ -130,7 +131,7 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp3.0' ">
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="1.0.19239.1" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.1.1" />
 	</ItemGroup>
 

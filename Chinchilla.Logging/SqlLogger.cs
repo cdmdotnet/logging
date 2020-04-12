@@ -7,7 +7,11 @@
 #endregion
 
 using System.Data;
+#if NET40
 using System.Data.SqlClient;
+#else
+using Microsoft.Data.SqlClient;
+#endif
 using Chinchilla.Logging.Configuration;
 
 namespace Chinchilla.Logging
@@ -20,7 +24,7 @@ namespace Chinchilla.Logging
 	/// </remarks>
 	public class SqlLogger : DatabaseLogger
 	{
-		#region Overrides of DatabaseLock
+#region Overrides of DatabaseLock
 
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="DatabaseLogger"/> class calling the constructor on <see cref="DatabaseLogger"/>.
@@ -59,6 +63,6 @@ namespace Chinchilla.Logging
 			return ((SqlConnection)dbConnection).BeginTransaction(IsolationLevel.ReadUncommitted);
 		}
 
-		#endregion
+#endregion
 	}
 }
