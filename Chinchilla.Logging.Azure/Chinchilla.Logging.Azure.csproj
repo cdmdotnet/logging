@@ -17,6 +17,10 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 4.2.0
+
+			* Better support for connection strings.
+
 			Version 4.1.0
 
 			* Switched to .NET Standard 2.0 support from .NET Core 3.0.
@@ -83,5 +87,6 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
 		<PackageReference Include="Microsoft.Azure.ConfigurationManager" Version="4.0.0" />
+		<Reference Include="System.Configuration" />
 	</ItemGroup>
 </Project>

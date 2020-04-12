@@ -177,7 +177,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 			get { return ((IContainerLoggerSettings)this).UsePerformanceCounters(null); }
 		}
 
-#endregion
+		#endregion
 
 		#region Implementation of IContainerLoggerSettings
 
@@ -279,7 +279,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 			return GetBooleanValue("UsePerformanceCounters", container, "false");
 		}
 
-#endregion
+		#endregion
 
 		/// <summary>
 		/// Reads configurations settings from .NET Core and .NET Framework support app.config, web.config and other locations, including Azure Portal.
@@ -354,6 +354,29 @@ namespace Chinchilla.Logging.Azure.Configuration
 			}
 #endif
 			return value ?? defaultValue;
+		}
+
+		string ILoggerSettings.GetConnectionString(string connectionStringName)
+		{
+			return GetConnectionString(connectionStringName);
+		}
+
+		/// <summary>
+		/// Gets a connection string
+		/// </summary>
+		protected virtual string GetConnectionString(string connectionStringName)
+		{
+#if NETSTANDARD2_0
+			return Configuration.GetConnectionString(connectionStringName);
+#else
+			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+			if (connectionStringSettings == null)
+				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", connectionStringName));
+			string connectionString = connectionStringSettings.ConnectionString;
+			if (string.IsNullOrWhiteSpace(connectionStringName))
+				throw new ConfigurationErrorsException(string.Format("No value for the connection string named '{0}' was provided", connectionStringName));
+			return connectionString;
+#endif
 		}
 	}
 }

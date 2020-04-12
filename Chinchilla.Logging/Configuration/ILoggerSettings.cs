@@ -99,5 +99,10 @@ namespace Chinchilla.Logging.Configuration
 		/// If true, all log calls will be telemetered.
 		/// </summary>
 		bool UsePerformanceCounters { get; }
+
+		/// <summary>
+		/// Gets a connection string
+		/// </summary>
+		string GetConnectionString(string connectionStringName);
 	}
 }

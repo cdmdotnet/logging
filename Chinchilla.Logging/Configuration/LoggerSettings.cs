@@ -154,5 +154,24 @@ namespace Chinchilla.Logging.Configuration
 		}
 
 		#endregion
+
+		string ILoggerSettings.GetConnectionString(string connectionStringName)
+		{
+			return GetConnectionString(connectionStringName);
+		}
+
+		/// <summary>
+		/// Gets a connection string
+		/// </summary>
+		protected virtual string GetConnectionString(string connectionStringName)
+		{
+			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+			if (connectionStringSettings == null)
+				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", connectionStringName));
+			string connectionString = connectionStringSettings.ConnectionString;
+			if (string.IsNullOrWhiteSpace(connectionStringName))
+				throw new ConfigurationErrorsException(string.Format("No value for the connection string named '{0}' was provided", connectionStringName));
+			return connectionString;
+		}
 	}
 }
