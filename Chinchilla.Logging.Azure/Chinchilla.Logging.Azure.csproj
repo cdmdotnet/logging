@@ -34,7 +34,16 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 			* Added support for IContainerLoggerSettings
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
-	</PropertyGroup>
+	
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
