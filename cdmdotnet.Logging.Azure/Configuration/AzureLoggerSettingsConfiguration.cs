@@ -230,7 +230,7 @@ namespace cdmdotnet.Logging.Azure.Configuration
 		/// </summary>
 		bool IContainerLoggerSettings.EnableThreadedLogging(string container)
 		{
-			return GetBooleanValue("EnableThreadedLoggingOutput", container, "false");
+			return GetBooleanValue("EnableThreadedLogging", container, "false");
 		}
 
 		/// <summary>
