@@ -3,7 +3,7 @@ DECLARE	@TableName	NVARCHAR(50);
 SET		@TableName	= 'Logs';
 
 EXECUTE('
-/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+/* To prevent any potential data loss issues, you should review this script in detail before running it.*/
 BEGIN TRANSACTION
 SET QUOTED_IDENTIFIER ON
 SET ARITHABORT ON
@@ -106,6 +106,12 @@ CREATE NONCLUSTERED INDEX [IX_' + @TableName + '_Raised_Descending_WithAllFields
 	)
 	  INCLUDE([Id],[Level],[CorrelationId],[Message],[Container],[Exception],[Module],[Instance],[Environment],[EnvironmentInstance],[MetaData])
 	  WITH (SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF) ON [PRIMARY]
+
+ADD SENSITIVITY CLASSIFICATION TO [dbo].[' + @TableName + '].[Message]		WITH (label = ''Highly Confidential'',	label_id = ''b7d5d4f7-37ee-4133-8975-734a87b58bc4'', information_type = ''Other'', information_type_id = ''9c5b4809-0ccc-0637-6547-91a6f8bb609d'', rank = High);
+
+ADD SENSITIVITY CLASSIFICATION TO [dbo].[' + @TableName + '].[Exception]	WITH (label = ''General'',				label_id = ''1a1a6e6d-a09a-49eb-8756-95877cf1b2db'', information_type = ''Other'', information_type_id = ''9c5b4809-0ccc-0637-6547-91a6f8bb609d'', rank = Low);
+
+ADD SENSITIVITY CLASSIFICATION TO [dbo].[' + @TableName + '].[MetaData]		WITH (label = ''General'',				label_id = ''1a1a6e6d-a09a-49eb-8756-95877cf1b2db'', information_type = ''Other'', information_type_id = ''9c5b4809-0ccc-0637-6547-91a6f8bb609d'', rank = Low);
 
 COMMIT
 ');
