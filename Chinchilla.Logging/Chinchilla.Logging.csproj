@@ -53,7 +53,15 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 			* Added support for IContainerLoggerSettings, an interface that allows container based settings at a very granular level.
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <None Remove="Chinchilla.Logging.xml" />

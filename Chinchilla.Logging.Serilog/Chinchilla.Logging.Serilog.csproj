@@ -24,7 +24,15 @@
 			* Added SerilogLogger.
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
