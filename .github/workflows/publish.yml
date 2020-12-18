@@ -32,4 +32,5 @@ jobs:
     - name: Push with dotnet CLI
       run: |
         .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.NUGET_PUBLISH_TOKEN }}
+        .nuget\NuGet.exe setapikey ${{ secrets.NUGET_PUBLISH_TOKEN }} -Source "https://nuget.pkg.github.com/cdmdotnet/index.json"
         dotnet nuget push Packaged\*.nupkg -s "GitHub"
