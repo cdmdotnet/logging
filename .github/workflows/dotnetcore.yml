@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup dotnet CLI
-      uses: actions/setup-dotnet@v1.2.0
+      uses: actions/setup-dotnet@v1.4.0
       with:
         dotnet-version: 3.0.100
     - name: Prepare Legacy NuGet
@@ -25,7 +25,7 @@ jobs:
     - name: Pack with dotnet CLI
       run: |
         forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=4.2 -p:PackageVersion=4.2 --version-suffix beta-$(date +%Y%m%d%H%M%S) --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
-    - name: Push with dotnet CLI
-      run: |
-        .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.GITHUB_TOKEN }}
-        dotnet nuget push Packaged\*.nupkg -s "GitHub"
+#    - name: Push with dotnet CLI
+#      run: |
+#        .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.GITHUB_TOKEN }}
+#        dotnet nuget push Packaged\*.nupkg -s "GitHub"
