@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 env:
-  nuGetVersionNumber: 4.3.${{ github.run_number }}.${{ github.run_id }}
+  nuGetVersionNumber: 4.3
+  nuGetFullVersionNumber: ${{ nuGetVersionNumber }}.${{ github.run_number }}.${{ github.run_id }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,9 +32,9 @@ jobs:
       run: dotnet build --configuration Release .\Chinchilla.Logging.sln
     - name: Pack with dotnet CLI
       run: |
-        forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=4.2 -p:PackageVersion=${{ env.nuGetVersionNumber }} --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
+        forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=${{ env.nuGetVersionNumber }} -p:PackageVersion=${{ env.nuGetFullVersionNumber }} --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
     - name: Push with dotnet CLI
       run: |
         .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.NUGET_PUBLISH_TOKEN }}
         .nuget\NuGet.exe setapikey ${{ secrets.NUGET_PUBLISH_TOKEN }} -Source "https://nuget.pkg.github.com/cdmdotnet/index.json"
-        dotnet nuget push Packaged\*.nupkg -s "GitHub"
+        dotnet nuget push Packaged\*.nupkg -k ${{ secrets.NUGET_PUBLISH_TOKEN }}
