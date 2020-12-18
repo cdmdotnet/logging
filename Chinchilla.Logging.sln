@@ -44,6 +44,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Azure.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Serilog", "Chinchilla.Logging.Serilog\Chinchilla.Logging.Serilog.csproj", "{0BE98865-12E5-4624-9F4F-9F24BEE3C708}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.Azure.Storage", "Chinchilla.Logging.Azure.Storage\Chinchilla.Logging.Azure.Storage.csproj", "{61D98D10-7FD9-409A-8E6D-4B0603219E60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{0BE98865-12E5-4624-9F4F-9F24BEE3C708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BE98865-12E5-4624-9F4F-9F24BEE3C708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BE98865-12E5-4624-9F4F-9F24BEE3C708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

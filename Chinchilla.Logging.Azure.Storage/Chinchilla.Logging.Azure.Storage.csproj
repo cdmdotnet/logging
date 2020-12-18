@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+		<title>Azure storage for Simple Logging For .NET and .NET Core</title>
+		<Authors>Chinchilla Software</Authors>
+		<Company>Chinchilla Software</Company>
+		<Description>Azure storage for using Simple Logging For .NET and .NET Core on the Azure platform.</Description>
+		<Copyright>Copyright ©  2020</Copyright>
+		<PackageLicenseFile></PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
+		<PackageReleaseNotes>
+			Version 4.2.0
+
+			* First release matching version numbers.
+		</PackageReleaseNotes>
+		<PackageIcon>images\icon.png</PackageIcon>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+		<DocumentationFile>Chinchilla.Logging.Azure.Storage.xml</DocumentationFile>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ApplicationIcon />
+		<StartupObject />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\icon.png" Link="icon.png">
+			<Pack>True</Pack>
+			<PackagePath>images\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="cdmdotnet.Logging.Azure.Storage.nuspec" />
+		<None Remove="Chinchilla.Logging.Azure.Storage.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Chinchilla.Logging\Chinchilla.Logging.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.0" />
+		<PackageReference Include="Microsoft.Azure.Storage.Common" Version="11.2.2" />
+	</ItemGroup>
+</Project>
