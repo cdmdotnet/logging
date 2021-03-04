@@ -13,7 +13,7 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// Instantiates a new instance of the <see cref="LogEntity"/>.
 		/// </summary>
 		public LogEntity(string level)
-			: this(level, new Guid().ToString("N"))
+			: this(level, Guid.NewGuid().ToString("N"))
 		{
 		}
 
