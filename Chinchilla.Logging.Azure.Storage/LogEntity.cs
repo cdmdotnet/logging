@@ -12,17 +12,25 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="LogEntity"/>.
 		/// </summary>
-		public LogEntity(string level, string container)
+		public LogEntity(string level)
+			: this(level, new Guid().ToString("N"))
+		{
+		}
+
+		/// <summary>
+		/// Instantiates a new instance of the <see cref="LogEntity"/>.
+		/// </summary>
+		public LogEntity(string level, string uniqueId)
 		{
 			PartitionKey = level;
-			RowKey = container;
+			RowKey = uniqueId;
 		}
 
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="LogEntity"/>.
 		/// </summary>
 		public LogEntity(LogInformation logInformation)
-			: this (logInformation.Level, logInformation.Container)
+			: this (logInformation.Level)
 		{
 			Raised = logInformation.Raised;
 			Level = logInformation.Level;
