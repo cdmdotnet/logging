@@ -81,7 +81,7 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="TableStorageLogger{TEntity}"/> class calling the constructor on <see cref="Logger"/>.
 		/// </summary>
-		protected TableStorageLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper)
+		public TableStorageLogger(ILoggerSettings loggerSettings, ICorrelationIdHelper correlationIdHelper, ITelemetryHelper telemetryHelper)
 			: base(loggerSettings, correlationIdHelper, telemetryHelper)
 		{
 		}
