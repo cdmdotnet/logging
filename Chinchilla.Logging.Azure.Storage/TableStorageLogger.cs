@@ -1,4 +1,12 @@
-﻿using System;
+﻿#region Copyright
+// // -----------------------------------------------------------------------
+// // <copyright company="Chinchilla Software Limited">
+// // 	Copyright Chinchilla Software Limited. All rights reserved.
+// // </copyright>
+// // -----------------------------------------------------------------------
+#endregion
+
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using Chinchilla.Logging.Configuration;
@@ -12,6 +20,7 @@ namespace Chinchilla.Logging.Azure.Storage
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code outputting to an Azure Table Storage account
+	/// SqlDatabaseTableName holds the name of the table
 	/// </summary>
 	public abstract class TableStorageLogger<TEntity>
 		: Logger

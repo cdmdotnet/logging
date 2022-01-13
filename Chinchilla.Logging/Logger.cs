@@ -22,7 +22,7 @@ namespace Chinchilla.Logging
 		/// <summary>
 		/// Default settings used to serialise objects for storage
 		/// </summary>
-		public static JsonSerializerSettings DefaultJsonSerializerSettings { get; private set; }
+		public static JsonSerializerSettings DefaultJsonSerializerSettings { get; protected set; }
 
 		static Logger()
 		{

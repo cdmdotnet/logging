@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Chinchilla.Logging.Azure.Storage</name>
+    </assembly>
+    <members>
+        <member name="T:Chinchilla.Logging.Azure.Storage.LogEntity">
+            <summary>
+            Information about an event to be logged
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.LogEntity.#ctor(System.String)">
+            <summary>
+            Instantiates a new instance of the <see cref="T:Chinchilla.Logging.Azure.Storage.LogEntity"/>.
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.LogEntity.#ctor(System.String,System.String)">
+            <summary>
+            Instantiates a new instance of the <see cref="T:Chinchilla.Logging.Azure.Storage.LogEntity"/>.
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.LogEntity.#ctor(Chinchilla.Logging.LogInformation)">
+            <summary>
+            Instantiates a new instance of the <see cref="T:Chinchilla.Logging.Azure.Storage.LogEntity"/>.
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Raised">
+            <summary>
+            The <see cref="T:System.DateTime"/> the event was raised.
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Level">
+            <summary>
+            The level of the event, such as 'error', 'info' or 'debug'
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Message">
+            <summary>
+            A Human readable message describing the event
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Container">
+            <summary>
+            The container such as a method or class the event was raised from
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Exception">
+            <summary>
+            A serialised <see cref="P:Chinchilla.Logging.Azure.Storage.LogEntity.Exception"/> if one was provided.
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.MetaData">
+            <summary>
+            A serialised <see cref="T:System.Collections.Generic.IDictionary`2"/> if one was provided.
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.CorrolationId">
+            <summary>
+            The value from <see cref="M:Chinchilla.Logging.ICorrelationIdHelper.GetCorrelationId"/>
+            </summary>
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Module">
+            <summary />
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Instance">
+            <summary />
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Environment">
+            <summary />
+        </member>
+        <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.EnvironmentInstance">
+            <summary />
+        </member>
+        <member name="T:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1">
+            <summary>
+            Provides a set of methods that help you log events relating to the execution of your code outputting to an Azure Table Storage account
+            SqlDatabaseTableName holds the name of the table
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1.#ctor(Chinchilla.Logging.Configuration.ILoggerSettings,Chinchilla.Logging.ICorrelationIdHelper,Chinchilla.Logging.ITelemetryHelper)">
+            <summary>
+            Instantiates a new instance of the <see cref="T:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1"/> class calling the constructor on <see cref="T:Chinchilla.Logging.Logger"/>.
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1.GetConnectionString(System.String)">
+            <summary />
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1.ConvertLogInformation(Chinchilla.Logging.LogInformation)">
+            <summary>
+            Converts the provided <paramref name="logInformation"/> into a <typeparamref name="TEntity"/>
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1.PersistLog(Chinchilla.Logging.LogInformation)">
+            <summary>
+            Persists (or saves) the provided <paramref name="logInformation"></paramref> to the database
+            </summary>
+            <param name="logInformation">The <see cref="T:Chinchilla.Logging.LogInformation"/> holding all the information you want to persist (save) to the database.</param>
+        </member>
+        <member name="T:Chinchilla.Logging.Azure.Storage.TableStorageLogger">
+            <summary>
+            Provides a set of methods that help you log events relating to the execution of your code outputting to an Azure Table Storage account
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.TableStorageLogger.#ctor(Chinchilla.Logging.Configuration.ILoggerSettings,Chinchilla.Logging.ICorrelationIdHelper,Chinchilla.Logging.ITelemetryHelper)">
+            <summary>
+            Instantiates a new instance of the <see cref="T:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1"/> class calling the constructor on <see cref="T:Chinchilla.Logging.Logger"/>.
+            </summary>
+        </member>
+        <member name="M:Chinchilla.Logging.Azure.Storage.TableStorageLogger.ConvertLogInformation(Chinchilla.Logging.LogInformation)">
+            <summary>
+            Converts the provided <paramref name="logInformation"/> into a <see cref="T:Chinchilla.Logging.Azure.Storage.LogEntity"/>
+            </summary>
+        </member>
+    </members>
+</doc>

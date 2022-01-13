@@ -239,3 +239,5 @@ _Pvt_Extensions
 /Chinchilla.Logging.Serilog/Chinchilla.Logging.Serilog.xml
 /Chinchilla.Logging/Chinchilla.Logging.xml
 /Chinchilla.Logging.Azure.ApplicationInsights/Chinchilla.Logging.Azure.ApplicationInsights.xml
+/Chinchilla.Logging.Tests.Integration/local.settings.json
+/Chinchilla.Logging.Tests.Integration/app.config

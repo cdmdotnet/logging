@@ -22,6 +22,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 	/// </summary>
 	public class AzureLoggerSettingsConfiguration
 		: ILoggerSettings
+		, ILogAnalyticsSettings
 		, IContainerLoggerSettings
 	{
 #if NETSTANDARD2_0
@@ -281,6 +282,70 @@ namespace Chinchilla.Logging.Azure.Configuration
 
 		#endregion
 
+		#region Implementation of ILogAnalyticsSettings
+
+		/// <summary>
+		/// The WorkspaceID is the unique identifier for the Log Analytics workspace.
+		/// See https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api#authorization.
+		/// </summary>
+		public string WorkspaceId
+		{
+			get { return ((ILogAnalyticsSettings)this).GetWorkspaceId(null); }
+		}
+
+		/// <summary>
+		/// The primary or the secondary key for the workspace to sign the request with.
+		/// See https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api#authorization.
+		/// </summary>
+		public string SharedKey
+		{
+			get { return ((ILogAnalyticsSettings)this).GetSharedKey(null); }
+		}
+
+		/// <summary>
+		/// The custom record type.
+		/// See https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api#record-type-and-properties.
+		/// </summary>
+		public string LogType
+		{
+			get { return ((ILogAnalyticsSettings)this).GetLogType(null); }
+		}
+
+		/// <summary>
+		/// The WorkspaceID is the unique identifier for the Log Analytics workspace.
+		/// See https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api#authorization.
+		/// </summary>
+		string ILogAnalyticsSettings.GetWorkspaceId(string container)
+		{
+			string result = GetStringValue("Azure.LogAnalytics.WorkspaceId", container, null, reverseKeyFormat: false);
+			if (string.IsNullOrWhiteSpace(result))
+				throw new ConfigurationErrorsException($"Missing setting for the 'Chinchilla.Logging.Azure.LogAnalytics.WorkspaceId'.");
+			return result;
+		}
+
+		/// <summary>
+		/// The primary or the secondary key for the workspace to sign the request with.
+		/// See https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api#authorization.
+		/// </summary>
+		string ILogAnalyticsSettings.GetSharedKey(string container)
+		{
+			string result = GetStringValue("Azure.LogAnalytics.SharedKey", container, null, reverseKeyFormat: false);
+			if (string.IsNullOrWhiteSpace(result))
+				throw new ConfigurationErrorsException($"Missing setting for the 'Chinchilla.Logging.Azure.LogAnalytics.SharedKey'.");
+			return result;
+		}
+
+		/// <summary>
+		/// The custom record type.
+		/// See https://docs.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api#record-type-and-properties.
+		/// </summary>
+		string ILogAnalyticsSettings.GetLogType(string container)
+		{
+			return GetStringValue("Azure.LogAnalytics.LogType", container, "Log", reverseKeyFormat: false);
+		}
+
+		#endregion
+
 		/// <summary>
 		/// Reads configurations settings from .NET Core and .NET Framework support app.config, web.config and other locations, including Azure Portal.
 		/// </summary>
@@ -303,7 +368,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary />
-		protected virtual string GetStringValue(string key, string container, string defaultValue, string key2 = null)
+		protected virtual string GetStringValue(string key, string container, string defaultValue, string key2 = null, bool reverseKeyFormat = true)
 		{
 			string value = null;
 #if NETSTANDARD2_0
@@ -311,7 +376,10 @@ namespace Chinchilla.Logging.Azure.Configuration
 			{
 				try
 				{
-					value = GetSetting($"{container}.{key}");
+					string _key = reverseKeyFormat
+						? $"{container}.{key}"
+						: $"{key}.{container}";
+					value = GetSetting(_key);
 				}
 				catch { }
 				if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(key2))
@@ -371,10 +439,10 @@ namespace Chinchilla.Logging.Azure.Configuration
 #else
 			ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
 			if (connectionStringSettings == null)
-				throw new ConfigurationErrorsException(string.Format("No connection string named '{0}' was provided", connectionStringName));
+				throw new ConfigurationErrorsException($"No connection string named '{connectionStringName}' was provided");
 			string connectionString = connectionStringSettings.ConnectionString;
 			if (string.IsNullOrWhiteSpace(connectionStringName))
-				throw new ConfigurationErrorsException(string.Format("No value for the connection string named '{0}' was provided", connectionStringName));
+				throw new ConfigurationErrorsException($"No value for the connection string named '{connectionStringName}' was provided");
 			return connectionString;
 #endif
 		}

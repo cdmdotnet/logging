@@ -31,9 +31,14 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 4.4.0
+
+			* Added support for logging to Azure Log Analytics via a separate package.
+
 			Version 4.2.0
 
 			* Added support for logging to the windows EventLog.
+			* Added support for logging to Azure Table Storage via a separate package.
 			* Better SQL support for SqlLogger in .Net Core.
 
 			Version 4.1.0

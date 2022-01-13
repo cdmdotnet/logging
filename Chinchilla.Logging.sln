@@ -15,6 +15,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.Logging.Azure", "cdmdotnet.Logging.Azure\cdmdotnet.Logging.Azure.csproj", "{67FCA38A-1B9C-41D4-A8F5-74791D99DBC1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packaging", "Packaging", "{A6D9CE89-6754-427D-A6B8-425B2B023294}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{AA4F08FD-0276-4BC4-93B8-396813A09BD7}"
 	ProjectSection(SolutionItems) = preProject
@@ -44,7 +48,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Azure.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Serilog", "Chinchilla.Logging.Serilog\Chinchilla.Logging.Serilog.csproj", "{0BE98865-12E5-4624-9F4F-9F24BEE3C708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinchilla.Logging.Azure.Storage", "Chinchilla.Logging.Azure.Storage\Chinchilla.Logging.Azure.Storage.csproj", "{61D98D10-7FD9-409A-8E6D-4B0603219E60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Azure.Storage", "Chinchilla.Logging.Azure.Storage\Chinchilla.Logging.Azure.Storage.csproj", "{61D98D10-7FD9-409A-8E6D-4B0603219E60}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Tests.Integration", "Chinchilla.Logging.Tests.Integration\Chinchilla.Logging.Tests.Integration.csproj", "{5AA3F580-DE0B-4AF6-B65C-D327B379F7C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +94,10 @@ Global
 		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61D98D10-7FD9-409A-8E6D-4B0603219E60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AA3F580-DE0B-4AF6-B65C-D327B379F7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AA3F580-DE0B-4AF6-B65C-D327B379F7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AA3F580-DE0B-4AF6-B65C-D327B379F7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AA3F580-DE0B-4AF6-B65C-D327B379F7C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

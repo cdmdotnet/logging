@@ -1,0 +1,30 @@
+﻿{
+	"Chinchilla": {
+		"Logging": {
+			"ModuleName": "Chinchilla.Logging.Tests.Integration",
+			"Instance": "All",
+
+			"EnableInfo": "true",
+			"EnableDebug": "true",
+			"EnableWarning": "true",
+			"EnableError": "true",
+			"EnableFatalError": "true",
+			"EnableThreadedLogging": "false",
+			"SqlDatabaseLogsConnectionStringName": "SqlDatabaseLogs",
+
+			"UseApplicationInsightTelemetryHelper": "false",
+			"Environment": "Local",
+			"EnvironmentInstance": "One",
+
+			"Azure": {
+				"LogAnalytics": {
+					"WorkspaceId": "",
+					"SharedKey": ""
+				}
+			}
+		}
+	},
+	"ConnectionStrings": {
+		"SqlDatabaseLogs": "Initial Catalog=Logs;Data Source=localhost\\MSSQLSERVER2014;Trusted_Connection=True;"
+	}
+}
