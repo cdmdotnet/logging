@@ -52,7 +52,7 @@ namespace Chinchilla.Logging.Azure
 				PreserveReferencesHandling = PreserveReferencesHandling.None,
 				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
 				StringEscapeHandling = StringEscapeHandling.EscapeNonAscii,
-				TypeNameHandling = TypeNameHandling.All,
+				TypeNameHandling = TypeNameHandling.None,
 			};
 		}
 
