@@ -4,8 +4,9 @@ An abstracted logging platform for .NET. It can help you collect reliable logs f
 ## Nuget Packages:
 
 * Chinchilla.Logging - core library with Console and Trace based outputs
-* Chinchilla.Logging.Azure - an Azure based package to allow configuration settings to be set via the Azure portal
+* Chinchilla.Logging.Azure - an Azure based package to store outputs in Azure Log Analytics and/or to allow configuration settings to be set via the Azure portal
 * Chinchilla.Logging.Azure.ApplicationInsights - an Azure based package to add Telemetry automatically as a result of logging to ApplicationInsights
+* Chinchilla.Logging.Azure.Storage - an Azure based package to store outputs in Azure Table Storage
 * Chinchilla.Logging.Sql - a SqlServer based package to store outputs in SqlServer.
 * Chinchilla.Logging.Serilog - a Serilog based package to store outputs using Serilog.
 
@@ -30,4 +31,6 @@ There are three built-in ICorrelationIdHelper implementations, `CorrelationIdHel
 ### ConsoleLogger
 ### SqlLogger
 ### SerilogLogger
-### MultiLogger - for those odd times to need to use multiple technology stacks for logging.
+### TableStorageLogger
+### LogAnalyticsLogger
+### MultiLogger - for those odd times you need to use multiple technology stacks for logging.
