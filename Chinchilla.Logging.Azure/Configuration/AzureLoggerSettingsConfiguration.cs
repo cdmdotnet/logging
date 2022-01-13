@@ -319,7 +319,11 @@ namespace Chinchilla.Logging.Azure.Configuration
 		{
 			string result = GetStringValue("Azure.LogAnalytics.WorkspaceId", container, null, reverseKeyFormat: false);
 			if (string.IsNullOrWhiteSpace(result))
+#if NETSTANDARD2_0
 				throw new ConfigurationErrorsException($"Missing setting for the 'Chinchilla.Logging.Azure.LogAnalytics.WorkspaceId'.");
+#else
+				throw new ConfigurationErrorsException($"Missing setting for the 'Azure.LogAnalytics.WorkspaceId'.");
+#endif
 			return result;
 		}
 
@@ -331,7 +335,11 @@ namespace Chinchilla.Logging.Azure.Configuration
 		{
 			string result = GetStringValue("Azure.LogAnalytics.SharedKey", container, null, reverseKeyFormat: false);
 			if (string.IsNullOrWhiteSpace(result))
+#if NETSTANDARD2_0
 				throw new ConfigurationErrorsException($"Missing setting for the 'Chinchilla.Logging.Azure.LogAnalytics.SharedKey'.");
+#else
+				throw new ConfigurationErrorsException($"Missing setting for the 'Azure.LogAnalytics.SharedKey'.");
+#endif
 			return result;
 		}
 

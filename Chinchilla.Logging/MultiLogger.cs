@@ -11,6 +11,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Chinchilla.Logging.Configuration;
 
@@ -62,6 +63,56 @@ namespace Chinchilla.Logging
 				Trace.TraceError("One of the loggers failed.");
 		}
 
+		/// <summary>
+		/// If <paramref name="container"/> is null or empty, generate a container name, otherwise return <paramref name="container"/>.
+		/// </summary>
+		/// <remarks>
+		/// Almost perfectly copied from <see cref="VeryPrimitiveLogger"/>
+		/// </remarks>
+		protected virtual string UseOrBuildContainerName(string container)
+		{
+			try
+			{
+				if (string.IsNullOrWhiteSpace(container))
+				{
+					var stackTrace = new StackTrace();
+					StackFrame[] stackFrames = stackTrace.GetFrames();
+					if (stackFrames != null)
+					{
+						foreach (StackFrame frame in stackFrames)
+						{
+							MethodBase method = frame.GetMethod();
+							if (method.ReflectedType == null)
+								continue;
+
+							try
+							{
+								bool found = false;
+								if (method.ReflectedType == null || string.IsNullOrWhiteSpace(method.ReflectedType.FullName))
+									continue;
+								if (!method.ReflectedType.FullName.StartsWith("Chinchilla.Logging"))
+								{
+									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
+									found = true;
+								}
+								if (found)
+									break;
+							}
+							catch
+							{
+								// Just move on
+							}
+						}
+					}
+				}
+			}
+			catch
+			{
+				// Just move on
+			}
+			return container;
+		}
+
 		#region Implementation of ILogger
 
 		/// <summary>
@@ -86,6 +137,9 @@ namespace Chinchilla.Logging
 		/// </summary>
 		public virtual void LogInfo(string message, string container = null, Exception exception = null, IDictionary<string, object> additionalData = null, IDictionary<string, object> metaData = null)
 		{
+			// this is needed here as jumping into a new thread/task would break this.
+			container = UseOrBuildContainerName(container);
+
 			Action<ILogger> logAction = logger =>
 			{
 				logger.LogInfo(message, container, exception, additionalData, metaData);
@@ -215,6 +269,17 @@ namespace Chinchilla.Logging
 
 #pragma warning restore CA1063 // Implement IDisposable Correctly
 		#endregion
+
+		/// <summary>
+		/// Adds the provided <paramref name="logger"/> to <see cref="Loggers"/>.
+		/// </summary>
+		protected virtual void AddLogger(ILogger logger)
+		{
+			Loggers.Add(logger, logger);
+			Type loggerType = typeof(VeryPrimitiveLogger);
+			MethodInfo addExclusionNamespacemethod = loggerType.GetMethod("AddExclusionNamespace", BindingFlags.Instance |BindingFlags.NonPublic);
+			addExclusionNamespacemethod.Invoke(logger, new object[] { "System.Threading" });
+		}
 	}
 
 	/// <summary>
@@ -228,7 +293,7 @@ namespace Chinchilla.Logging
 		/// </summary>
 		public MultiLogger(TLogger logger)
 		{
-			Loggers.Add(logger, logger);
+			AddLogger(logger);
 		}
 	}
 
@@ -244,8 +309,8 @@ namespace Chinchilla.Logging
 		/// </summary>
 		public MultiLogger(TLogger1 logger1, TLogger2 logger2)
 		{
-			Loggers.Add(logger1, logger1);
-			Loggers.Add(logger2, logger2);
+			AddLogger(logger1);
+			AddLogger(logger2);
 		}
 	}
 
@@ -262,9 +327,9 @@ namespace Chinchilla.Logging
 		/// </summary>
 		public MultiLogger(TLogger1 logger1, TLogger2 logger2, TLogger3 logger3)
 		{
-			Loggers.Add(logger1, logger1);
-			Loggers.Add(logger2, logger2);
-			Loggers.Add(logger3, logger3);
+			AddLogger(logger1);
+			AddLogger(logger2);
+			AddLogger(logger3);
 		}
 	}
 
@@ -282,10 +347,10 @@ namespace Chinchilla.Logging
 		/// </summary>
 		public MultiLogger(TLogger1 logger1, TLogger2 logger2, TLogger3 logger3, TLogger4 logger4)
 		{
-			Loggers.Add(logger1, logger1);
-			Loggers.Add(logger2, logger2);
-			Loggers.Add(logger3, logger3);
-			Loggers.Add(logger4, logger4);
+			AddLogger(logger1);
+			AddLogger(logger2);
+			AddLogger(logger3);
+			AddLogger(logger4);
 		}
 	}
 
@@ -304,11 +369,11 @@ namespace Chinchilla.Logging
 		/// </summary>
 		public MultiLogger(TLogger1 logger1, TLogger2 logger2, TLogger3 logger3, TLogger4 logger4, TLogger5 logger5)
 		{
-			Loggers.Add(logger1, logger1);
-			Loggers.Add(logger2, logger2);
-			Loggers.Add(logger3, logger3);
-			Loggers.Add(logger4, logger4);
-			Loggers.Add(logger5, logger5);
+			AddLogger(logger1);
+			AddLogger(logger2);
+			AddLogger(logger3);
+			AddLogger(logger4);
+			AddLogger(logger5);
 		}
 	}
 }

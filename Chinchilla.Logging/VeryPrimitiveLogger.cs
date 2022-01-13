@@ -81,7 +81,15 @@ namespace Chinchilla.Logging
 		/// </summary>
 		protected IDictionary<string, string> ExclusionNamespaces { get; private set; }
 
-		private bool? _enableThreadedLoggingOutput;
+		/// <summary>
+		/// Adds the provided <paramref name="@namespace"/> to <see cref="ExclusionNamespaces"/>.
+		/// </summary>
+		protected virtual void AddExclusionNamespace(string @namespace)
+		{
+			ExclusionNamespaces.Add(@namespace, @namespace);
+		}
+
+	private bool? _enableThreadedLoggingOutput;
 		/// <summary />
 		protected bool EnableThreadedLoggingOutput
 		{
@@ -128,6 +136,9 @@ namespace Chinchilla.Logging
 		/// <summary>
 		/// If <paramref name="container"/> is null or empty, generate a container name, otherwise return <paramref name="container"/>.
 		/// </summary>
+		/// <remarks>
+		/// Almost perfectly copied to <see cref="MultiLogger"/>
+		/// </remarks>
 		protected virtual string UseOrBuildContainerName(string container)
 		{
 			try
