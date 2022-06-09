@@ -31,6 +31,10 @@ This package installs Chinchilla.Logging.dll which includes core logging functio
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 4.5.0
+
+			* Added support for tracing via ITelemetryHelper.
+
 			Version 4.4.0
 
 			* Added support for logging to Azure Log Analytics via a separate package.
