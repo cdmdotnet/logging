@@ -2,6 +2,10 @@ name: Build Core Framework
 
 on: [push]
 
+env:
+  nuGetVersionNumber: 4.5
+  nuGetFullVersionNumber: 4.5.${{ github.run_number }}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -24,7 +28,7 @@ jobs:
       run: dotnet build --configuration Release .\Chinchilla.Logging.sln
     - name: Pack with dotnet CLI
       run: |
-        forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=4.5 -p:PackageVersion=4.5 --version-suffix beta-$(date +%Y%m%d%H%M%S) --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
+        forfiles /s /m Chinchilla.Logging*.csproj /c "cmd /c dotnet pack @PATH -c Release -p:Version=${{ env.nuGetVersionNumber }} -p:PackageVersion=${{ env.nuGetFullVersionNumber }} --version-suffix beta-$(date +%Y%m%d%H%M%S) --include-symbols -p:SymbolPackageFormat=snupkg --include-source -o ../Packaged"
 #    - name: Push with dotnet CLI
 #      run: |
 #        .nuget\NuGet.exe source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/cdmdotnet/index.json" -UserName cdmdotnet -Password ${{ secrets.GITHUB_TOKEN }}
