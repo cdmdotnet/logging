@@ -359,6 +359,84 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		}
 
 		/// <summary>
+		/// Send a trace message for display in Diagnostic Search.
+		/// </summary>
+		/// <param name="message">Message to display.</param>
+		/// <param name="severityLevel">Trace severity level.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID</param>
+		void ITelemetryHelper.TrackTrace(string message, int severityLevel, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+			TrackTrace(message, (SeverityLevel)severityLevel, properties, sessionId);
+		}
+
+		/// <summary>
+		/// Send a trace message for display in Diagnostic Search.
+		/// </summary>
+		/// <param name="message">Message to display.</param>
+		/// <param name="severityLevel">Trace severity level.</param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID</param>
+		void ITelemetryHelper.TrackTrace(string message, string userId, int severityLevel, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+			TrackTrace(message, userId, (SeverityLevel)severityLevel, properties, sessionId);
+		}
+
+		/// <summary>
+		/// Send a trace message for display in Diagnostic Search.
+		/// </summary>
+		/// <param name="message">Message to display.</param>
+		/// <param name="severityLevel">Trace severity level.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID</param>
+		public virtual void TrackTrace(string message, SeverityLevel severityLevel, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+			TrackTrace(message, null, severityLevel, properties, sessionId);
+		}
+
+		/// <summary>
+		/// Send a trace message for display in Diagnostic Search.
+		/// </summary>
+		/// <param name="message">Message to display.</param>
+		/// <param name="severityLevel">Trace severity level.</param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID</param>
+		public virtual void TrackTrace(string message, string userId, SeverityLevel severityLevel, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+			var traceTelemetry = new TraceTelemetry(message, severityLevel);
+			if (properties != null)
+				foreach (KeyValuePair<string, string> pair in properties)
+					traceTelemetry.Properties.Add(pair);
+			string correlationId = SetCorrelationId(traceTelemetry.Properties);
+
+			if (!string.IsNullOrWhiteSpace(userId))
+			{
+				traceTelemetry.Context.User.Id = userId;
+				traceTelemetry.Context.User.AuthenticatedUserId = userId;
+			}
+			if (!string.IsNullOrWhiteSpace(sessionId))
+				traceTelemetry.Context.Session.Id = sessionId;
+
+			traceTelemetry.Context.Operation.Id = correlationId;
+			if (LoggerSettings != null)
+			{
+				traceTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				traceTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					ActionQueue.Enqueue(() => TelemetryClient.TrackTrace(traceTelemetry));
+				});
+			else
+				TelemetryClient.TrackTrace(traceTelemetry);
+		}
+
+		/// <summary>
 		/// Flushes the in-memory buffer, if one exists
 		/// </summary>
 		public virtual void Flush()

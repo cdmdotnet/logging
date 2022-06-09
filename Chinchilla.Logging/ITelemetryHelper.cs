@@ -89,6 +89,42 @@ namespace Chinchilla.Logging
 		/// <param name="sessionId">The application-defined session ID.</param>
 		void TrackRequest(string name, Uri url, string userId, DateTimeOffset startTime, TimeSpan duration, string responseCode, bool wasSuccessfull, IDictionary<string, string> properties = null, string sessionId = null);
 
+
+		/// <summary>
+		/// Send a trace message for display in Diagnostic Search.
+		/// </summary>
+		/// <param name="message">Message to display.</param>
+		/// <param name="severityLevel">
+		/// Trace severity level.
+		/// 
+		/// Verbose = 0,
+		/// Information = 1,
+		/// Warning = 2,
+		/// Error = 3,
+		/// Critical = 4
+		/// </param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID</param>
+		void TrackTrace(string message, int severityLevel = 1, IDictionary<string, string> properties = null, string sessionId = null);
+
+		/// <summary>
+		/// Send a trace message for display in Diagnostic Search.
+		/// </summary>
+		/// <param name="message">Message to display.</param>
+		/// <param name="severityLevel">
+		/// Trace severity level.
+		/// 
+		/// Verbose = 0,
+		/// Information = 1,
+		/// Warning = 2,
+		/// Error = 3,
+		/// Critical = 4
+		/// </param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID</param>
+		void TrackTrace(string message, string userId, int severityLevel = 1, IDictionary<string, string> properties = null, string sessionId = null);
+
 		/// <summary>
 		/// Flushes the in-memory buffer, if one exists
 		/// </summary>
