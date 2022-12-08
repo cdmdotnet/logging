@@ -138,7 +138,7 @@
 	<ItemGroup>
 		<PackageReference Include="Chinchilla.StateManagement" Version="4.2.11" />
 		<!-- Locked at 3.0.9 see - https://github.com/Azure/Azure-Functions/issues/1370 -->
-		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="App.config">
