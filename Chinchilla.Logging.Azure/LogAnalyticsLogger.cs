@@ -119,7 +119,7 @@ namespace Chinchilla.Logging.Azure
 							if (response.StatusCode != HttpStatusCode.OK)
 							{
 								HttpContent responseContent = response.Content;
-								string result = responseContent.ReadAsStringAsync().Result;
+								string result = await responseContent.ReadAsStringAsync();
 								Trace.TraceError("Persisting log failed with the following exception:\r\n{0}", result);
 							}
 						}
