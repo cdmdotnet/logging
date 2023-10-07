@@ -95,6 +95,14 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
+		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings)
+			: this(telemetryClient, correlationIdHelper, loggerSettings, false)
+		{
+		}
+
+		/// <summary>
+		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
+		/// </summary>
 		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper)
 			: this(telemetryClient, correlationIdHelper, null, false)
 		{
