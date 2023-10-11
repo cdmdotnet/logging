@@ -35,7 +35,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// </summary>
 		protected ILoggerSettings LoggerSettings { get; private set; }
 
-#if NETCOREAPP3_0 || NETSTANDARD2_0
+#if NET6_0 || NETSTANDARD2_0
 		/// <summary>
 		/// The delegate used internally to get the current <see cref="TelemetryConfiguration"/>.
 		/// <see cref="TelemetryConfiguration.CreateDefault"/> will be used if this is not set.

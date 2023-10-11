@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net40;netcoreapp3.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net40;net6.0</TargetFrameworks>
 		<title>Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -26,14 +26,15 @@
 
 			This package installs Chinchilla.Logging.dll which includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
 		</Description>
-		<Copyright>Copyright ©  2019</Copyright>
+		<Copyright>Copyright ©  2023</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
-			Version 4.5.0
+			Version 4.5
 
 			* Added support for tracing via ITelemetryHelper.
+			* Upgraded base level support to .NET 6.0
 
 			Version 4.4.0
 
@@ -132,7 +133,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net40;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+		<TargetFrameworks>net40;netstandard2.0;net6.0</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
@@ -146,7 +147,7 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp3.0' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="1.0.19239.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.1.1" />
@@ -157,7 +158,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Chinchilla.StateManagement" Version="4.2.5" />
+		<PackageReference Include="Chinchilla.StateManagement" Version="4.2.7" />
 		<!-- Locked at 3.0.9 see - https://github.com/Azure/Azure-Functions/issues/1370 -->
 		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
 	</ItemGroup>

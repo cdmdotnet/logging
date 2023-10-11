@@ -278,7 +278,7 @@ namespace Chinchilla.Logging
 			Loggers.Add(logger, logger);
 			Type loggerType = typeof(VeryPrimitiveLogger);
 			MethodInfo addExclusionNamespacemethod = loggerType.GetMethod("AddExclusionNamespace", BindingFlags.Instance |BindingFlags.NonPublic);
-			addExclusionNamespacemethod.Invoke(logger, new object[] { "System.Threading" });
+			addExclusionNamespacemethod.Invoke(logger, new object[] { new [] { "System.Threading", "System.Threading.Tasks" } });
 		}
 	}
 

@@ -48,7 +48,7 @@ namespace Chinchilla.Logging
 					TelemetryHelper = new NullTelemetryHelper();
 			}
 			ExclusionNamespaces = new ConcurrentDictionary<string, string>();
-			ExclusionNamespaces.Add("Chinchilla.Logging", "Chinchilla.Logging");
+			AddExclusionNamespace("Chinchilla.Logging");
 			InprogressThreads = new ConcurrentDictionary<Guid, string>();
 		}
 
@@ -82,14 +82,15 @@ namespace Chinchilla.Logging
 		protected IDictionary<string, string> ExclusionNamespaces { get; private set; }
 
 		/// <summary>
-		/// Adds the provided <paramref name="@namespace"/> to <see cref="ExclusionNamespaces"/>.
+		/// Adds the provided <paramref name="namespace"/> to <see cref="ExclusionNamespaces"/>.
 		/// </summary>
-		protected virtual void AddExclusionNamespace(string @namespace)
+		protected virtual void AddExclusionNamespace(params string[] @namespaces)
 		{
-			ExclusionNamespaces.Add(@namespace, @namespace);
+			foreach(string @namespace in namespaces)
+				ExclusionNamespaces.Add(@namespace, @namespace);
 		}
 
-	private bool? _enableThreadedLoggingOutput;
+		private bool? _enableThreadedLoggingOutput;
 		/// <summary />
 		protected bool EnableThreadedLoggingOutput
 		{
@@ -162,7 +163,7 @@ namespace Chinchilla.Logging
 									continue;
 								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace.Key)))
 								{
-									container = string.Format("{0}.{1}", method.ReflectedType.FullName, method.Name);
+									container = $"{method.ReflectedType.FullName}.{method.Name}";
 									found = true;
 								}
 								if (found)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net45;netcoreapp3.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net45;net6.0</TargetFrameworks>
 		<title>Telemetry via Azure application insights for Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -11,9 +11,10 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
-			Version 4.5.0
+			Version 4.5
 
 			* Added support for tracing via ITelemetryHelper.
+			* Upgraded base level support to .NET 6.0
 
 			Version 4.1.0
 
@@ -44,7 +45,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>netstandard2.0;net45;netcoreapp3.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net45;net6.0</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.Azure.ApplicationInsights.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
