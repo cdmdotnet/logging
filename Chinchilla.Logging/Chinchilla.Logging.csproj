@@ -26,7 +26,7 @@
 
 			This package installs Chinchilla.Logging.dll which includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
 		</Description>
-		<Copyright>Copyright ©  2023</Copyright>
+		<Copyright>Copyright © 2023</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>

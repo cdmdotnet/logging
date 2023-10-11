@@ -6,7 +6,7 @@
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
 		<Description>Serilog logger implementation for Simple Logging .NET and .NET Core.</Description>
-		<Copyright>Copyright ©  2019</Copyright>
+		<Copyright>Copyright © 2023</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>

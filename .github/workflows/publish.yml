@@ -16,12 +16,27 @@ jobs:
     strategy:
       matrix:
         os: [windows-2019]
+        dotnet-version: [ '7.0.x' ]
     steps:
     - uses: actions/checkout@v1
     - name: Setup dotnet CLI
-      uses: actions/setup-dotnet@v1.7.2
+      uses: actions/setup-dotnet@v3.2.0
       with:
-        dotnet-version: 3.1.100
+        dotnet-version: | 
+          3.1.x
+          5.0.x
+          6.0.x
+          7.0.x
+
+    - name: Setup dependencies caching
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
+
     - name: Prepare Legacy NuGet
       run: |
         cd .\.nuget
