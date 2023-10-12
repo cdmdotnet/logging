@@ -22,7 +22,7 @@ namespace Chinchilla.Logging.Tests.Integration
 	[TestClass]
 	public class LogAnalyticsLoggerTests
 	{
-//		[TestMethod]
+		[TestMethod]
 		public void LogError_SampleMessage_NoExpcetions()
 		{
 			// Arrange
