@@ -158,7 +158,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Chinchilla.StateManagement" Version="4.2.8" />
+		<PackageReference Include="Chinchilla.StateManagement" Version="4.2.9" />
 		<!-- Locked at 3.0.9 see - https://github.com/Azure/Azure-Functions/issues/1370 -->
 		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
 	</ItemGroup>
