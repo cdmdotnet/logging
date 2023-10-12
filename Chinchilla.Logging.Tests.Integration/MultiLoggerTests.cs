@@ -26,7 +26,7 @@ namespace Chinchilla.Logging.Tests.Integration
 	public class MultiLoggerTests
 	{
 		[TestMethod]
-		public void Constructor_ConsoleLoggers_AdditionalExclusionNAmespacesAdded()
+		public void Constructor_ConsoleLoggers_AdditionalExclusionNamespacesAdded()
 		{
 			// Arrange
 			var logger1 = new TestConsoleLogger(new AzureLoggerSettingsConfiguration(
@@ -57,7 +57,7 @@ namespace Chinchilla.Logging.Tests.Integration
 		}
 
 		[TestMethod]
-		public void Constructor_ConsoleLoggers_CorrectContainNameGenerated()
+		public void Constructor_ConsoleLoggers_CorrectContainerNameGenerated()
 		{
 			// Arrange
 			var logger1 = new TestConsoleLogger(new AzureLoggerSettingsConfiguration(
