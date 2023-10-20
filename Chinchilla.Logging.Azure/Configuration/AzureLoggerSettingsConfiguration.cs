@@ -22,7 +22,10 @@ namespace Chinchilla.Logging.Azure.Configuration
 	/// </summary>
 	public class AzureLoggerSettingsConfiguration
 		: ILoggerSettings
+#if NET40
+#else
 		, ILogAnalyticsSettings
+#endif
 		, IContainerLoggerSettings
 	{
 #if NETSTANDARD2_0
@@ -282,6 +285,8 @@ namespace Chinchilla.Logging.Azure.Configuration
 
 		#endregion
 
+#if NET40
+#else
 		#region Implementation of ILogAnalyticsSettings
 
 		/// <summary>
@@ -353,6 +358,7 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		#endregion
+#endif
 
 		/// <summary>
 		/// Reads configurations settings from .NET Core and .NET Framework support app.config, web.config and other locations, including Azure Portal.

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdmdotnet.Logging", "cdmdotnet.Logging\cdmdotnet.Logging.csproj", "{43A451BF-4C29-424C-B480-309595D103E5}"
 EndProject
@@ -51,6 +51,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Azure.Storage", "Chinchilla.Logging.Azure.Storage\Chinchilla.Logging.Azure.Storage.csproj", "{61D98D10-7FD9-409A-8E6D-4B0603219E60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinchilla.Logging.Tests.Integration", "Chinchilla.Logging.Tests.Integration\Chinchilla.Logging.Tests.Integration.csproj", "{5AA3F580-DE0B-4AF6-B65C-D327B379F7C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{5459B2B6-6EC1-421B-9EC0-093FD219C79D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,8 +105,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{43A451BF-4C29-424C-B480-309595D103E5} = {5459B2B6-6EC1-421B-9EC0-093FD219C79D}
+		{67FCA38A-1B9C-41D4-A8F5-74791D99DBC1} = {5459B2B6-6EC1-421B-9EC0-093FD219C79D}
 		{AA4F08FD-0276-4BC4-93B8-396813A09BD7} = {A6D9CE89-6754-427D-A6B8-425B2B023294}
 		{751072FE-2FD4-468C-A2A4-373940E58491} = {A6D9CE89-6754-427D-A6B8-425B2B023294}
+		{127883BC-3272-4964-B40A-CED8DF0D37B1} = {5459B2B6-6EC1-421B-9EC0-093FD219C79D}
+		{8472B5F5-221A-4573-AA29-65DC8D1488CB} = {5459B2B6-6EC1-421B-9EC0-093FD219C79D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {214FDFF6-6558-4F81-ACF4-B1C202CF7D24}

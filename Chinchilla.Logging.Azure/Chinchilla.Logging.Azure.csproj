@@ -55,6 +55,7 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
 		<StartupObject />
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<ItemGroup>

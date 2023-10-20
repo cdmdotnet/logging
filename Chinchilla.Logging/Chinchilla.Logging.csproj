@@ -138,6 +138,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
 		<StartupObject />
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<ItemGroup>

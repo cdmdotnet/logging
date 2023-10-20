@@ -1,4 +1,6 @@
-﻿using Chinchilla.Logging.Configuration;
+﻿#if NET40
+#else
+using Chinchilla.Logging.Configuration;
 
 namespace Chinchilla.Logging.Azure.Configuration
 {
@@ -45,3 +47,4 @@ namespace Chinchilla.Logging.Azure.Configuration
 		string GetLogType(string container);
 	}
 }
+#endif

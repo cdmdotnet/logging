@@ -82,7 +82,7 @@ namespace Chinchilla.Logging
 		protected IDictionary<string, string> ExclusionNamespaces { get; private set; }
 
 		/// <summary>
-		/// Adds the provided <paramref name="namespace"/> to <see cref="ExclusionNamespaces"/>.
+		/// Adds the provided <paramref name="namespaces"/> to <see cref="ExclusionNamespaces"/>.
 		/// </summary>
 		protected virtual void AddExclusionNamespace(params string[] @namespaces)
 		{
@@ -117,7 +117,9 @@ namespace Chinchilla.Logging
 				// Currently this doesn't need StartNewSafely as all thread based data is already collected and this would just slow things down.
 				Task.Factory.StartNewSafely(() =>
 				{
+#if NET40
 					using (tokenSource.Token.Register(Thread.CurrentThread.Abort))
+#endif
 					{
 						try
 						{

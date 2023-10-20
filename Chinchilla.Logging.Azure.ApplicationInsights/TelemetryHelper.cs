@@ -50,7 +50,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		{
 			if (telemetryClient == null)
 			{
-#if NET45
+#if NET452
 				TelemetryClient = new TelemetryClient();
 #else
 				TelemetryConfiguration config = GetTelemetryConfigurationDelegate == null
@@ -122,12 +122,6 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
 			: this(null, correlationIdHelper, null, enableThreadedOperations)
 		{
-#if NET45
-			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
-#else
-			TelemetryConfiguration config = (GetTelemetryConfigurationDelegate != null ? GetTelemetryConfigurationDelegate() : null) ?? TelemetryConfiguration.CreateDefault();
-			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
-#endif
 		}
 
 		/// <summary>
@@ -144,14 +138,6 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
 			: this(null, correlationIdHelper, loggerSettings, enableThreadedOperations)
 		{
-#if NET45
-			TelemetryClient.InstrumentationKey = TelemetryConfiguration.Active.InstrumentationKey;
-#else
-			TelemetryConfiguration config = GetTelemetryConfigurationDelegate == null
-				? TelemetryConfiguration.CreateDefault()
-				: GetTelemetryConfigurationDelegate() ?? TelemetryConfiguration.CreateDefault();
-			TelemetryClient.InstrumentationKey = config.InstrumentationKey;
-#endif
 		}
 
 		/// <summary>
@@ -373,7 +359,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// <param name="severityLevel">Trace severity level.</param>
 		/// <param name="properties">Named string values you can use to search and classify events.</param>
 		/// <param name="sessionId">The application-defined session ID</param>
-		void ITelemetryHelper.TrackTrace(string message, int severityLevel, IDictionary<string, string> properties = null, string sessionId = null)
+		void ITelemetryHelper.TrackTrace(string message, int severityLevel, IDictionary<string, string> properties, string sessionId)
 		{
 			TrackTrace(message, (SeverityLevel)severityLevel, properties, sessionId);
 		}
@@ -386,7 +372,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// <param name="userId">The ID of user accessing the application.</param>
 		/// <param name="properties">Named string values you can use to search and classify events.</param>
 		/// <param name="sessionId">The application-defined session ID</param>
-		void ITelemetryHelper.TrackTrace(string message, string userId, int severityLevel, IDictionary<string, string> properties = null, string sessionId = null)
+		void ITelemetryHelper.TrackTrace(string message, string userId, int severityLevel, IDictionary<string, string> properties, string sessionId)
 		{
 			TrackTrace(message, userId, (SeverityLevel)severityLevel, properties, sessionId);
 		}
