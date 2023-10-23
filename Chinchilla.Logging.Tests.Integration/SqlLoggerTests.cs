@@ -181,6 +181,16 @@ namespace Chinchilla.Logging.Tests.Integration
 		public string SqlDatabaseTableName { get; set; }
 
 		/// <summary>
+		/// The key of the <see cref="P:System.Configuration.ConfigurationManager.AppSettings"/> item that holds the name of the connection string to use.
+		/// </summary>
+		public string LogsConnectionStringName { get; set; }
+
+		/// <summary>
+		/// The name of the table to use.
+		/// </summary>
+		public string LogsTableName { get; set; }
+
+		/// <summary>
 		/// If true, all log calls will be telemetered.
 		/// </summary>
 		public bool UseApplicationInsightTelemetryHelper { get; set; }

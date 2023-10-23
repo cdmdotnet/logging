@@ -60,16 +60,22 @@
             </summary>
         </member>
         <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Module">
-            <summary />
+            <summary>
+            A friendly identifier to help identify different applications if they use the same <see cref="T:Chinchilla.Logging.ILogger"/>.
+            </summary>
         </member>
         <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Instance">
-            <summary />
+            <summary>
+            A friendly identifier to help identify different instances of the same application, such as a development or production instance of the same application.
+            </summary>
         </member>
         <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.Environment">
             <summary />
         </member>
         <member name="P:Chinchilla.Logging.Azure.Storage.LogEntity.EnvironmentInstance">
-            <summary />
+            <summary>
+            A friendly identifier to help identify different environments of the same application, such as deployments to different geo-graphical locations of the same application.
+            </summary>
         </member>
         <member name="T:Chinchilla.Logging.Azure.Storage.TableStorageLogger`1">
             <summary>
