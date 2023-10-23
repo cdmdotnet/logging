@@ -122,11 +122,27 @@ namespace Chinchilla.Logging.Configuration
 		}
 
 		/// <summary>
-		/// The name of the table to use.
+		/// Reads the <see cref="ILoggerSettings.SqlDatabaseTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
 		/// </summary>
 		public string SqlDatabaseTableName
 		{
 			get { return LoggerSettingsConfigurationSection.Current.SqlDatabaseTableName; }
+		}
+
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.LogsConnectionStringName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		public string LogsConnectionStringName
+		{
+			get { return LoggerSettingsConfigurationSection.Current.LogsConnectionStringName; }
+		}
+
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.LogsTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		public string LogsTableName
+		{
+			get { return LoggerSettingsConfigurationSection.Current.LogsTableName; }
 		}
 
 		/// <summary>

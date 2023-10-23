@@ -17,25 +17,9 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
-			Version 4.4.0
+			Version 5.0
 
-			* Added support for Azure Log Analytics.
-
-			Version 4.2.0
-
-			* Better support for connection strings.
-
-			Version 4.1.0
-
-			* Switched to .NET Standard 2.0 support from .NET Core 3.0.
-
-			Version 4.0.0
-
-			* Added .NET Core 3.0 support.
-
-			Version 1.2.104
-
-			* Added support for IContainerLoggerSettings
+			- New settings to support table logging
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
 

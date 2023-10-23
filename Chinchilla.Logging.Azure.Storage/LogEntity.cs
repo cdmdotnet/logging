@@ -6,16 +6,17 @@
 // // -----------------------------------------------------------------------
 #endregion
 
+using Azure;
+using Azure.Data.Tables;
 using System;
 using System.Collections.Generic;
-using Microsoft.Azure.Cosmos.Table;
 
 namespace Chinchilla.Logging.Azure.Storage
 {
 	/// <summary>
 	/// Information about an event to be logged
 	/// </summary>
-	public class LogEntity : TableEntity
+	public class LogEntity : ITableEntity
 	{
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="LogEntity"/>.
@@ -30,8 +31,8 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// </summary>
 		public LogEntity(string level, string uniqueId)
 		{
-			PartitionKey = level;
-			RowKey = uniqueId;
+			((ITableEntity)this).PartitionKey = level;
+			((ITableEntity)this).RowKey = uniqueId;
 		}
 
 		/// <summary>
@@ -84,16 +85,30 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// </summary>
 		public Guid CorrolationId { get; set; }
 
-		/// <summary />
+		/// <summary>
+		/// A friendly identifier to help identify different applications if they use the same <see cref="ILogger"/>.
+		/// </summary>
 		public string Module { get; set; }
 
-		/// <summary />
+		/// <summary>
+		/// A friendly identifier to help identify different instances of the same application, such as a development or production instance of the same application.
+		/// </summary>
 		public string Instance { get; set; }
 
 		/// <summary />
 		public string Environment { get; set; }
 
-		/// <summary />
+		/// <summary>
+		/// A friendly identifier to help identify different environments of the same application, such as deployments to different geo-graphical locations of the same application.
+		/// </summary>
 		public string EnvironmentInstance { get; set; }
+
+		string ITableEntity.PartitionKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+		string ITableEntity.RowKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+		DateTimeOffset? ITableEntity.Timestamp { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+		ETag ITableEntity.ETag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 	}
 }

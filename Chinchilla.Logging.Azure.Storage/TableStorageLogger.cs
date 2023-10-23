@@ -9,8 +9,9 @@
 using System;
 using System.Configuration;
 using System.Diagnostics;
+using Azure.Core;
+using Azure.Data.Tables;
 using Chinchilla.Logging.Configuration;
-using Microsoft.Azure.Cosmos.Table;
 
 #if NETSTANDARD2_0
 #else
@@ -37,9 +38,9 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// <summary />
 		protected virtual string GetConnectionString(string container)
 		{
-			string appSettingValue = GetSetting(container, containerLoggerSettings => containerLoggerSettings.SqlDatabaseLogsConnectionStringName, LoggerSettings.SqlDatabaseLogsConnectionStringName);
+			string appSettingValue = GetSetting(container, containerLoggerSettings => containerLoggerSettings.LogsConnectionStringName, LoggerSettings.LogsConnectionStringName);
 			if (string.IsNullOrWhiteSpace(appSettingValue))
-				throw new ConfigurationErrorsException("No value for the setting 'SqlDatabaseLogsConnectionStringName' was provided");
+				throw new ConfigurationErrorsException("No value for the setting 'LogsConnectionStringName' was provided");
 			string connectionString = LoggerSettings.GetConnectionString(appSettingValue);
 			return connectionString;
 		}
@@ -60,10 +61,17 @@ namespace Chinchilla.Logging.Azure.Storage
 				string tableName = GetSetting(logInformation.Container, containerLoggerSettings => containerLoggerSettings.SqlDatabaseTableName, LoggerSettings.SqlDatabaseTableName);
 				string connectionString = GetConnectionString(logInformation.Container);
 
-				CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
-				CloudTableClient tblclient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
-				CloudTable table = tblclient.GetTableReference(tableName);
-				table.CreateIfNotExists();
+				var tableClientOptions = new TableClientOptions();
+				tableClientOptions.Retry.Mode = RetryMode.Exponential;
+				tableClientOptions.Retry.Delay = TimeSpan.FromSeconds(10);
+				tableClientOptions.Retry.MaxRetries = 6;
+				var storageAccount = new TableServiceClient(connectionString, tableClientOptions);
+
+				// Get a reference to the TableClient from the service client instance.
+				TableClient tableClient = storageAccount.GetTableClient(tableName);
+
+				// Create the table if it doesn't exist.
+				tableClient.CreateIfNotExists();
 
 				TEntity logEntity = ConvertLogInformation(logInformation);
 				logEntity.Module = LoggerSettings.ModuleName;
@@ -71,8 +79,7 @@ namespace Chinchilla.Logging.Azure.Storage
 				logEntity.Environment = LoggerSettings.Environment;
 				logEntity.EnvironmentInstance = LoggerSettings.EnvironmentInstance;
 
-				TableOperation insertOperation = TableOperation.Insert(logEntity);
-				table.Execute(insertOperation);
+				tableClient.AddEntity(logEntity);
 			}
 			catch (Exception exception)
 			{

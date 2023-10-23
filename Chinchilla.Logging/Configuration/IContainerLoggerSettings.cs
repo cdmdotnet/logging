@@ -68,6 +68,16 @@ namespace Chinchilla.Logging.Configuration
 		string SqlDatabaseTableName(string container);
 
 		/// <summary>
+		/// The key of the <see cref="ConfigurationManager.AppSettings"/> item that holds the name of the connection string to use.
+		/// </summary>
+		string LogsConnectionStringName(string container);
+
+		/// <summary>
+		/// The name of the table to use.
+		/// </summary>
+		string LogsTableName(string container);
+
+		/// <summary>
 		/// If true, all log calls will be telemetered.
 		/// </summary>
 		bool UseApplicationInsightTelemetryHelper(string container);

@@ -262,6 +262,38 @@ namespace Chinchilla.Logging.Configuration
 		}
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.LogsConnectionStringName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		[ConfigurationProperty("LogsConnectionStringName", DefaultValue = "Logs", IsRequired = true)]
+		public string LogsConnectionStringName
+		{
+			get
+			{
+				return (string)this["LogsConnectionStringName"];
+			}
+			set
+			{
+				this["LogsConnectionStringName"] = value;
+			}
+		}
+
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.LogsTableName"/> from the <see cref="ConfigurationSection"/> in your app.config or web.config file.
+		/// </summary>
+		[ConfigurationProperty("LogsTableName", DefaultValue = "Logs", IsRequired = true)]
+		public string LogsTableName
+		{
+			get
+			{
+				return (string)this["LogsTableName"];
+			}
+			set
+			{
+				this["LogsTableName"] = value;
+			}
+		}
+
+		/// <summary>
 		/// If true, all log calls will be telemetered.
 		/// </summary>
 		[ConfigurationProperty("UseApplicationInsightTelemetryHelper", DefaultValue = false, IsRequired = true)]

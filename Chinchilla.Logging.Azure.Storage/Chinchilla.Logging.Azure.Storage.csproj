@@ -11,9 +11,9 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
-			Version 4.2.0
+			Version 5.0
 
-			* First release matching version numbers.
+			- Updated Azure library to Azure.Data.Tables version 12
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
 
@@ -59,7 +59,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.0" />
-		<PackageReference Include="Microsoft.Azure.Storage.Common" Version="11.2.2" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.8.1" />
 	</ItemGroup>
 </Project>

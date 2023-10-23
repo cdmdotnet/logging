@@ -166,6 +166,22 @@ namespace Chinchilla.Logging.Azure.Configuration
 		}
 
 		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.LogsConnectionStringName"/> from the app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
+		/// </summary>
+		public string LogsConnectionStringName
+		{
+			get { return ((IContainerLoggerSettings)this).LogsConnectionStringName(null); }
+		}
+
+		/// <summary>
+		/// Reads the <see cref="ILoggerSettings.LogsTableName"/> from the app setting of the app.config, web.config or .Net Core equivalent file with Azure portal providing runtime overrides.
+		/// </summary>
+		public string LogsTableName
+		{
+			get { return ((IContainerLoggerSettings)this).LogsTableName(null); }
+		}
+
+		/// <summary>
 		/// If true, all log calls will be telemetered.
 		/// </summary>
 		public bool UseApplicationInsightTelemetryHelper
@@ -265,6 +281,22 @@ namespace Chinchilla.Logging.Azure.Configuration
 		string IContainerLoggerSettings.SqlDatabaseTableName(string container)
 		{
 			return GetStringValue("SqlDatabaseTableName", container, "Logs");
+		}
+
+		/// <summary>
+		/// The key of the app setting item that holds the name of the connection string to use.
+		/// </summary>
+		string IContainerLoggerSettings.LogsConnectionStringName(string container)
+		{
+			return GetStringValue("LogsConnectionStringName", container, "Logs");
+		}
+
+		/// <summary>
+		/// The name of the table to use.
+		/// </summary>
+		string IContainerLoggerSettings.LogsTableName(string container)
+		{
+			return GetStringValue("LogsTableName", container, "Logs");
 		}
 
 		/// <summary>

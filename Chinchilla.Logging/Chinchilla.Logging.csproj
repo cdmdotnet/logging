@@ -31,36 +31,9 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
-			Version 4.5
+			Version 5.0
 
-			* Added support for tracing via ITelemetryHelper.
-			* Upgraded base level support to .NET 6.0
-
-			Version 4.4.0
-
-			* Added support for logging to Azure Log Analytics via a separate package.
-
-			Version 4.2.0
-
-			* Added support for logging to the windows EventLog.
-			* Added support for logging to Azure Table Storage via a separate package.
-			* Better SQL support for SqlLogger in .Net Core.
-
-			Version 4.1.0
-
-			* Added additional Support for .NET Standard 2.0.
-
-			Version 4.0.0
-
-			* Added .NET Core 3.0 support.
-
-			Breaking Changes
-
-			* Removed Performance Trackers
-
-			Version 1.2.104
-
-			* Added support for IContainerLoggerSettings, an interface that allows container based settings at a very granular level.
+			- New settings to support table logging
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
 
