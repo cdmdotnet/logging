@@ -137,6 +137,35 @@ namespace Chinchilla.Logging
 		}
 
 		/// <summary>
+		/// Send information about a process flow in the application.
+		/// </summary>
+		/// <param name="name">Name of the process</param>
+		/// <param name="sequence">The value that defines absolute order of this step within large process flows.</param>
+		/// <param name="duration">The time taken by the application to handle the request.</param>
+		/// <param name="responseCode">The response status code.</param>
+		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		public void TrackProcessFlow(string name, TimeSpan duration, string responseCode, bool wasSuccessfull, string sequence = null, IDictionary<string, string> properties = null)
+		{
+		}
+
+		/// <summary>
+		/// Send information about a process flow in the application.
+		/// </summary>
+		/// <param name="name">Name of the process</param>
+		/// <param name="url"></param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="sequence">The value that defines absolute order of this step within large process flows.</param>
+		/// <param name="duration">The time taken by the application to handle the request.</param>
+		/// <param name="responseCode">The response status code.</param>
+		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID.</param>
+		public void TrackProcessFlow(string name, Uri url, string userId, TimeSpan duration, string responseCode, bool wasSuccessfull, string sequence = null, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+		}
+
+		/// <summary>
 		/// Flushes the in-memory buffer, if one exists
 		/// </summary>
 		public virtual void Flush()

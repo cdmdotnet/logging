@@ -28,6 +28,11 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// </summary>
 		public bool EnableThreadedOperations { get; set; }
 
+		/// <summary>
+		/// A function that will provide a cloud role name
+		/// </summary>
+		public Func<string> GetCloudRoleName { get; set; }
+
 		private ConcurrentQueue<Action> ActionQueue { get; set; }
 
 		/// <summary>
@@ -164,7 +169,10 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 
 			if (LoggerSettings != null)
 			{
-				TelemetryClient.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
 				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
@@ -191,7 +199,10 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 
 			if (LoggerSettings != null)
 			{
-				TelemetryClient.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
 				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
@@ -218,7 +229,10 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 
 			if (LoggerSettings != null)
 			{
-				TelemetryClient.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
 				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
@@ -267,12 +281,17 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 					dependencyTelemetry.Properties.Add(pair);
 			string correlationId = SetCorrelationId(dependencyTelemetry.Properties);
 
-			TelemetryClient.Context.Operation.Name = dependencyName;
 			dependencyTelemetry.Context.Operation.Id = correlationId;
-			dependencyTelemetry.Context.Operation.Name = dependencyName;
 			if (LoggerSettings != null)
 			{
-				dependencyTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				dependencyTelemetry.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+				{
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
+					dependencyTelemetry.Context.Cloud.RoleName = cloudRoleName;
+				}
 				dependencyTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
@@ -332,12 +351,17 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			if (!string.IsNullOrWhiteSpace(sessionId))
 				requestTelemetry.Context.Session.Id = sessionId;
 
-			TelemetryClient.Context.Operation.Name = name;
 			requestTelemetry.Context.Operation.Id = correlationId;
-			requestTelemetry.Context.Operation.Name = name;
 			if (LoggerSettings != null)
 			{
-				requestTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				requestTelemetry.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+				{
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
+					requestTelemetry.Context.Cloud.RoleName = cloudRoleName;
+				}
 				requestTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
@@ -416,7 +440,10 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			traceTelemetry.Context.Operation.Id = correlationId;
 			if (LoggerSettings != null)
 			{
-				traceTelemetry.Context.Cloud.RoleName = LoggerSettings.ModuleName;
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
 				traceTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
@@ -428,6 +455,82 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 				});
 			else
 				TelemetryClient.TrackTrace(traceTelemetry);
+		}
+
+		/// <summary>
+		/// Send information about a process flow in the application.
+		/// </summary>
+		/// <param name="name">Name of the process</param>
+		/// <param name="sequence">The value that defines absolute order of this step within large process flows.</param>
+		/// <param name="duration">The time taken by the application to handle the request.</param>
+		/// <param name="responseCode">The response status code.</param>
+		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		public void TrackProcessFlow(string name, TimeSpan duration, string responseCode, bool wasSuccessfull, string sequence = null, IDictionary<string, string> properties = null)
+		{
+			TrackProcessFlow(name, new Uri(string.Format("//{0}", name)), null, duration, responseCode, wasSuccessfull, sequence, properties);
+		}
+
+		/// <summary>
+		/// Send information about a process flow in the application.
+		/// </summary>
+		/// <param name="name">Name of the process</param>
+		/// <param name="url"></param>
+		/// <param name="userId">The ID of user accessing the application.</param>
+		/// <param name="sequence">The value that defines absolute order of this step within large process flows.</param>
+		/// <param name="duration">The time taken by the application to handle the request.</param>
+		/// <param name="responseCode">The response status code.</param>
+		/// <param name="wasSuccessfull">True if the request was handled successfully by the application.</param>
+		/// <param name="properties">Named string values you can use to search and classify events.</param>
+		/// <param name="sessionId">The application-defined session ID.</param>
+		public void TrackProcessFlow(string name, Uri url, string userId, TimeSpan duration, string responseCode, bool wasSuccessfull, string sequence = null, IDictionary<string, string> properties = null, string sessionId = null)
+		{
+			var pageViewTelemetry = new PageViewTelemetry(name)
+			{
+				Url = url,
+				Duration = duration,
+				Sequence = sequence
+			};
+
+			pageViewTelemetry.Properties.Add("responseCode", responseCode);
+			pageViewTelemetry.Properties.Add("wasSuccessfull", wasSuccessfull.ToString());
+
+			if (properties != null)
+				foreach (KeyValuePair<string, string> pair in properties)
+					pageViewTelemetry.Properties.Add(pair);
+			string correlationId = SetCorrelationId(pageViewTelemetry.Properties);
+
+			if (!string.IsNullOrWhiteSpace(userId))
+			{
+				pageViewTelemetry.Context.User.Id = userId;
+				pageViewTelemetry.Context.User.AuthenticatedUserId = userId;
+			}
+			if (!string.IsNullOrWhiteSpace(sessionId))
+				pageViewTelemetry.Context.Session.Id = sessionId;
+
+			pageViewTelemetry.Context.Operation.Id = correlationId;
+			if (LoggerSettings != null)
+			{
+				TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+				pageViewTelemetry.Context.Operation.Name = LoggerSettings.ModuleName;
+				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
+				if (!string.IsNullOrWhiteSpace(cloudRoleName))
+				{
+					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
+					pageViewTelemetry.Context.Cloud.RoleName = cloudRoleName;
+				}
+				pageViewTelemetry.Context.Cloud.RoleInstance = LoggerSettings.Instance;
+			}
+
+			if (EnableThreadedOperations)
+				ActionQueue.Enqueue(() =>
+				{
+					TelemetryClient.Context.Operation.Id = correlationId;
+					TelemetryClient.Context.Operation.Name = LoggerSettings.ModuleName;
+					ActionQueue.Enqueue(() => TelemetryClient.TrackPageView(pageViewTelemetry));
+				});
+			else
+				TelemetryClient.TrackPageView(pageViewTelemetry);
 		}
 
 		/// <summary>

@@ -31,6 +31,10 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 5.1
+
+			- Added support for process flow tracking via ITelemetryHelper.
+
 			Version 5.0
 
 			- New settings to support table logging
