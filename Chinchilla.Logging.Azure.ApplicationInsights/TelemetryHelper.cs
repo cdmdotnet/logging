@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Chinchilla.Logging.Configuration;
+using Chinchilla.StateManagement;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -45,6 +46,11 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// </summary>
 		protected ILoggerSettings LoggerSettings { get; private set; }
 
+		/// <summary>
+		/// Generalised Logger settings.
+		/// </summary>
+		protected IContextItemCollection ContextStore { get; private set; }
+
 #if NET6_0 || NETSTANDARD2_0
 		/// <summary>
 		/// The delegate used internally to get the current <see cref="TelemetryConfiguration"/>.
@@ -56,7 +62,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
-		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
+		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings = null, IContextItemCollectionFactory contextItemCollectionFactory = null, bool enableThreadedOperations = false)
 		{
 			if (telemetryClient == null)
 			{
@@ -100,53 +106,16 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 					}
 				);
 			}
+
+			if (contextItemCollectionFactory != null)
+				ContextStore = contextItemCollectionFactory.GetCurrentContext();
 		}
 
 		/// <summary>
 		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
 		/// </summary>
-		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings)
-			: this(telemetryClient, correlationIdHelper, loggerSettings, false)
-		{
-		}
-
-		/// <summary>
-		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
-		/// </summary>
-		public TelemetryHelper(TelemetryClient telemetryClient, ICorrelationIdHelper correlationIdHelper)
-			: this(telemetryClient, correlationIdHelper, null, false)
-		{
-		}
-
-		/// <summary>
-		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
-		/// </summary>
-		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper)
-			: this(correlationIdHelper, false)
-		{
-		}
-
-		/// <summary>
-		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
-		/// </summary>
-		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, bool enableThreadedOperations)
-			: this(null, correlationIdHelper, null, enableThreadedOperations)
-		{
-		}
-
-		/// <summary>
-		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
-		/// </summary>
-		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings)
-			: this(correlationIdHelper, loggerSettings, false)
-		{
-		}
-
-		/// <summary>
-		/// Instantiate a new instance of <see cref="TelemetryHelper"/>
-		/// </summary>
-		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings, bool enableThreadedOperations)
-			: this(null, correlationIdHelper, loggerSettings, enableThreadedOperations)
+		public TelemetryHelper(ICorrelationIdHelper correlationIdHelper, ILoggerSettings loggerSettings = null, IContextItemCollectionFactory contextItemCollectionFactory = null, bool enableThreadedOperations = false)
+			: this(null, correlationIdHelper, loggerSettings, contextItemCollectionFactory, enableThreadedOperations)
 		{
 		}
 
@@ -159,6 +128,27 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// Obtains the CorrelationId to stamp each telemetry operation with
 		/// </summary>
 		protected ICorrelationIdHelper CorrelationIdHelper { get; private set; }
+
+		/// <summary>
+		/// Calculates the current value of the operation name
+		/// </summary>
+		protected virtual string CalculateOperationName()
+		{
+			string operationName = null;
+			if (ContextStore != null)
+				operationName = ContextStore.GetData<string>("Cqrs.Azure.FunctionName");
+
+			if (!string.IsNullOrWhiteSpace(operationName))
+				return operationName;
+
+			if (GetOperationName != null)
+				operationName = GetOperationName();
+
+			if (!string.IsNullOrWhiteSpace(operationName))
+				return operationName;
+
+			return LoggerSettings?.ModuleName;
+		}
 
 		#region Implementation of ITelemetryHelper
 
@@ -174,7 +164,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
@@ -205,7 +195,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
@@ -236,7 +226,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
@@ -292,7 +282,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			dependencyTelemetry.Context.Operation.Id = correlationId;
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				dependencyTelemetry.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
@@ -305,13 +295,15 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			}
 
 			if (EnableThreadedOperations)
+			{
+				string operationName = CalculateOperationName();
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
-					string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
 					TelemetryClient.Context.Operation.Name = operationName;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyTelemetry));
 				});
+			}
 			else
 				TelemetryClient.TrackDependency(dependencyTelemetry);
 		}
@@ -364,7 +356,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			requestTelemetry.Context.Operation.Id = correlationId;
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				requestTelemetry.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
@@ -377,13 +369,15 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			}
 
 			if (EnableThreadedOperations)
+			{
+				string operationName = CalculateOperationName();
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
-					string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
 					TelemetryClient.Context.Operation.Name = operationName;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackRequest(requestTelemetry));
 				});
+			}
 			else
 				TelemetryClient.TrackRequest(requestTelemetry);
 		}
@@ -452,7 +446,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			traceTelemetry.Context.Operation.Id = correlationId;
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
@@ -533,7 +527,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			pageViewTelemetry.Context.Operation.Id = correlationId;
 			if (LoggerSettings != null)
 			{
-				string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
+				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				pageViewTelemetry.Context.Operation.Name = operationName;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
@@ -546,13 +540,15 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			}
 
 			if (EnableThreadedOperations)
+			{
+				string operationName = CalculateOperationName();
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
-					string operationName = GetOperationName == null ? LoggerSettings.ModuleName : GetOperationName();
 					TelemetryClient.Context.Operation.Name = operationName;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackPageView(pageViewTelemetry));
 				});
+			}
 			else
 				TelemetryClient.TrackPageView(pageViewTelemetry);
 		}
