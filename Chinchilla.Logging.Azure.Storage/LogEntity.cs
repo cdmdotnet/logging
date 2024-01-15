@@ -50,10 +50,23 @@ namespace Chinchilla.Logging.Azure.Storage
 			CorrolationId = logInformation.CorrolationId;
 		}
 
+		private DateTime raised { get; set; }
+
 		/// <summary>
 		/// The <see cref="DateTime"/> the event was raised.
 		/// </summary>
-		public DateTime Raised { get; set; }
+		public DateTime Raised
+		{
+			get
+			{
+				return raised;
+			}
+			set
+			{
+				raised = value;
+				((ITableEntity)this).Timestamp = value.ToUniversalTime();
+			}
+		}
 
 		/// <summary>
 		/// The level of the event, such as 'error', 'info' or 'debug'
@@ -103,12 +116,12 @@ namespace Chinchilla.Logging.Azure.Storage
 		/// </summary>
 		public string EnvironmentInstance { get; set; }
 
-		string ITableEntity.PartitionKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		string ITableEntity.PartitionKey { get; set; }
 
-		string ITableEntity.RowKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		string ITableEntity.RowKey { get; set; }
 
-		DateTimeOffset? ITableEntity.Timestamp { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		DateTimeOffset? ITableEntity.Timestamp { get; set; }
 
-		ETag ITableEntity.ETag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		ETag ITableEntity.ETag { get; set; }
 	}
 }
