@@ -25,6 +25,7 @@
 		}
 	},
 	"ConnectionStrings": {
-		"SqlDatabaseLogs": "Initial Catalog=Logs;Data Source=localhost\\MSSQLSERVER2014;Trusted_Connection=True;"
+		"SqlDatabaseLogs": "Initial Catalog=Logs;Data Source=localhost\\MSSQLSERVER2014;Trusted_Connection=True;",
+		"ApplicationInsights": "InstrumentationKey=;IngestionEndpoint=https://.in.applicationinsights.azure.com/;LiveEndpoint=https://.livediagnostics.monitor.azure.com/"
 	}
 }
