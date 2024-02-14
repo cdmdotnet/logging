@@ -31,6 +31,12 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 5.2
+
+			- Upgraded Microsoft.Data.SqlClient to version 5.1.4.
+			- Upgraded System.Configuration.ConfigurationManager to version 6.0.1.
+			- Added a message to exception tracking so they appear better in Azure Function monitoring when unioned with traces in Out-Of-The-Box monitoring charts etc.
+
 			Version 5.1
 
 			- Added support for process flow tracking via ITelemetryHelper.
@@ -126,8 +132,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net6.0' ">
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="1.0.19239.1" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
 		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.1.1" />
 	</ItemGroup>
 

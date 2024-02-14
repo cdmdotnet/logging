@@ -12,6 +12,10 @@
 		<PackageReference Include="coverlet.collector" Version="1.2.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />

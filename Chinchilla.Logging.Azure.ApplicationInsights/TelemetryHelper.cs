@@ -234,14 +234,25 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 				TelemetryClient.Context.Cloud.RoleInstance = LoggerSettings.Instance;
 			}
 
+			var exceptionTelemetry = new ExceptionTelemetry(exception)
+			{
+				Message = exception.Message
+			};
+			if (metrics != null)
+				foreach (KeyValuePair<string, double> metric in metrics)
+					exceptionTelemetry.Metrics.Add(metric);
+			if (telemetryProperties != null)
+				foreach (KeyValuePair<string, string> telemetryProperty in telemetryProperties)
+					exceptionTelemetry.Properties.Add(telemetryProperty);
+
 			if (EnableThreadedOperations)
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
-					ActionQueue.Enqueue(() => TelemetryClient.TrackException(exception, telemetryProperties, metrics));
+					ActionQueue.Enqueue(() => TelemetryClient.TrackException(exceptionTelemetry));
 				});
 			else
-				TelemetryClient.TrackException(exception, telemetryProperties, metrics);
+				TelemetryClient.TrackException(exceptionTelemetry);
 		}
 
 		/// <summary>
