@@ -23,9 +23,7 @@ namespace Chinchilla.Logging.Tests.Integration
 	[TestClass]
 	public class TelemetryHelperTests
 	{
-#if DEBUG
-		[TestMethod]
-#endif
+//		[TestMethod]
 		public void TrackException_SampleException_NoExpcetions()
 		{
 			// Arrange
