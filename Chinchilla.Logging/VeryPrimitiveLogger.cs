@@ -49,8 +49,14 @@ namespace Chinchilla.Logging
 			}
 			ExclusionNamespaces = new ConcurrentDictionary<string, string>();
 			AddExclusionNamespace("Chinchilla.Logging");
-			AddExclusionNamespace("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
+			AddExclusionNamespace("System.Runtime.CompilerServices.Async");
+			AddExclusionNamespace("System.Threading.ExecutionContext");
 			InprogressThreads = new ConcurrentDictionary<Guid, string>();
+			TaskRelatedMethodNames = new List<string>
+			{
+				"MoveNext",
+				"Start"
+			};
 		}
 
 #if NETSTANDARD2_0
@@ -81,6 +87,8 @@ namespace Chinchilla.Logging
 		/// A list of namespaces to exclude when trying to automatically determine the container. The key and the value MUST match each other.
 		/// </summary>
 		protected IDictionary<string, string> ExclusionNamespaces { get; private set; }
+
+		private IList<string> TaskRelatedMethodNames { get; }
 
 		/// <summary>
 		/// Adds the provided <paramref name="namespaces"/> to <see cref="ExclusionNamespaces"/>.
@@ -166,7 +174,7 @@ namespace Chinchilla.Logging
 									continue;
 								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace.Key)))
 								{
-									if (!(method.DeclaringType.IsSealed && method.DeclaringType.IsNestedPrivate && method.DeclaringType.IsAutoLayout))
+									if (!(method.DeclaringType.IsSealed && method.DeclaringType.IsNestedPrivate && method.DeclaringType.IsAutoLayout && TaskRelatedMethodNames.Contains(method.Name)))
 									{
 										container = $"{method.ReflectedType.FullName}.{method.Name}";
 										found = true;

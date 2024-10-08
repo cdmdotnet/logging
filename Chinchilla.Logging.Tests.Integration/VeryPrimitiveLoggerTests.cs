@@ -45,6 +45,48 @@ namespace Chinchilla.Logging.Tests.Integration
 			// Assert
 			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger.BuildContainerNameAsync", containerName);
 		}
+
+		[TestMethod]
+		public async Task UseOrBuildContainerName_NoContainerNameAndDoubleAsyncCalls_AsyncSafeContainerName()
+		{
+			// Arrange
+			var logger = new MockVeryPrimitiveLogger(new AzureLoggerSettingsConfiguration(
+#if NET472
+#else
+				new ConfigurationBuilder()
+					.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+				.AddEnvironmentVariables()
+				.Build()
+#endif
+				), new NullCorrelationIdHelper(), new NullTelemetryHelper());
+
+			// Act
+			string containerName = await logger.BuildContainerNameAsync2();
+
+			// Assert
+			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger.BuildContainerNameAsync", containerName);
+		}
+
+		[TestMethod]
+		public void UseOrBuildContainerName_NoContainerNameAndSyncAsyncCall_AsyncSafeContainerName()
+		{
+			// Arrange
+			var logger = new MockVeryPrimitiveLogger(new AzureLoggerSettingsConfiguration(
+#if NET472
+#else
+				new ConfigurationBuilder()
+					.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+				.AddEnvironmentVariables()
+				.Build()
+#endif
+				), new NullCorrelationIdHelper(), new NullTelemetryHelper());
+
+			// Act
+			string containerName = logger.BuildContainerName();
+
+			// Assert
+			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger.BuildContainerNameAsync", containerName);
+		}
 	}
 }
 
@@ -98,9 +140,28 @@ namespace Test.Chinchilla.Logging
 			return base.UseOrBuildContainerName(container);
 		}
 
+		public string BuildContainerName()
+		{
+			string containerName = null;
+
+			Task containerNameTask = Task.Run(async () => {
+				containerName = await BuildContainerNameAsync();
+			});
+			containerNameTask.Wait();
+
+			return containerName;
+		}
+
 		public async Task<string> BuildContainerNameAsync()
 		{
 			string containerName = UseOrBuildContainerName(null);
+
+			return await Task.FromResult(containerName);
+		}
+
+		public async Task<string> BuildContainerNameAsync2()
+		{
+			string containerName = await BuildContainerNameAsync();
 
 			return await Task.FromResult(containerName);
 		}
