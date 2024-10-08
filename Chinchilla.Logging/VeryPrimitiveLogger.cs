@@ -49,6 +49,7 @@ namespace Chinchilla.Logging
 			}
 			ExclusionNamespaces = new ConcurrentDictionary<string, string>();
 			AddExclusionNamespace("Chinchilla.Logging");
+			AddExclusionNamespace("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
 			InprogressThreads = new ConcurrentDictionary<Guid, string>();
 		}
 
@@ -165,8 +166,11 @@ namespace Chinchilla.Logging
 									continue;
 								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace.Key)))
 								{
-									container = $"{method.ReflectedType.FullName}.{method.Name}";
-									found = true;
+									if (!(method.DeclaringType.IsSealed && method.DeclaringType.IsNestedPrivate && method.DeclaringType.IsAutoLayout))
+									{
+										container = $"{method.ReflectedType.FullName}.{method.Name}";
+										found = true;
+									}
 								}
 								if (found)
 									break;
