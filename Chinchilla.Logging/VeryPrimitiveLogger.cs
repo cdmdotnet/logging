@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Chinchilla.Logging.Configuration;
@@ -50,13 +51,17 @@ namespace Chinchilla.Logging
 			ExclusionNamespaces = new ConcurrentDictionary<string, string>();
 			AddExclusionNamespace("Chinchilla.Logging");
 			AddExclusionNamespace("System.Runtime.CompilerServices.Async");
+			AddExclusionNamespace("System.Runtime.CompilerServices.TaskAwaiter");
 			AddExclusionNamespace("System.Threading.ExecutionContext");
+			AddExclusionNamespace("System.Threading.Tasks.AwaitTaskContinuation");
+			AddExclusionNamespace("System.Threading.Tasks.Task");
 			InprogressThreads = new ConcurrentDictionary<Guid, string>();
 			TaskRelatedMethodNames = new List<string>
 			{
 				"MoveNext",
 				"Start"
 			};
+			ContainerNameMatcher = new Regex("^(.)+?>", RegexOptions.IgnoreCase);
 		}
 
 #if NETSTANDARD2_0
@@ -89,6 +94,8 @@ namespace Chinchilla.Logging
 		protected IDictionary<string, string> ExclusionNamespaces { get; private set; }
 
 		private IList<string> TaskRelatedMethodNames { get; }
+
+		private Regex ContainerNameMatcher { get; }
 
 		/// <summary>
 		/// Adds the provided <paramref name="namespaces"/> to <see cref="ExclusionNamespaces"/>.
@@ -174,7 +181,13 @@ namespace Chinchilla.Logging
 									continue;
 								if (ExclusionNamespaces.All(@namespace => !method.ReflectedType.FullName.StartsWith(@namespace.Key)))
 								{
-									if (!(method.DeclaringType.IsSealed && method.DeclaringType.IsNestedPrivate && method.DeclaringType.IsAutoLayout && TaskRelatedMethodNames.Contains(method.Name)))
+									Match match;
+									if (method.DeclaringType.IsSealed && method.DeclaringType.IsNestedPrivate && method.DeclaringType.IsAutoLayout && TaskRelatedMethodNames.Contains(method.Name) && (match = ContainerNameMatcher.Match(method.ReflectedType.FullName)).Success)
+									{
+										container = match.Value.Substring(0, match.Value.Length - 1).Replace("+<", ".");
+										found = true;
+									}
+									else
 									{
 										container = $"{method.ReflectedType.FullName}.{method.Name}";
 										found = true;
