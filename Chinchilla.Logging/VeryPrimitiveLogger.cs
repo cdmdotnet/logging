@@ -184,12 +184,12 @@ namespace Chinchilla.Logging
 									Match match;
 									if (method.DeclaringType.IsSealed && method.DeclaringType.IsNestedPrivate && method.DeclaringType.IsAutoLayout && TaskRelatedMethodNames.Contains(method.Name) && (match = ContainerNameMatcher.Match(method.ReflectedType.FullName)).Success)
 									{
-										container = match.Value.Substring(0, match.Value.Length - 1).Replace("+<", ".");
+										container = match.Value.Substring(0, match.Value.Length - 1).Replace("+<", "\\");
 										found = true;
 									}
 									else
 									{
-										container = $"{method.ReflectedType.FullName}.{method.Name}";
+										container = $"{method.ReflectedType.FullName}\\{method.Name}";
 										found = true;
 									}
 								}

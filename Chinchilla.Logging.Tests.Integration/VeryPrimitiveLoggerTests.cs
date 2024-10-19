@@ -43,7 +43,7 @@ namespace Chinchilla.Logging.Tests.Integration
 			string containerName = await logger.BuildContainerNameAsync();
 
 			// Assert
-			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger.BuildContainerNameAsync", containerName);
+			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger\\BuildContainerNameAsync", containerName);
 		}
 
 		[TestMethod]
@@ -64,7 +64,7 @@ namespace Chinchilla.Logging.Tests.Integration
 			string containerName = await logger.BuildContainerNameAsync2();
 
 			// Assert
-			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger.BuildContainerNameAsync", containerName);
+			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger\\BuildContainerNameAsync", containerName);
 		}
 
 		[TestMethod]
@@ -82,10 +82,31 @@ namespace Chinchilla.Logging.Tests.Integration
 				), new NullCorrelationIdHelper(), new NullTelemetryHelper());
 
 			// Act
+			string containerName = logger.BuildContainerNameAsyncInAsync();
+
+			// Assert
+			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger\\BuildContainerNameAsync", containerName);
+		}
+
+		[TestMethod]
+		public void UseOrBuildContainerName_NoContainerNameAndSyncCall_SyncSafeContainerName()
+		{
+			// Arrange
+			var logger = new MockVeryPrimitiveLogger(new AzureLoggerSettingsConfiguration(
+#if NET472
+#else
+				new ConfigurationBuilder()
+					.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+				.AddEnvironmentVariables()
+				.Build()
+#endif
+				), new NullCorrelationIdHelper(), new NullTelemetryHelper());
+
+			// Act
 			string containerName = logger.BuildContainerName();
 
 			// Assert
-			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger.BuildContainerNameAsync", containerName);
+			Assert.AreEqual("Test.Chinchilla.Logging.MockVeryPrimitiveLogger\\BuildContainerName", containerName);
 		}
 	}
 }
@@ -140,7 +161,7 @@ namespace Test.Chinchilla.Logging
 			return base.UseOrBuildContainerName(container);
 		}
 
-		public string BuildContainerName()
+		public string BuildContainerNameAsyncInAsync()
 		{
 			string containerName = null;
 
@@ -148,6 +169,15 @@ namespace Test.Chinchilla.Logging
 				containerName = await BuildContainerNameAsync();
 			});
 			containerNameTask.Wait();
+
+			return containerName;
+		}
+
+		public string BuildContainerName()
+		{
+			string containerName = null;
+
+			containerName = UseOrBuildContainerName(containerName);
 
 			return containerName;
 		}
