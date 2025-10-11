@@ -6,11 +6,15 @@
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
 		<Description>Azure storage for using Simple Logging For .NET and .NET Core on the Azure platform.</Description>
-		<Copyright>Copyright © 2023</Copyright>
+		<Copyright>Copyright © 2025</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 6.0
+
+			- Updated dependencies to latest versions.
+
 			Version 5.0
 
 			- Updated Azure library to Azure.Data.Tables version 12
@@ -24,7 +28,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -61,6 +65,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Data.Tables" Version="12.8.1" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.11.0" />
 	</ItemGroup>
 </Project>

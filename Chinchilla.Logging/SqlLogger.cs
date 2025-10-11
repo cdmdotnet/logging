@@ -7,7 +7,7 @@
 #endregion
 
 using System.Data;
-#if NET40
+#if NET40_OR_GREATER
 using System.Data.SqlClient;
 #else
 using Microsoft.Data.SqlClient;

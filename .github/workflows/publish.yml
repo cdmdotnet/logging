@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [windows-latest]
         dotnet-version: [ '7.0.x' ]
     steps:
     - uses: actions/checkout@v1

@@ -1,5 +1,11 @@
-﻿#if NET40
-#else
+﻿#region Copyright
+// // -----------------------------------------------------------------------
+// // <copyright company="Chinchilla Software Limited">
+// // 	Copyright Chinchilla Software Limited. All rights reserved.
+// // </copyright>
+// // -----------------------------------------------------------------------
+#endregion
+
 using Chinchilla.Logging.Configuration;
 
 namespace Chinchilla.Logging.Azure.Configuration
@@ -47,4 +53,3 @@ namespace Chinchilla.Logging.Azure.Configuration
 		string GetLogType(string container);
 	}
 }
-#endif

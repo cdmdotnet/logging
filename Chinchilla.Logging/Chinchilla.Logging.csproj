@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net40;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net472;net8.0</TargetFrameworks>
 		<title>Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -26,15 +26,21 @@
 
 			This package installs Chinchilla.Logging.dll which includes core logging functionality. Other packages depend on Chinchilla.Logging for specific implementations.
 		</Description>
-		<Copyright>Copyright © 2023</Copyright>
+		<Copyright>Copyright © 2025</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 6.0
+
+			- Retired .NET Framework 4.0 and 4.5.2 support. Minimum supported version is 4.7.2
+			- Retired .NET 6.0 support. Minimum supported version is 8.0
+			- Updated dependencies to latest versions.
+
 			Version 5.3
 
 			- Upgraded Microsoft.Data.SqlClient to version 5.2.2.
-			
+
 			Version 5.2
 
 			- Upgraded Microsoft.Data.SqlClient to version 5.1.4.
@@ -58,7 +64,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -122,7 +128,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net40;netstandard2.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>net472;netstandard2.0;net8.0</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
@@ -137,21 +143,21 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net6.0' ">
-		<PackageReference Include="Azure.Identity" Version="1.13.1" />
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net8.0' ">
+		<PackageReference Include="Azure.Identity" Version="1.17.0" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.1.1" />
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="9.0.9" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.9" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
 		<Reference Include="System.Configuration" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Chinchilla.StateManagement" Version="4.2.11" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="App.config">

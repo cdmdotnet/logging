@@ -52,7 +52,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		/// </summary>
 		protected IContextItemCollection ContextStore { get; private set; }
 
-#if NET6_0 || NETSTANDARD2_0
+#if NET6_0_OR_GREATER || NETSTANDARD2_0_OR_GREATER
 		/// <summary>
 		/// The delegate used internally to get the current <see cref="TelemetryConfiguration"/>.
 		/// <see cref="TelemetryConfiguration.CreateDefault"/> will be used if this is not set.
@@ -67,7 +67,7 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 		{
 			if (telemetryClient == null)
 			{
-#if NET452
+#if NET452_OR_GREATER
 				TelemetryClient = new TelemetryClient();
 #else
 				TelemetryConfiguration config = GetTelemetryConfigurationDelegate == null

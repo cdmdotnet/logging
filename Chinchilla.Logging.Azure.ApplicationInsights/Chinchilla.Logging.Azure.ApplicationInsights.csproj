@@ -1,18 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net452;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net472;net8.0</TargetFrameworks>
 		<title>Telemetry via Azure application insights for Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
 		<Description>Telemetry via Azure application insights for Simple Logging .NET and .NET Core.</Description>
-		<Copyright>Copyright © 2023</Copyright>
+		<Copyright>Copyright © 2025</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
-			Version 5.3
+			Version 6.0
 
+			- Retired .NET Framework 4.0 and 4.5.2 support. Minimum supported version is 4.7.2
+			- Retired .NET 6.0 support. Minimum supported version is 8.0
+			- Updated dependencies to latest versions.
 			- Added support for process flow tracking within Azure Functions via ITelemetryHelper using the operationId.
 
 			Version 5.1
@@ -29,12 +32,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>netstandard2.0;net452;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net472;net8.0</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.Azure.ApplicationInsights.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
@@ -70,7 +73,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.ApplicationInsights.TraceListener" Version="2.21.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.TraceListener" Version="2.23.0" />
 	</ItemGroup>
 
 </Project>

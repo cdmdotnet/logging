@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net40;net452</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
 		<title>Azure settings for Simple Logging For .NET and .NET Core</title>
 		<Authors>Chinchilla Software</Authors>
 		<Company>Chinchilla Software</Company>
@@ -12,11 +12,16 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 
 
 </Description>
-		<Copyright>Copyright © 2023</Copyright>
+		<Copyright>Copyright © 2025</Copyright>
 		<PackageLicenseFile></PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 6.0
+
+			- Retired .NET Framework 4.0 and 4.5.2 support. Minimum supported version is 4.7.2
+			- Updated dependencies to latest versions.
+
 			Version 5.0
 
 			- New settings to support table logging
@@ -30,12 +35,12 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>netstandard2.0;net40;net452</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
 		<DocumentationFile>Chinchilla.Logging.Azure.xml</DocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<ApplicationIcon />
@@ -77,15 +82,11 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.9" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-		<Reference Include="System.Configuration" />
-		<PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
-	</ItemGroup>
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 		<PackageReference Include="Microsoft.Azure.ConfigurationManager" Version="4.0.0" />
 		<Reference Include="System.Configuration" />

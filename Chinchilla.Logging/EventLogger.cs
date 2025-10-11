@@ -6,18 +6,23 @@
 // // -----------------------------------------------------------------------
 #endregion
 
+#if NET5_0_OR_GREATER
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chinchilla.Logging.Configuration;
 using Newtonsoft.Json;
+#if NET5_0_OR_GREATER
+using System.Runtime.Versioning;
+#endif
 
 namespace Chinchilla.Logging
 {
 	/// <summary>
 	/// Provides a set of methods that help you log events relating to the execution of your code outputting to the Windows EventLog
 	/// </summary>
+	[SupportedOSPlatform("windows")]
 	public class EventLogger : PrimitiveLogger
 	{
 		static object OutputLock { get; set; }
@@ -178,3 +183,4 @@ namespace Chinchilla.Logging
 		}
 	}
 }
+#endif

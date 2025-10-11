@@ -133,7 +133,7 @@ namespace Chinchilla.Logging
 				// Currently this doesn't need StartNewSafely as all thread based data is already collected and this would just slow things down.
 				Task.Factory.StartNewSafely(() =>
 				{
-#if NET40
+#if NET40_OR_GREATER
 					using (tokenSource.Token.Register(Thread.CurrentThread.Abort))
 #endif
 					{
