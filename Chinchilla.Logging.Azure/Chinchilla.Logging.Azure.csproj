@@ -22,6 +22,7 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 			- New settings to support table logging
 		</PackageReleaseNotes>
 		<PackageIcon>images\icon.png</PackageIcon>
+		<readme>README.md</readme>
 
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<IncludeSymbols>true</IncludeSymbols>
@@ -58,6 +59,7 @@ See https://github.com/cdmdotnet/logging/wiki/Quick-Azure-How-To for usage detai
 			<Pack>True</Pack>
 			<PackagePath>images\</PackagePath>
 		</None>
+		<None Include="..\README.md" Link="Packaging\README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 	<ItemGroup>
