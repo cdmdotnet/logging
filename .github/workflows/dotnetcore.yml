@@ -47,20 +47,20 @@ jobs:
     - name: Test with dotnet (.NET 4.7.2)
       run: dotnet test -f net472 --logger trx --collect "Code Coverage" --results-directory "TestResults-net472-${{ matrix.dotnet-version }}" Chinchilla.Logging.Tests.Integration\Chinchilla.Logging.Tests.Integration.csproj
     - name: Upload dotnet test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dotnet-net472-results-${{ matrix.dotnet-version }}
         path: TestResults-net472-${{ matrix.dotnet-version }}
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
 
-    - name: Test with dotnet (.NET Core 6.0)
-      run: dotnet test -f net6.0 --logger trx --collect "Code Coverage" --results-directory "TestResults-net60-${{ matrix.dotnet-version }}" Chinchilla.Logging.Tests.Integration\Chinchilla.Logging.Tests.Integration.csproj
+    - name: Test with dotnet (.NET Core 8.0)
+      run: dotnet test -f net8.0 --logger trx --collect "Code Coverage" --results-directory "TestResults-net80-${{ matrix.dotnet-version }}" Chinchilla.Logging.Tests.Integration\Chinchilla.Logging.Tests.Integration.csproj
     - name: Upload dotnet test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: dotnet-net60-results-${{ matrix.dotnet-version }}
-        path: TestResults-net60-${{ matrix.dotnet-version }}
+        name: dotnet-net80-results-${{ matrix.dotnet-version }}
+        path: TestResults-net80-${{ matrix.dotnet-version }}
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
 
