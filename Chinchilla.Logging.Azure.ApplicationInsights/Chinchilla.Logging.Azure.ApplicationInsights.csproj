@@ -11,6 +11,10 @@
 		<PackageProjectUrl>https://github.com/cdmdotnet/logging/wiki/Quick-How-To</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/cdmdotnet/logging</RepositoryUrl>
 		<PackageReleaseNotes>
+			Version 5.3
+
+			- Added support for process flow tracking within Azure Functions via ITelemetryHelper using the operationId.
+
 			Version 5.1
 
 			- Added support for process flow tracking via ITelemetryHelper using PageViews internally.

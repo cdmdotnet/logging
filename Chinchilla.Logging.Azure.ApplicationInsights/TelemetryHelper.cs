@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Chinchilla.Logging.Configuration;
@@ -150,6 +151,21 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			return LoggerSettings?.ModuleName;
 		}
 
+		/// <summary>
+		/// Get's the current OperationId from the current <see cref="Activity"/>.
+		/// </summary>
+		/// <returns></returns>
+		public virtual string GetOperationId()
+		{
+			var activity = Activity.Current;
+			if (activity != null)
+			{
+				string operationId = activity.RootId; // This is the operation_Id used by Application Insights
+				return operationId;
+			}
+			return null;
+		}
+
 		#region Implementation of ITelemetryHelper
 
 		/// <summary>
@@ -166,6 +182,9 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			{
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+					TelemetryClient.Context.Operation.Id = activityId;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
@@ -197,6 +216,9 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			{
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+					TelemetryClient.Context.Operation.Id = activityId;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
@@ -228,6 +250,9 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			{
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+					TelemetryClient.Context.Operation.Id = activityId;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
@@ -296,6 +321,12 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				dependencyTelemetry.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+				{
+					TelemetryClient.Context.Operation.Id = activityId;
+					dependencyTelemetry.Context.Operation.Id = activityId;
+				}
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 				{
@@ -308,10 +339,13 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			if (EnableThreadedOperations)
 			{
 				string operationName = CalculateOperationName();
+				string activityId = GetOperationId();
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
 					TelemetryClient.Context.Operation.Name = operationName;
+					if (!string.IsNullOrWhiteSpace(activityId))
+						TelemetryClient.Context.Operation.Id = activityId;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackDependency(dependencyTelemetry));
 				});
 			}
@@ -370,6 +404,12 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				requestTelemetry.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+				{
+					TelemetryClient.Context.Operation.Id = activityId;
+					requestTelemetry.Context.Operation.Id = activityId;
+				}
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 				{
@@ -382,10 +422,13 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			if (EnableThreadedOperations)
 			{
 				string operationName = CalculateOperationName();
+				string activityId = GetOperationId();
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
 					TelemetryClient.Context.Operation.Name = operationName;
+					if (!string.IsNullOrWhiteSpace(activityId))
+						TelemetryClient.Context.Operation.Id = activityId;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackRequest(requestTelemetry));
 				});
 			}
@@ -459,6 +502,9 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			{
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+					TelemetryClient.Context.Operation.Id = activityId;
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 					TelemetryClient.Context.Cloud.RoleName = cloudRoleName;
@@ -541,6 +587,12 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 				string operationName = CalculateOperationName();
 				TelemetryClient.Context.Operation.Name = operationName;
 				pageViewTelemetry.Context.Operation.Name = operationName;
+				string activityId = GetOperationId();
+				if (!string.IsNullOrWhiteSpace(activityId))
+				{
+					TelemetryClient.Context.Operation.Id = activityId;
+					pageViewTelemetry.Context.Operation.Id = activityId;
+				}
 				string cloudRoleName = GetCloudRoleName == null ? null : GetCloudRoleName();
 				if (!string.IsNullOrWhiteSpace(cloudRoleName))
 				{
@@ -553,10 +605,13 @@ namespace Chinchilla.Logging.Azure.ApplicationInsights
 			if (EnableThreadedOperations)
 			{
 				string operationName = CalculateOperationName();
+				string activityId = GetOperationId();
 				ActionQueue.Enqueue(() =>
 				{
 					TelemetryClient.Context.Operation.Id = correlationId;
 					TelemetryClient.Context.Operation.Name = operationName;
+					if (!string.IsNullOrWhiteSpace(activityId))
+						TelemetryClient.Context.Operation.Id = activityId;
 					ActionQueue.Enqueue(() => TelemetryClient.TrackPageView(pageViewTelemetry));
 				});
 			}
